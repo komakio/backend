@@ -6,8 +6,6 @@ export const env = process.env.ENV || 'develop';
 export class ConfigService {
     public env = env;
     public isProduction = process.env.NODE_ENV === 'production';
-    public tag = process.env.TAG;
-    public sentryDsn = process.env.SENTRY_BACKEND;
     public host = process.env.HOST;
 
     public mongo = {

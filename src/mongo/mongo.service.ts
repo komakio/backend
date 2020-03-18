@@ -1,8 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Db, MongoClient, MongoClientOptions } from 'mongodb';
-import { waitForSomeSeconds } from '@utils/wait';
 import { ConfigService } from 'src/config/config.service';
-// import { Logger } from '@logger';
+import { LoggerService } from 'src/logger/logger.service';
+import { waitForSomeSeconds } from 'utils/time';
 
 @Injectable()
 export class MongoService {
@@ -12,7 +12,7 @@ export class MongoService {
   private indexes: { collection: string; index: any }[] = [];
   private promises: any[] = [];
 
-  constructor(private config: ConfigService, private logger: Logger) {
+  constructor(private config: ConfigService, private logger: LoggerService) {
     this.init();
   }
 
