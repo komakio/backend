@@ -5,6 +5,7 @@ import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
   providers: [MongoService],
-  imports: [ConfigModule, LoggerModule]
+  imports: [ConfigModule, LoggerModule],
+  exports: [MongoService]
 })
 export class MongoModule {}
