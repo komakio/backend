@@ -35,7 +35,6 @@ export class UsersController {
           HttpStatus.FORBIDDEN
         );
       }
-      
       return this.usersMongo.createOne(body);
     }
 
