@@ -16,6 +16,5 @@ export class ConfigService {
         user: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
         replicaSet: process.env.MONGO_REPLICASET,
-      };
-    
+    };
 }
