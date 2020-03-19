@@ -1,20 +1,16 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { IsString } from 'class-validator';
-import { UsersMongoService } from './services/users.mongo.service';
-import { ApiProperty } from '@nestjs/swagger';
-import { hashString, compareHash } from 'src/utils/hash';
+import { UsersService } from './users.service';
 
 class RegisterDto {
-    @ApiProperty()
     @IsString()
     public uuid: string;
 
-    @ApiProperty()
     @IsString()
     public password: string;
 }
 
-class LoginDto {
+export class LoginDto {
     @IsString()
     public uuid: string;
 
@@ -24,25 +20,17 @@ class LoginDto {
 
 @Controller('users')
 export class UsersController {
-    constructor(private usersMongo: UsersMongoService) {}
+    constructor(private users: UsersService) {}
 
     @Post('register')
     public async register(@Body() body: RegisterDto) {
-        const user = await this.usersMongo.findOneByUuid(body.uuid);
-
-        if (user) {
-            throw new HttpException('EXISTING_USER', HttpStatus.FORBIDDEN);
-        }
-        const hashedPassword = await hashString(body.password);
-        return this.usersMongo.createOne({ uuid: body.uuid, password: hashedPassword });
+        const user = await this.register(body);
+        return user;
     }
 
     @Post('login')
     public async login(@Body() body: LoginDto) {
-        const user = await this.usersMongo.findOneByUuid(body.uuid);
-        if (!user || !(await compareHash(body.password, user.password))) {
-            throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
-        }
+        const user = await this.users.login(body);
         return user;
     }
 }
