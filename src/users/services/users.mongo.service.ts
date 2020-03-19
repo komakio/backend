@@ -15,8 +15,8 @@ export class UsersMongoService {
         await this.mongo.waitReady();
         return this.mongo.db.collection(collection).findOne({ uuid });
     }
-    
-    public async findOneByCredentials(credentials: {uuid: string, password: string}) {
+
+    public async findOneByCredentials(credentials: { uuid: string; password: string }) {
         await this.mongo.waitReady();
         return this.mongo.db.collection(collection).findOne({ uuid: credentials.uuid, password: credentials.password });
     }

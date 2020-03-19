@@ -7,8 +7,8 @@ import { LoggerModule } from './logger/logger.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [MongoModule, ConfigModule, LoggerModule, UsersModule],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [MongoModule, ConfigModule, LoggerModule, UsersModule],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

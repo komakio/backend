@@ -5,8 +5,8 @@ import { UsersMongoService } from './services/users.mongo.service';
 import { MongoModule } from 'src/mongo/mongo.module';
 
 @Module({
-  providers: [UsersService, UsersMongoService],
-  controllers: [UsersController],
-  imports: [MongoModule]
+    providers: [UsersService, UsersMongoService],
+    controllers: [UsersController],
+    imports: [MongoModule],
 })
 export class UsersModule {}
