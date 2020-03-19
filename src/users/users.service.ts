@@ -1,7 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { LoginDto } from './users.controller';
+import { LoginDto, PatchUserDto } from './users.controller';
 import { compareHash, hashString } from 'src/utils/hash';
 import { UsersMongoService } from './services/users.mongo.service';
+import { ObjectID } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -22,5 +23,9 @@ export class UsersService {
         }
         const hashedPassword = await hashString(data.password);
         return this.usersMongo.createOne({ uuid: data.uuid, password: hashedPassword });
+    }
+
+    public async patch(args: { id: ObjectID; data: PatchUserDto }) {
+        return this.usersMongo.patchOneById({ id: new ObjectID(args.id), data: args.data });
     }
 }

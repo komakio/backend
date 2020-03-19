@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { SHA256 } from 'sha2';
 
 export const hashString = async (string: string): Promise<string> => {

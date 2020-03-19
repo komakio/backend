@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MongoService } from 'src/mongo/mongo.service';
 import { User } from '../users.model';
+import { ObjectID } from 'mongodb';
 
 const collection = 'users';
 @Injectable()
@@ -11,19 +12,22 @@ export class UsersMongoService {
         this.mongo.addIndex(collection, { uuid: 1 });
     }
 
-    public async findOneByUuid(uuid: string) {
-        await this.mongo.waitReady();
-        return this.mongo.db.collection(collection).findOne({ uuid });
-    }
-
-    public async findOneByCredentials(credentials: { uuid: string; password: string }) {
-        await this.mongo.waitReady();
-        return this.mongo.db.collection(collection).findOne({ uuid: credentials.uuid, password: credentials.password });
-    }
-
-    public async createOne(user: Partial<User>) {
+    public async createOne(user: Partial<User>): Promise<User> {
         await this.mongo.waitReady();
         const req = await this.mongo.db.collection(collection).insertOne({ ...user, createdAt: new Date() });
-        return req.ops[0] as User;
+        return new User(req.ops[0]);
+    }
+
+    public async patchOneById(args: { id: ObjectID; data: Partial<User> }) {
+        await this.mongo.waitReady();
+        return this.mongo.db
+            .collection(collection)
+            .updateOne({ _id: new ObjectID(args.id) }, args.data, { upsert: true });
+    }
+
+    public async findOneByUuid(uuid: string): Promise<User> {
+        await this.mongo.waitReady();
+        const user = await this.mongo.db.collection(collection).findOne({ uuid });
+        return user ? new User(user) : null;
     }
 }
