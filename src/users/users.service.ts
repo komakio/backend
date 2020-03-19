@@ -8,18 +8,13 @@ import { ObjectID } from 'mongodb';
 export class UsersService {
     constructor(private usersMongo: UsersMongoService) {}
 
-    public async login(data: LoginDto) {
-        const user = await this.usersMongo.findOneByUuid(data.uuid);
-        if (!user || !(await compareHash(data.password, user.password))) {
-            throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
-        }
-        return user;
-    }
-
-    public async register(data: LoginDto) {
+    public async registerOrLogin(data: LoginDto) {
         const user = await this.usersMongo.findOneByUuid(data.uuid);
         if (user) {
-            throw new HttpException('EXISTING_USER', HttpStatus.FORBIDDEN);
+            if (await compareHash(data.password, user.password)) {
+                throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
+            }
+            return user;
         }
         const hashedPassword = await hashString(data.password);
         return this.usersMongo.createOne({ uuid: data.uuid, password: hashedPassword });

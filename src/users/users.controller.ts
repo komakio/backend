@@ -27,19 +27,13 @@ export class PatchUserDto {
     public locations: string[];
 }
 
-@Controller('users')
+@Controller('v1/users')
 export class UsersController {
     constructor(private users: UsersService) {}
 
-    @Post('register')
-    public async register(@Body() body: RegisterDto): Promise<User> {
-        const user = await this.users.register(body);
-        return user.serialize();
-    }
-
     @Post('login')
-    public async login(@Body() body: LoginDto): Promise<User> {
-        const user = await this.users.login(body);
+    public async register(@Body() body: RegisterDto): Promise<User> {
+        const user = await this.users.registerOrLogin(body);
         return user.serialize();
     }
 

@@ -20,9 +20,7 @@ export class UsersMongoService {
 
     public async patchOneById(args: { id: ObjectID; data: Partial<User> }) {
         await this.mongo.waitReady();
-        return this.mongo.db
-            .collection(collection)
-            .updateOne({ _id: new ObjectID(args.id) }, args.data, { upsert: true });
+        return this.mongo.db.collection(collection).updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
     }
 
     public async findOneByUuid(uuid: string): Promise<User> {
