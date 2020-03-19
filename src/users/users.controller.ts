@@ -2,6 +2,7 @@ import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/commo
 import { IsString } from 'class-validator';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ApiProperty } from '@nestjs/swagger';
+import { hashString, compareHash } from 'src/utils/hash';
 
 class RegisterDto {
     @ApiProperty()
@@ -32,11 +33,16 @@ export class UsersController {
         if (user) {
             throw new HttpException('EXISTING_USER', HttpStatus.FORBIDDEN);
         }
-        return this.usersMongo.createOne(body);
+        const hashedPassword = await hashString(body.password);
+        return this.usersMongo.createOne({ uuid: body.uuid, password: hashedPassword });
     }
 
     @Post('login')
     public async login(@Body() body: LoginDto) {
-        return this.usersMongo.findOneByCredentials({ uuid: body.uuid, password: body.password });
+        const user = await this.usersMongo.findOneByUuid(body.uuid);
+        if (!user || !(await compareHash(body.password, user.password))) {
+            throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
+        }
+        return user;
     }
 }
