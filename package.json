@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -18,7 +18,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/wehelp-backend/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -63,12 +63,26 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "@config/config/(.*)": "<rootDir>/libs/config/src/$1",
+      "@config/config": "<rootDir>/libs/config/src",
+      "@mongo/mongo/(.*)": "<rootDir>/libs/mongo/src/$1",
+      "@mongo/mongo": "<rootDir>/libs/mongo/src",
+      "@logger/logger/(.*)": "<rootDir>/libs/logger/src/$1",
+      "@logger/logger": "<rootDir>/libs/logger/src",
+      "@users/users/(.*)": "<rootDir>/libs/users/src/$1",
+      "@users/users": "<rootDir>/libs/users/src"
+    }
   }
 }

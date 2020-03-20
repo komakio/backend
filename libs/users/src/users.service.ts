@@ -1,9 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { LoginDto } from './users.controller';
-import { compareHash, hashString } from 'src/utils/hash';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
 import { User } from './users.model';
+import { compareHash, hashString } from 'utils/hash';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +12,7 @@ export class UsersService {
     public async registerOrLogin(data: LoginDto) {
         const user = await this.usersMongo.findOneByUuid(data.uuid);
         if (user) {
-            if (await compareHash(data.password, user.password)) {
+            if (!(await compareHash(data.password, user.password))) {
                 throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
             }
             return user;
