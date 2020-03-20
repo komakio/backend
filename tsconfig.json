@@ -9,7 +9,36 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@config/config": [
+        "libs/config/src"
+      ],
+      "@config/config/*": [
+        "libs/config/src/*"
+      ],
+      "@mongo/mongo": [
+        "libs/mongo/src"
+      ],
+      "@mongo/mongo/*": [
+        "libs/mongo/src/*"
+      ],
+      "@logger/logger": [
+        "libs/logger/src"
+      ],
+      "@logger/logger/*": [
+        "libs/logger/src/*"
+      ],
+      "@users/users": [
+        "libs/users/src"
+      ],
+      "@users/users/*": [
+        "libs/users/src/*"
+      ]
+    }
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

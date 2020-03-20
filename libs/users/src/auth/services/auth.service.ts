@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { UsersService } from '../../users.service';
 import { AccessTokenResponse, AccessToken } from '../auth.models';
-import { ConfigService } from 'src/config/config.service';
-import { User } from 'src/users/users.model';
+import { ConfigService } from '@config/config';
+import { User } from '@users/users/users.model';
 
 @Injectable()
 export class AuthService {
