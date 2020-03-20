@@ -22,9 +22,9 @@ export class LoginDto {
 
 export class PatchUserDto {
     @IsString()
-    public name: string;
+    public name?: string;
     @IsString({ each: true })
-    public locations: string[];
+    public locations?: string[];
 }
 
 @Controller('v1/users')

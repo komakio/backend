@@ -17,4 +17,9 @@ export class ConfigService {
         password: process.env.MONGO_PASSWORD,
         replicaSet: process.env.MONGO_REPLICASET,
     };
+
+    public jwt = {
+        accessTokenSecret: '6>o3f)F+8Cot9@Gfsb6ba@EZ7[jThX}KRNE7Af8gE/wA3D8d',
+        accessTokenExpiration: this.isProduction ? 120 : 60 * 60 * 24,
+    };
 }
