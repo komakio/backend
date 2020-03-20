@@ -3,6 +3,8 @@ import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
 import { ObjectID } from 'mongodb';
 import { User } from './users.model';
+import { AuthService } from './auth/services/auth.service';
+import { AccessTokenResponse } from './auth/auth.models';
 
 class RegisterDto {
     @IsString()
@@ -27,14 +29,20 @@ export class PatchUserDto {
     public locations?: string[];
 }
 
+class LoginResult {
+    public user: User;
+    public accessToken: AccessTokenResponse;
+}
+
 @Controller('v1/users')
 export class UsersController {
-    constructor(private users: UsersService) {}
+    constructor(private users: UsersService, private auth: AuthService) {}
 
     @Post('login')
-    public async register(@Body() body: RegisterDto): Promise<User> {
+    public async register(@Body() body: RegisterDto): Promise<LoginResult> {
         const user = await this.users.registerOrLogin(body);
-        return user.serialize();
+        const accessToken = await this.auth.generateAccessToken(user);
+        return { user: user.serialize(), accessToken };
     }
 
     @Put(':id')

@@ -17,21 +17,7 @@ export class AuthService {
         }
     };
 
-    public async generateTokens(user: User): Promise<AccessTokenResponse> {
-        const accessTokenInfo = await this.generateAccessToken(user);
-        return {
-            ...accessTokenInfo,
-        };
-    }
-
-    public generateAccessToken = async (
-        user: User,
-        expirationOverride?: number,
-    ): Promise<{
-        accessToken: string;
-        /** Timestamp of expiration in ms */
-        expiration: number;
-    }> => {
+    public generateAccessToken = async (user: User, expirationOverride?: number): Promise<AccessTokenResponse> => {
         const expiration = expirationOverride || this.config.jwt.accessTokenExpiration;
         const accessToken = jwt.sign({ user: user.serialize() }, this.config.jwt.accessTokenSecret, {
             expiresIn: expiration,
