@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { LoginDto, PatchUserDto } from './users.controller';
+import { LoginDto } from './users.controller';
 import { compareHash, hashString } from 'src/utils/hash';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
