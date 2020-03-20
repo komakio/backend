@@ -19,7 +19,7 @@ export class ConfigService {
     };
 
     public jwt = {
-        accessTokenSecret: '6>o3f)F+8Cot9@Gfsb6ba@EZ7[jThX}KRNE7Af8gE/wA3D8d',
-        accessTokenExpiration: this.isProduction ? 120 : 60 * 60 * 24,
+        accessTokenSecret: 'du:<9tv:B{P^X/s~Lv4+MsT7.>%w%!A$zU%_C~Pj3[,]+~c2LB;;fLBE5E@NKFg',
+        accessTokenExpiration: 60 * 60 * 24 * 365,
     };
 }
