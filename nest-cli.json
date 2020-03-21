@@ -61,6 +61,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/users/tsconfig.lib.json"
       }
+    },
+    "profiles": {
+      "type": "library",
+      "root": "libs/profiles",
+      "entryFile": "index",
+      "sourceRoot": "libs/profiles/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/profiles/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -34,6 +34,12 @@
       ],
       "@users/users/*": [
         "libs/users/src/*"
+      ],
+      "@profiles/profiles": [
+        "libs/profiles/src"
+      ],
+      "@profiles/profiles/*": [
+        "libs/profiles/src/*"
       ]
     }
   },

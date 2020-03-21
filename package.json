@@ -82,7 +82,9 @@
       "@logger/logger/(.*)": "<rootDir>/libs/logger/src/$1",
       "@logger/logger": "<rootDir>/libs/logger/src",
       "@users/users/(.*)": "<rootDir>/libs/users/src/$1",
-      "@users/users": "<rootDir>/libs/users/src"
+      "@users/users": "<rootDir>/libs/users/src",
+      "@profiles/profiles/(.*)": "<rootDir>/libs/profiles/src/$1",
+      "@profiles/profiles": "<rootDir>/libs/profiles/src"
     }
   }
 }
