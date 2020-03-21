@@ -7,7 +7,7 @@ export class Location {
     @IsNumber({}, { each: true })
     @ArrayMinSize(2)
     @ArrayMaxSize(2)
-    public coordinates?: number[];
+    public coordinates?: [number, number];
 }
 
 export class Profile {
