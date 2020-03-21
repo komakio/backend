@@ -88,6 +88,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/exceptions/tsconfig.lib.json"
       }
+    },
+    "requests": {
+      "type": "library",
+      "root": "libs/requests",
+      "entryFile": "index",
+      "sourceRoot": "libs/requests/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/requests/tsconfig.lib.json"
+      }
     }
   }
 }

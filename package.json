@@ -93,7 +93,9 @@
       "@rabbitmq/rabbitmq/(.*)": "<rootDir>/libs/rabbitmq/src/$1",
       "@rabbitmq/rabbitmq": "<rootDir>/libs/rabbitmq/src",
       "@exceptions/exceptions/(.*)": "<rootDir>/libs/exceptions/src/$1",
-      "@exceptions/exceptions": "<rootDir>/libs/exceptions/src"
+      "@exceptions/exceptions": "<rootDir>/libs/exceptions/src",
+      "@requests/requests/(.*)": "<rootDir>/libs/requests/src/$1",
+      "@requests/requests": "<rootDir>/libs/requests/src"
     }
   }
 }
