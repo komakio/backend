@@ -40,6 +40,18 @@
       ],
       "@profiles/profiles/*": [
         "libs/profiles/src/*"
+      ],
+      "@rabbitmq/rabbitmq": [
+        "libs/rabbitmq/src"
+      ],
+      "@rabbitmq/rabbitmq/*": [
+        "libs/rabbitmq/src/*"
+      ],
+      "@exceptions/exceptions": [
+        "libs/exceptions/src"
+      ],
+      "@exceptions/exceptions/*": [
+        "libs/exceptions/src/*"
       ]
     }
   },
