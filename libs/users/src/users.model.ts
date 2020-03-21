@@ -6,8 +6,6 @@ export class User {
     public uuid?: string;
     @Exclude()
     public password?: string;
-    public name?: string;
-    public locations: string[];
     public createdAt: Date;
     public lastLoginAt?: Date;
     public isAdmin?: boolean;

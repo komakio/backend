@@ -10,5 +10,6 @@ import { ConfigModule } from '@config/config';
     providers: [UsersService, UsersMongoService, AuthService],
     controllers: [UsersController],
     imports: [MongoModule, ConfigModule],
+    exports: [UsersService, AuthService],
 })
 export class UsersModule {}
