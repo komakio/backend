@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqp-connection-manager';
 import { ConfigService } from '@config/config';
+import { LoggerService } from '@logger/logger';
 
 export interface RabbitMQServiceInterface {
     url: string;
@@ -17,7 +18,7 @@ export class RabbitMQService implements RabbitMQServiceInterface {
 
     private channel: amqp.ChannelWrapper;
 
-    constructor(private config: ConfigService, private logger: Logger) {}
+    constructor(private config: ConfigService, private logger: LoggerService) {}
 
     public connect() {
         if (this.channel) {

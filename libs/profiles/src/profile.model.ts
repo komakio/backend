@@ -2,8 +2,8 @@ import { ObjectID } from 'mongodb';
 import { IsIn, IsNumber, ArrayMinSize, ArrayMaxSize } from 'class-validator';
 
 export class Location {
-    @IsIn(['point'])
-    public type: 'point';
+    @IsIn(['Point'])
+    public type: 'Point';
     @IsNumber({}, { each: true })
     @ArrayMinSize(2)
     @ArrayMaxSize(2)

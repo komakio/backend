@@ -14,11 +14,9 @@ export class HelpRequest {
     public requestedUserId: ObjectID;
     public acceptedUserId: ObjectID;
     public type: HelpRequestType;
+    public comment: string;
+}
 
-    // // FOR LATER
-    // type: 'groceries' | 'dog',
-    // reason: string,
-    // // FOR LATER
-
-    // 24 hour max = expiry
+export class QueueRequest {
+    userId: ObjectID;
 }
