@@ -43,11 +43,7 @@ async function bootstrap() {
     const requestsRabbitMQ = app.get(RequestsRabbitMQService);
 
     await Promise.all([
-        bootstrapQueue(
-            ConsumerModule.register(app.get(RequestsConsumer)),
-            requestsRabbitMQ.requestQueueName,
-            30,
-        ),
+        bootstrapQueue(ConsumerModule.register(app.get(RequestsConsumer)), requestsRabbitMQ.requestQueueName, 30),
     ]);
 }
 bootstrap();
