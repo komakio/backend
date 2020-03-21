@@ -23,7 +23,11 @@
   "dependencies": {
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
+    "@nestjs/microservices": "^7.0.3",
     "@nestjs/platform-express": "^7.0.0",
+    "@sentry/node": "^5.15.0",
+    "amqp-connection-manager": "^3.2.0",
+    "amqplib": "^0.5.5",
     "bcrypt": "3.0.7",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
@@ -38,6 +42,7 @@
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
+    "@types/amqplib": "^0.5.13",
     "@types/express": "^4.17.3",
     "@types/jest": "25.1.4",
     "@types/mongodb": "^3.5.2",
@@ -84,7 +89,11 @@
       "@users/users/(.*)": "<rootDir>/libs/users/src/$1",
       "@users/users": "<rootDir>/libs/users/src",
       "@profiles/profiles/(.*)": "<rootDir>/libs/profiles/src/$1",
-      "@profiles/profiles": "<rootDir>/libs/profiles/src"
+      "@profiles/profiles": "<rootDir>/libs/profiles/src",
+      "@rabbitmq/rabbitmq/(.*)": "<rootDir>/libs/rabbitmq/src/$1",
+      "@rabbitmq/rabbitmq": "<rootDir>/libs/rabbitmq/src",
+      "@exceptions/exceptions/(.*)": "<rootDir>/libs/exceptions/src/$1",
+      "@exceptions/exceptions": "<rootDir>/libs/exceptions/src"
     }
   }
 }

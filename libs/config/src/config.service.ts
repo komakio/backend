@@ -7,6 +7,8 @@ export class ConfigService {
     public env = env;
     public isProduction = process.env.NODE_ENV === 'production';
     public host = process.env.HOST;
+    public sentryDsn = process.env.SENTRY_BACKEND;
+    public tag = process.env.TAG;
 
     public mongo = {
         srv: process.env.MONGO_SRV,
@@ -16,6 +18,14 @@ export class ConfigService {
         user: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
         replicaSet: process.env.MONGO_REPLICASET,
+    };
+
+    public rabbitmq = {
+        host: process.env.RABBITMQ_HOST || 'localhost',
+        port: parseInt(process.env.RABBITMQ_PORT, 10) || 5672,
+        user: process.env.RABBITMQ_USER,
+        password: process.env.RABBITMQ_PASSWORD,
+        prefix: process.env.RABBITMQ_PREFIX || 'default',
     };
 
     public jwt = {

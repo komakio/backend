@@ -7,6 +7,7 @@ import { ProfilesModule } from '@profiles/profiles';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@users/users/auth/auth.guard';
 
+const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule];
 @Module({
     providers: [
         {
@@ -14,6 +15,11 @@ import { AuthGuard } from '@users/users/auth/auth.guard';
             useClass: AuthGuard,
         },
     ],
-    imports: [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule],
+    imports: modules,
 })
 export class AppModule {}
+
+@Module({
+    imports: modules,
+})
+export class AppConsumerModule {}
