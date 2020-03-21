@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, Get } from '@nestjs/common';
 import { IsString, IsBoolean, IsIn, IsOptional, ValidateNested, IsNotEmpty } from 'class-validator';
 import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
@@ -70,5 +70,12 @@ export class ProfilesController {
     @Put(':id')
     public async patch(@Param('id') id: string, @Body() data: PatchProfilesDto) {
         await this.profile.patchOneById({ id: new ObjectID(id), data });
+    }
+
+    @Auth()
+    @Get()
+    public async lookupHelp(@UserReq() user: User) {
+        const profiles = await this.profile.findNearHelpers({ id: new ObjectID(user._id), maxDistance: 1000 });
+        console.log({ profiles }); // logic for sending the request to helpers goes here
     }
 }

@@ -14,4 +14,17 @@ export class ProfilesService {
     public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
         return this.profilesMongo.patchOneById({ id: new ObjectID(args.id), data: args.data });
     }
+
+    public async findNearHelpers(args: { id: ObjectID; maxDistance: number }) {
+        const { location, country } = await this.profilesMongo.findOneById(new ObjectID(args.id));
+        return this.profilesMongo.findNear({
+            filters: {
+                role: 'helper',
+                disabled: false,
+                country,
+            },
+            coordinates: location.coordinates,
+            maxDistance: args.maxDistance,
+        });
+    }
 }
