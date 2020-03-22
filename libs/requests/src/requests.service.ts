@@ -9,4 +9,8 @@ export class RequestsService {
   public async createOne(request: Partial<HelpRequest>) {
     return this.requestsMongo.createOne(request);
   }
+
+  public async cancelOne(request: Partial<HelpRequest>) {
+    return this.requestsMongo.createOne(request);
+  }
 }
