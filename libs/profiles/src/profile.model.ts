@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import { IsIn, IsNumber, ArrayMinSize, ArrayMaxSize, IsString, ValidateNested, IsNotEmpty } from 'class-validator';
+import { IsIn, IsNumber, ArrayMinSize, ArrayMaxSize, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class Geo {

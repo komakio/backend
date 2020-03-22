@@ -40,8 +40,9 @@ export class ExceptionsFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
+        
 
-        const path = request.raw.originalUrl;
+        const path = request.originalUrl;
 
         if (exception instanceof HttpException) {
             const code = exception.getStatus();
