@@ -23,4 +23,5 @@ export class Profile {
     public role: 'helper' | 'needer';
     public phone: string;
     public country: string;
+    public deviceIds: string[];
 }

@@ -6,6 +6,7 @@ import { RMQHelper } from '@rabbitmq/rabbitmq';
 import { QueueRequest } from '../requests.model';
 import { ProfilesService } from '@profiles/profiles';
 import { ObjectID } from 'mongodb';
+import { NotificationsService } from '@notifications/notifications';
 
 @Injectable()
 export class RequestsConsumer {
@@ -13,7 +14,8 @@ export class RequestsConsumer {
         private exceptions: ExceptionsService,
         private mongo: MongoService,
         private logger: LoggerService,
-        private profile: ProfilesService,
+        private profiles: ProfilesService,
+        private notifications: NotificationsService
     ) {}
 
     public async consume({ message, ack }: RMQHelper<QueueRequest>) {
@@ -21,8 +23,19 @@ export class RequestsConsumer {
 
         try {
             await this.mongo.waitReady();
-            const profiles = await this.profile.findNearHelpers({ id: new ObjectID(userId), maxDistance: 1000 });
-            console.log(profiles);
+            const profiles = await this.profiles.findNearHelpers({ id: new ObjectID(userId), maxDistance: 1000 });
+            const deviceIds = profiles.reduce((ids, profile) => {
+                ids = [...ids, ...profile.deviceIds];
+                return ids;
+            }, []);
+            await this.notifications.send({
+                deviceIds,
+                message: {
+                    title: 'I need help',
+                    body: 'Please help me!',
+                    icon: 'icon'
+                }
+            })
 
             ack();
         } catch (err) {

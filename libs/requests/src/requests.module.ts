@@ -10,11 +10,12 @@ import { RequestsConsumer } from './consumers/requests.consumer';
 import { LoggerModule } from '@logger/logger';
 import { ProfilesModule } from '@profiles/profiles';
 import { RequestsController } from './requests.controller';
+import { NotificationsModule } from '@notifications/notifications';
 
 @Module({
     controllers: [RequestsController],
     providers: [RequestsService, RequestsMongoService, RequestsRabbitMQService, RequestsConsumer],
-    imports: [MongoModule, RabbitmqModule, ConfigModule, LoggerModule, ProfilesModule, ExceptionsModule],
+    imports: [MongoModule, RabbitmqModule, ConfigModule, LoggerModule, ProfilesModule, ExceptionsModule, NotificationsModule],
     exports: [RequestsService],
 })
 export class RequestsModule {}

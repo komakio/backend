@@ -34,10 +34,12 @@
     "class-validator": "^0.11.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.5",
+    "node-gcm": "^1.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
-    "sha2": "^1.0.2"
+    "sha2": "^1.0.2",
+    "uninstall": "0.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -48,13 +50,17 @@
     "@types/jest": "25.1.4",
     "@types/mongodb": "^3.5.2",
     "@types/node": "^13.9.1",
+    "@types/node-gcm": "^1.0.0",
+    "@types/node-pushnotifications": "^1.0.3",
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
+    "install": "^0.13.0",
     "jest": "^25.1.0",
+    "npm": "^6.14.3",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "25.2.1",
@@ -96,7 +102,9 @@
       "@exceptions/exceptions/(.*)": "<rootDir>/libs/exceptions/src/$1",
       "@exceptions/exceptions": "<rootDir>/libs/exceptions/src",
       "@requests/requests/(.*)": "<rootDir>/libs/requests/src/$1",
-      "@requests/requests": "<rootDir>/libs/requests/src"
+      "@requests/requests": "<rootDir>/libs/requests/src",
+      "@notifications/notifications/(.*)": "<rootDir>/libs/notifications/src/$1",
+      "@notifications/notifications": "<rootDir>/libs/notifications/src"
     }
   }
 }
