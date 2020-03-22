@@ -5,26 +5,31 @@ import { ObjectID } from 'mongodb';
 
 @Injectable()
 export class ProfilesService {
-    constructor(private profilesMongo: ProfilesMongoService) {}
+  constructor(private profilesMongo: ProfilesMongoService) {}
 
-    public async create(profile: Partial<Profile>) {
-        return this.profilesMongo.createOne(profile);
-    }
+  public async create(profile: Partial<Profile>) {
+    return this.profilesMongo.createOne(profile);
+  }
 
-    public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
-        return this.profilesMongo.patchOneById({ id: new ObjectID(args.id), data: args.data });
-    }
+  public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
+    return this.profilesMongo.patchOneById({
+      id: new ObjectID(args.id),
+      data: args.data,
+    });
+  }
 
-    public async findNearHelpers(args: { id: ObjectID; maxDistance: number }) {
-        const { location } = await this.profilesMongo.findOneById(new ObjectID(args.id));
-        return this.profilesMongo.findNear({
-            filters: {
-                role: 'helper',
-                disabled: false,
-                'location.country': location.country,
-            },
-            coordinates: location.geo.coordinates,
-            maxDistance: args.maxDistance,
-        });
-    }
+  public async findNearHelpers(args: { id: ObjectID; maxDistance: number }) {
+    const { location } = await this.profilesMongo.findOneById(
+      new ObjectID(args.id)
+    );
+    return this.profilesMongo.findNear({
+      filters: {
+        role: 'helper',
+        disabled: false,
+        'location.country': location.country,
+      },
+      coordinates: location.geo.coordinates,
+      maxDistance: args.maxDistance,
+    });
+  }
 }

@@ -7,9 +7,9 @@ import { MongoModule } from '@backend/mongo';
 import { ConfigModule } from '@backend/config';
 
 @Module({
-    providers: [UsersService, UsersMongoService, AuthService],
-    controllers: [UsersController],
-    imports: [MongoModule, ConfigModule],
-    exports: [UsersService, AuthService],
+  providers: [UsersService, UsersMongoService, AuthService],
+  controllers: [UsersController],
+  imports: [MongoModule, ConfigModule],
+  exports: [UsersService, AuthService],
 })
 export class UsersModule {}

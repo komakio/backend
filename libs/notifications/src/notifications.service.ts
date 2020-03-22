@@ -5,36 +5,40 @@ import { SendNotificationArgs } from './notifications.model';
 
 @Injectable()
 export class NotificationsService {
-    private sender: fcm.Sender;
+  private sender: fcm.Sender;
 
-    constructor(private config: ConfigService) {
-        this.sender = new fcm.Sender(this.config.fcm.serverKey);
-    }
+  constructor(private config: ConfigService) {
+    this.sender = new fcm.Sender(this.config.fcm.serverKey);
+  }
 
-    public async send(args: SendNotificationArgs) {
-        // Prepare a message to be sent
-        const message = new fcm.Message({
-            priority: 'high',
-            contentAvailable: true,
-            delayWhileIdle: true,
-            timeToLive: 60 * 60 * 24,
-            dryRun: !this.config.isProduction,
-            data: args.payload,
-            notification: args.message,
-        });
+  public async send(args: SendNotificationArgs) {
+    // Prepare a message to be sent
+    const message = new fcm.Message({
+      priority: 'high',
+      contentAvailable: true,
+      delayWhileIdle: true,
+      timeToLive: 60 * 60 * 24,
+      dryRun: !this.config.isProduction,
+      data: args.payload,
+      notification: args.message,
+    });
 
-        // Actually send the message
-        const promise = new Promise((resolve, reject) => {
-            this.sender.send(message, { registrationTokens: args.deviceIds }, (response, err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    !this.config.isProduction ? console.log({ response }) : null;
-                    resolve(response);
-                }
-            });
-        });
+    // Actually send the message
+    const promise = new Promise((resolve, reject) => {
+      this.sender.send(
+        message,
+        { registrationTokens: args.deviceIds },
+        (response, err) => {
+          if (err) {
+            reject(err);
+          } else {
+            !this.config.isProduction ? console.log({ response }) : null;
+            resolve(response);
+          }
+        }
+      );
+    });
 
-        return promise;
-    }
+    return promise;
+  }
 }

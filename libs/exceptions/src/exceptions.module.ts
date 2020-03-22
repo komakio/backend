@@ -7,15 +7,15 @@ import { LoggerModule } from '@backend/logger';
 import { ConfigModule } from '@backend/config';
 
 @Module({
-    providers: [
-        {
-            provide: APP_FILTER,
-            useClass: ExceptionsFilter,
-        },
-        SentryService,
-        ExceptionsService,
-    ],
-    exports: [ExceptionsService],
-    imports: [ConfigModule, LoggerModule],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionsFilter,
+    },
+    SentryService,
+    ExceptionsService,
+  ],
+  exports: [ExceptionsService],
+  imports: [ConfigModule, LoggerModule],
 })
 export class ExceptionsModule {}
