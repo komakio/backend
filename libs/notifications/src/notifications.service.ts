@@ -29,7 +29,7 @@ export class NotificationsService {
         const promise = new Promise((resolve, reject) => {
             this.sender.send(message, { registrationTokens: args.deviceIds }, function(err, response) {
                 if (err) {
-                    reject({message: err});
+                    reject({err});
                 } else {
                     !this.config.isProduction ? console.log({ response }) : null;
                     resolve(response);

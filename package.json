@@ -38,8 +38,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
-    "sha2": "^1.0.2",
-    "uninstall": "0.0.0"
+    "sha2": "^1.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -58,9 +57,7 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
-    "install": "^0.13.0",
     "jest": "^25.1.0",
-    "npm": "^6.14.3",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "25.2.1",
