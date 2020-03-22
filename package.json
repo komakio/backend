@@ -11,6 +11,7 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "dev:jobs": "npm run start:dev consumers -- --webpackPath webpack-consumers.config.js",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -93,7 +94,9 @@
       "@rabbitmq/rabbitmq/(.*)": "<rootDir>/libs/rabbitmq/src/$1",
       "@rabbitmq/rabbitmq": "<rootDir>/libs/rabbitmq/src",
       "@exceptions/exceptions/(.*)": "<rootDir>/libs/exceptions/src/$1",
-      "@exceptions/exceptions": "<rootDir>/libs/exceptions/src"
+      "@exceptions/exceptions": "<rootDir>/libs/exceptions/src",
+      "@requests/requests/(.*)": "<rootDir>/libs/requests/src/$1",
+      "@requests/requests": "<rootDir>/libs/requests/src"
     }
   }
 }

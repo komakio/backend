@@ -6,8 +6,9 @@ import { UsersModule } from '@users/users';
 import { ProfilesModule } from '@profiles/profiles';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@users/users/auth/auth.guard';
+import { RequestsModule } from 'libs/requests/src';
 
-const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule];
+const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule, RequestsModule];
 @Module({
     providers: [
         {
@@ -15,11 +16,11 @@ const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersM
             useClass: AuthGuard,
         },
     ],
-    imports: modules,
+    imports: [...modules],
 })
 export class AppModule {}
 
 @Module({
-    imports: modules,
+    imports: [...modules],
 })
 export class AppConsumerModule {}

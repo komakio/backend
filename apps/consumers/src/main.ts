@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-// import { ConsumerModule } from 'libs/rabbitmq/src/consumer/consumer.module';
+import { ConsumerModule } from 'libs/rabbitmq/src/consumer/consumer.module';
 import { LoggerService } from '@logger/logger';
 import { ExceptionsService } from 'libs/exceptions/src';
 import { AppConsumerModule } from 'apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@rabbitmq/rabbitmq';
+import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
+import { RequestsConsumer } from 'libs/requests/src/consumers/requests.consumer';
 
 const logger = new LoggerService();
 
@@ -38,14 +40,10 @@ async function bootstrap() {
         app.get(ExceptionsService).report(err);
     });
 
-    // const companiesRabbitMQ = app.get(CompaniesRabbitMQService);
+    const requestsRabbitMQ = app.get(RequestsRabbitMQService);
 
-    // await Promise.all([
-    //     bootstrapQueue(
-    //         ConsumerModule.register(app.get(CompanyResolverConsumer)),
-    //         companiesRabbitMQ.resolveQueueName,
-    //         30,
-    //     ),
-    // ]);
+    await Promise.all([
+        bootstrapQueue(ConsumerModule.register(app.get(RequestsConsumer)), requestsRabbitMQ.requestQueueName, 30),
+    ]);
 }
 bootstrap();

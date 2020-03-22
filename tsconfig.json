@@ -52,6 +52,12 @@
       ],
       "@exceptions/exceptions/*": [
         "libs/exceptions/src/*"
+      ],
+      "@requests/requests": [
+        "libs/requests/src"
+      ],
+      "@requests/requests/*": [
+        "libs/requests/src/*"
       ]
     }
   },
