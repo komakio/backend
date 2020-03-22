@@ -15,7 +15,7 @@ export class RequestsConsumer {
         private mongo: MongoService,
         private logger: LoggerService,
         private profiles: ProfilesService,
-        private notifications: NotificationsService
+        private notifications: NotificationsService,
     ) {}
 
     public async consume({ message, ack }: RMQHelper<QueueRequest>) {
@@ -33,9 +33,9 @@ export class RequestsConsumer {
                 message: {
                     title: 'I need help',
                     body: 'Please help me!',
-                    icon: 'icon'
-                }
-            })
+                    icon: 'icon',
+                },
+            });
 
             ack();
         } catch (err) {

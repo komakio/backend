@@ -23,7 +23,7 @@ export class NotificationsService {
             dryRun: !this.config.isProduction,
             data: args.payload,
             notification: args.message,
-        });        
+        });
 
         // Actually send the message
         const promise = new Promise((resolve, reject) => {
