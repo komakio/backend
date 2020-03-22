@@ -23,9 +23,9 @@ export class Location {
 
 export class Phone {
     @IsNumber()
-    public dialCode: number;
+    public dialCode: string;
     @IsNumber()
-    public number: number
+    public number: string;
 }
 
 export class Profile {
