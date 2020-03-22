@@ -5,9 +5,9 @@ import { ProfilesMongoService } from './services/profiles.mongo.service';
 import { MongoModule } from '@backend/mongo';
 
 @Module({
-    controllers: [ProfilesController],
-    providers: [ProfilesService, ProfilesMongoService],
-    imports: [MongoModule],
-    exports: [ProfilesService],
+  controllers: [ProfilesController],
+  providers: [ProfilesService, ProfilesMongoService],
+  imports: [MongoModule],
+  exports: [ProfilesService],
 })
 export class ProfilesModule {}

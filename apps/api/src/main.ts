@@ -4,15 +4,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { RabbitMQService } from '@backend/rabbitmq';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-    // process.on('uncaughtException', (err: Error) => {
-    //     app.get(ExceptionsService).report(err);
-    // });
+  // process.on('uncaughtException', (err: Error) => {
+  //     app.get(ExceptionsService).report(err);
+  // });
 
-    app.get(RabbitMQService).connect();
+  app.get(RabbitMQService).connect();
 
-    await app.listen(3000);
+  await app.listen(3000);
 }
 bootstrap();

@@ -7,24 +7,35 @@ import { User } from '@backend/users/users.model';
 
 @Injectable()
 export class AuthService {
-    constructor(private config: ConfigService, private users: UsersService) {}
+  constructor(private config: ConfigService, private users: UsersService) {}
 
-    public validateAccessToken = (token: string): AccessToken | false => {
-        try {
-            return jwt.verify(token, this.config.jwt.accessTokenSecret) as AccessToken;
-        } catch (err) {
-            return false;
-        }
-    };
+  public validateAccessToken = (token: string): AccessToken | false => {
+    try {
+      return jwt.verify(
+        token,
+        this.config.jwt.accessTokenSecret
+      ) as AccessToken;
+    } catch (err) {
+      return false;
+    }
+  };
 
-    public generateAccessToken = async (user: User, expirationOverride?: number): Promise<AccessTokenResponse> => {
-        const expiration = expirationOverride || this.config.jwt.accessTokenExpiration;
-        const accessToken = jwt.sign({ user: user.serialize() }, this.config.jwt.accessTokenSecret, {
-            expiresIn: expiration,
-        });
+  public generateAccessToken = async (
+    user: User,
+    expirationOverride?: number
+  ): Promise<AccessTokenResponse> => {
+    const expiration =
+      expirationOverride || this.config.jwt.accessTokenExpiration;
+    const accessToken = jwt.sign(
+      { user: user.serialize() },
+      this.config.jwt.accessTokenSecret,
+      {
+        expiresIn: expiration,
+      }
+    );
 
-        this.users.patch({ id: user._id, data: { lastLoginAt: new Date() } });
+    this.users.patch({ id: user._id, data: { lastLoginAt: new Date() } });
 
-        return { expiration: Date.now() + expiration * 1000, accessToken };
-    };
+    return { expiration: Date.now() + expiration * 1000, accessToken };
+  };
 }

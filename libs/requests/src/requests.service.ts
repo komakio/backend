@@ -4,9 +4,9 @@ import { HelpRequest } from './requests.model';
 
 @Injectable()
 export class RequestsService {
-    constructor(private requestsMongo: RequestsMongoService) {}
+  constructor(private requestsMongo: RequestsMongoService) {}
 
-    public async createOne(request: Partial<HelpRequest>) {
-        return this.requestsMongo.createOne(request);
-    }
+  public async createOne(request: Partial<HelpRequest>) {
+    return this.requestsMongo.createOne(request);
+  }
 }

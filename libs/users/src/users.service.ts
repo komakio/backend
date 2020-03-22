@@ -7,21 +7,27 @@ import { compareHash, hashString } from 'utils/hash';
 
 @Injectable()
 export class UsersService {
-    constructor(private usersMongo: UsersMongoService) {}
+  constructor(private usersMongo: UsersMongoService) {}
 
-    public async registerOrLogin(data: LoginDto) {
-        const user = await this.usersMongo.findOneByUsername(data.username);
-        if (user) {
-            if (!(await compareHash(data.password, user.password))) {
-                throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
-            }
-            return user;
-        }
-        const hashedPassword = await hashString(data.password);
-        return this.usersMongo.createOne({ username: data.username, password: hashedPassword });
+  public async registerOrLogin(data: LoginDto) {
+    const user = await this.usersMongo.findOneByUsername(data.username);
+    if (user) {
+      if (!(await compareHash(data.password, user.password))) {
+        throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
+      }
+      return user;
     }
+    const hashedPassword = await hashString(data.password);
+    return this.usersMongo.createOne({
+      username: data.username,
+      password: hashedPassword,
+    });
+  }
 
-    public async patch(args: { id: ObjectID; data: Partial<User> }) {
-        return this.usersMongo.patchOneById({ id: new ObjectID(args.id), data: args.data });
-    }
+  public async patch(args: { id: ObjectID; data: Partial<User> }) {
+    return this.usersMongo.patchOneById({
+      id: new ObjectID(args.id),
+      data: args.data,
+    });
+  }
 }
