@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MongoModule } from '@mongo/mongo';
-import { ConfigModule } from '@config/config';
-import { LoggerModule } from '@logger/logger';
-import { UsersModule } from '@users/users';
-import { ProfilesModule } from '@profiles/profiles';
+import { MongoModule } from '@backend/mongo';
+import { ConfigModule } from '@backend/config';
+import { LoggerModule } from '@backend/logger';
+import { UsersModule } from '@backend/users';
+import { ProfilesModule } from '@backend/profiles';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@users/users/auth/auth.guard';
+import { AuthGuard } from '@backend/users/auth/auth.guard';
 import { RequestsModule } from 'libs/requests/src';
 
 const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule, RequestsModule];

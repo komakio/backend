@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { ProfilesController } from './profiles.controller';
 import { ProfilesMongoService } from './services/profiles.mongo.service';
-import { MongoModule } from '@mongo/mongo';
+import { MongoModule } from '@backend/mongo';
 
 @Module({
     controllers: [ProfilesController],

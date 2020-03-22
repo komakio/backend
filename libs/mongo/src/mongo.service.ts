@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Db, MongoClient, MongoClientOptions } from 'mongodb';
-import { ConfigService } from '@config/config';
-import { LoggerService } from '@logger/logger';
+import { ConfigService } from '@backend/config';
+import { LoggerService } from '@backend/logger';
 import { waitForSomeSeconds } from 'utils/time';
 
 @Injectable()

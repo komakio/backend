@@ -5,7 +5,7 @@ import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
 import { Location, Profile, Phone } from './profile.model';
-import { User } from '@users/users/users.model';
+import { User } from '@backend/users/users.model';
 
 class CreateProfilesDto {
     @IsOptional()
@@ -49,9 +49,10 @@ class PatchProfilesDto {
     @IsOptional()
     @IsIn(['helper', 'needer'])
     public role?: 'helper' | 'needer';
-    @IsOptional()
-    @IsString()
-    public phone?: string;
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(() => Phone)    
+    public phone: Phone;
     @IsOptional()
     @IsString()
     public country?: string;

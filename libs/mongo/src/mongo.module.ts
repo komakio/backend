@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongoService } from './mongo.service';
-import { ConfigModule } from '@config/config';
-import { LoggerModule } from '@logger/logger';
+import { ConfigModule } from '@backend/config';
+import { LoggerModule } from '@backend/logger';
 
 @Module({
     providers: [MongoService],

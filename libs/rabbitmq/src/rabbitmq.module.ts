@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RabbitMQService } from './rabbitmq.service';
-import { LoggerModule } from '@logger/logger';
-import { ConfigModule } from '@config/config';
+import { LoggerModule } from '@backend/logger';
+import { ConfigModule } from '@backend/config';
 
 @Module({
     providers: [RabbitMQService],

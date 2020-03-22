@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ExceptionsService } from 'libs/exceptions/src';
-import { MongoService } from '@mongo/mongo';
-import { LoggerService } from '@logger/logger';
-import { RMQHelper } from '@rabbitmq/rabbitmq';
+import { MongoService } from '@backend/mongo';
+import { LoggerService } from '@backend/logger';
+import { RMQHelper } from '@backend/rabbitmq';
 import { QueueRequest } from '../requests.model';
-import { ProfilesService } from '@profiles/profiles';
+import { ProfilesService } from '@backend/profiles';
 import { ObjectID } from 'mongodb';
-import { NotificationsService } from '@notifications/notifications';
+import { NotificationsService } from '@backend/notifications';
 
 @Injectable()
 export class RequestsConsumer {

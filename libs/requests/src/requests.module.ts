@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { RequestsService } from './requests.service';
-import { MongoModule } from '@mongo/mongo';
-import { RabbitmqModule } from '@rabbitmq/rabbitmq';
-import { ConfigModule } from '@config/config';
+import { MongoModule } from '@backend/mongo';
+import { RabbitmqModule } from '@backend/rabbitmq';
+import { ConfigModule } from '@backend/config';
 import { ExceptionsModule } from 'libs/exceptions/src';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { RequestsMongoService } from './services/requests-mongo.service';
 import { RequestsConsumer } from './consumers/requests.consumer';
-import { LoggerModule } from '@logger/logger';
-import { ProfilesModule } from '@profiles/profiles';
+import { LoggerModule } from '@backend/logger';
+import { ProfilesModule } from '@backend/profiles';
 import { RequestsController } from './requests.controller';
-import { NotificationsModule } from '@notifications/notifications';
+import { NotificationsModule } from '@backend/notifications';
 
 @Module({
     controllers: [RequestsController],

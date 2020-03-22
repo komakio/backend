@@ -11,58 +11,58 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@config/config": [
+      "@backend/config": [
         "libs/config/src"
       ],
-      "@config/config/*": [
+      "@backend/config/*": [
         "libs/config/src/*"
       ],
-      "@mongo/mongo": [
+      "@backend/mongo": [
         "libs/mongo/src"
       ],
-      "@mongo/mongo/*": [
+      "@backend/mongo/*": [
         "libs/mongo/src/*"
       ],
-      "@logger/logger": [
+      "@backend/logger": [
         "libs/logger/src"
       ],
-      "@logger/logger/*": [
+      "@backend/logger/*": [
         "libs/logger/src/*"
       ],
-      "@users/users": [
+      "@backend/users": [
         "libs/users/src"
       ],
-      "@users/users/*": [
+      "@backend/users/*": [
         "libs/users/src/*"
       ],
-      "@profiles/profiles": [
+      "@backend/profiles": [
         "libs/profiles/src"
       ],
-      "@profiles/profiles/*": [
+      "@backend/profiles/*": [
         "libs/profiles/src/*"
       ],
-      "@rabbitmq/rabbitmq": [
+      "@backend/rabbitmq": [
         "libs/rabbitmq/src"
       ],
-      "@rabbitmq/rabbitmq/*": [
+      "@backend/rabbitmq/*": [
         "libs/rabbitmq/src/*"
       ],
-      "@exceptions/exceptions": [
+      "@backend/exceptions": [
         "libs/exceptions/src"
       ],
-      "@exceptions/exceptions/*": [
+      "@backend/exceptions/*": [
         "libs/exceptions/src/*"
       ],
-      "@requests/requests": [
+      "@backend/requests": [
         "libs/requests/src"
       ],
-      "@requests/requests/*": [
+      "@backend/requests/*": [
         "libs/requests/src/*"
       ],
-      "@notifications/notifications": [
+      "@backend/notifications": [
         "libs/notifications/src"
       ],
-      "@notifications/notifications/*": [
+      "@backend/notifications/*": [
         "libs/notifications/src/*"
       ]
     }

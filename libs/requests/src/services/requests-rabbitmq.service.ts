@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@config/config';
-import { RabbitMQService } from '@rabbitmq/rabbitmq';
+import { ConfigService } from '@backend/config';
+import { RabbitMQService } from '@backend/rabbitmq';
 import { QueueRequest } from '../requests.model';
 
 @Injectable()

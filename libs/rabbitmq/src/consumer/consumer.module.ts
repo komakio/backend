@@ -1,6 +1,6 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { ConsumerController } from './consumer.controller';
-import { LoggerModule } from '@logger/logger';
+import { LoggerModule } from '@backend/logger';
 
 @Module({})
 export class ConsumerModule {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../users.model';
 import { ObjectID } from 'mongodb';
-import { MongoService } from '@mongo/mongo';
+import { MongoService } from '@backend/mongo';
 
 const collection = 'users';
 @Injectable()

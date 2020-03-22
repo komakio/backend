@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ExceptionsService } from '@exceptions/exceptions';
-import { RabbitMQService } from '@rabbitmq/rabbitmq';
+import { ExceptionsService } from '@backend/exceptions';
+import { RabbitMQService } from '@backend/rabbitmq';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

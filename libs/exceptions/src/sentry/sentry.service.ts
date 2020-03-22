@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
-import { ConfigService } from '@config/config';
+import { ConfigService } from '@backend/config';
 
 @Injectable()
 export class SentryService implements OnModuleInit {

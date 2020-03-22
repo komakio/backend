@@ -3,8 +3,8 @@ import { ExceptionsFilter } from './exceptions.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { SentryService } from './sentry/sentry.service';
 import { ExceptionsService } from './exceptions.service';
-import { LoggerModule } from '@logger/logger';
-import { ConfigModule } from '@config/config';
+import { LoggerModule } from '@backend/logger';
+import { ConfigModule } from '@backend/config';
 
 @Module({
     providers: [

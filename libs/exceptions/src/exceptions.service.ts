@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SentryService } from './sentry/sentry.service';
-import { ConfigService } from '@config/config';
-import { LoggerService } from '@logger/logger';
+import { ConfigService } from '@backend/config';
+import { LoggerService } from '@backend/logger';
 
 @Injectable()
 export class ExceptionsService {

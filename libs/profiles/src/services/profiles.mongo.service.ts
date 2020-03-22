@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MongoService } from '@mongo/mongo';
+import { MongoService } from '@backend/mongo';
 import { Profile } from '../profile.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 

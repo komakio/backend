@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqp-connection-manager';
-import { ConfigService } from '@config/config';
-import { LoggerService } from '@logger/logger';
+import { ConfigService } from '@backend/config';
+import { LoggerService } from '@backend/logger';
 
 export interface RabbitMQServiceInterface {
     url: string;
