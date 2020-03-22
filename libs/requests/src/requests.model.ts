@@ -18,5 +18,5 @@ export class HelpRequest {
 }
 
 export class QueueRequest {
-    userId: ObjectID;
+    public userId: ObjectID;
 }

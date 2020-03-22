@@ -22,10 +22,10 @@ export class Location {
 }
 
 export class Phone {
-    @IsString()
-    dialCode: string;
-    @IsString()
-    number: string;
+    @IsNumber()
+    public dialCode: number;
+    @IsNumber()
+    public number: number
 }
 
 export class Profile {
