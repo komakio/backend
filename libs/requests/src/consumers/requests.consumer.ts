@@ -41,7 +41,7 @@ export class RequestsConsumer {
         } catch (err) {
             this.logger.verbose({
                 route: 'request-queue',
-                error: err.message,
+                error: err?.message,
             });
             this.exceptions.report(err);
             ack('failed');
