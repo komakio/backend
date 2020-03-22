@@ -23,11 +23,15 @@ export class RequestsMongoService {
 
   public async patchOne(args: {
     id: ObjectID;
+    userId: ObjectID;
     data: Partial<HelpRequest>;
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
-      .updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
+      .updateOne(
+        { _id: new ObjectID(args.id), userId: new ObjectID(args.userId) },
+        { $set: args.data }
+      );
   }
 }

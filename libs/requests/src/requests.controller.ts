@@ -1,9 +1,10 @@
-import { Controller, Post, Param, Get, Put } from '@nestjs/common';
+import { Controller, Post, Param, Get, Put, Patch } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { NotificationsService } from '@backend/notifications';
 import { RequestsService } from './requests.service';
+import { ObjectID } from 'mongodb';
 
 @Controller('v1/requests')
 export class RequestsController {
@@ -20,10 +21,28 @@ export class RequestsController {
   }
 
   @Auth()
-  @Put(':id')
-  public async cancel(@UserReq() user: User): Promise<void> {
-    await this.requestsRabbitMQ.sendToRequests({ userId: user._id });
+  @Patch(':id')
+  public async cancel(
+    @Param('id') id: string,
+    @UserReq() user: User
+  ): Promise<void> {
+    await this.requests.cancelOne({
+      id: new ObjectID(id),
+      userId: new ObjectID(user._id),
+    });
   }
+
+  @Auth()
+  @Put('accept')
+  public async accept(
+    @Param('id') id: string,
+    @UserReq() user: User
+  ): Promise<void> {
+    await this.requests.cancelOne({
+      id: new ObjectID(id),
+      userId: new ObjectID(user._id),
+    });
+  } //todo
 
   @Get(':id')
   public async test(@Param('id') devideId: string): Promise<void> {

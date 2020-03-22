@@ -11,13 +11,11 @@ export class RequestsService {
     return this.requestsMongo.createOne(request);
   }
 
-  public async cancelOne(args: {
-    id: ObjectID;
-    request: Partial<HelpRequest>;
-  }) {
+  public async cancelOne(args: { id: ObjectID; userId: ObjectID }) {
     return this.requestsMongo.patchOne({
-      id: args.id,
-      data: { status: 'canceled' },
+      id: new ObjectID(args.id),
+      userId: new ObjectID(args.userId),
+      data: { status: 'canceled', userIds: [] },
     });
   }
 }
