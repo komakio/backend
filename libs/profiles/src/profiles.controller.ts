@@ -4,7 +4,7 @@ import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
-import { Location, Profile } from './profile.model';
+import { Location, Profile, Phone } from './profile.model';
 import { User } from '@users/users/users.model';
 
 class CreateProfilesDto {
@@ -22,8 +22,10 @@ class CreateProfilesDto {
     public disabled?: boolean;
     @IsIn(['helper', 'needer'])
     public role: 'helper' | 'needer';
-    @IsString()
-    public phone: string;
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(() => Phone)    
+    public phone: Phone;
     @IsString()
     public country: string;
     @IsString({each: true})

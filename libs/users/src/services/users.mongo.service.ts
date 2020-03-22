@@ -23,7 +23,7 @@ export class UsersMongoService {
         return this.mongo.db.collection(collection).updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
     }
 
-    public async findOneByUuid(uuid: string): Promise<User> {
+    public async findOneByUsername(uuid: string): Promise<User> {
         await this.mongo.waitReady();
         const user = await this.mongo.db.collection(collection).findOne({ uuid });
         return user ? new User(user) : null;
