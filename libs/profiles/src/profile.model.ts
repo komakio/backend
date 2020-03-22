@@ -22,9 +22,9 @@ export class Location {
 }
 
 export class Phone {
-    @IsNumber()
+    @IsString()
     public dialCode: string;
-    @IsNumber()
+    @IsString()
     public number: string;
 }
 
