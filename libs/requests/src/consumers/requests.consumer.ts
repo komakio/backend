@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ExceptionsService } from 'libs/exceptions/src';
 import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
@@ -12,7 +11,6 @@ import { RequestsService } from '../requests.service';
 @Injectable()
 export class RequestsConsumer {
     constructor(
-        private exceptions: ExceptionsService,
         private mongo: MongoService,
         private logger: LoggerService,
         private profiles: ProfilesService,
@@ -53,7 +51,6 @@ export class RequestsConsumer {
                 route: 'request-queue',
                 error: err?.message,
             });
-            this.exceptions.report(err);
             ack('failed');
         }
     }

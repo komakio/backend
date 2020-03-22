@@ -3,7 +3,6 @@ import { RequestsService } from './requests.service';
 import { MongoModule } from '@backend/mongo';
 import { RabbitmqModule } from '@backend/rabbitmq';
 import { ConfigModule } from '@backend/config';
-import { ExceptionsModule } from 'libs/exceptions/src';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { RequestsMongoService } from './services/requests-mongo.service';
 import { RequestsConsumer } from './consumers/requests.consumer';
@@ -21,7 +20,6 @@ import { NotificationsModule } from '@backend/notifications';
         ConfigModule,
         LoggerModule,
         ProfilesModule,
-        ExceptionsModule,
         NotificationsModule,
     ],
     exports: [RequestsService],
