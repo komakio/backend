@@ -10,7 +10,7 @@ export class UsersService {
     constructor(private usersMongo: UsersMongoService) {}
 
     public async registerOrLogin(data: LoginDto) {
-        const user = await this.usersMongo.findOneByUuid(data.uuid);
+        const user = await this.usersMongo.findOneByUsername(data.username);
         if (user) {
             if (!(await compareHash(data.password, user.password))) {
                 throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
@@ -18,7 +18,7 @@ export class UsersService {
             return user;
         }
         const hashedPassword = await hashString(data.password);
-        return this.usersMongo.createOne({ uuid: data.uuid, password: hashedPassword });
+        return this.usersMongo.createOne({ username: data.username, password: hashedPassword });
     }
 
     public async patch(args: { id: ObjectID; data: Partial<User> }) {

@@ -15,7 +15,7 @@ export interface ConsumerService {
 
 export const RMQ = createParamDecorator((data, req) => {
     const context: RmqContext = req.args[1];
-    
+
     const message = context.getMessage();
 
     const channel = context.getChannelRef();

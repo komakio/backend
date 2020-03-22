@@ -3,7 +3,7 @@ import { Exclude, classToClass } from 'class-transformer';
 
 export class User {
     public _id: ObjectID;
-    public uuid?: string;
+    public username?: string;
     @Exclude()
     public password?: string;
     public createdAt: Date;

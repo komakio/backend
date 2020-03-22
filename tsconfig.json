@@ -58,6 +58,12 @@
       ],
       "@requests/requests/*": [
         "libs/requests/src/*"
+      ],
+      "@notifications/notifications": [
+        "libs/notifications/src"
+      ],
+      "@notifications/notifications/*": [
+        "libs/notifications/src/*"
       ]
     }
   },

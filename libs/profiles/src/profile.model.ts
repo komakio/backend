@@ -10,6 +10,13 @@ export class Location {
     public coordinates?: [number, number];
 }
 
+export class Phone {
+    @IsNumber()
+    dialCode: number;
+    @IsNumber()
+    number: number
+}
+
 export class Profile {
     public _id: ObjectID;
     public userId: ObjectID;
@@ -21,6 +28,7 @@ export class Profile {
     public location?: Location;
     public disabled?: boolean;
     public role: 'helper' | 'needer';
-    public phone: string;
+    public phone: Phone;
     public country: string;
+    public deviceIds: string[];
 }

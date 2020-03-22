@@ -7,7 +7,7 @@ import { AccessTokenResponse } from './auth/auth.models';
 
 class RegisterDto {
     @IsString()
-    public uuid: string;
+    public username: string;
 
     @IsString()
     public password: string;
@@ -15,7 +15,7 @@ class RegisterDto {
 
 export class LoginDto {
     @IsString()
-    public uuid: string;
+    public username: string;
 
     @IsString()
     public password: string;

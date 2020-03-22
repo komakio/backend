@@ -29,7 +29,7 @@ export class ProfilesMongoService {
 
     public async findOneById(id: ObjectID): Promise<Profile> {
         await this.mongo.waitReady();
-        return this.mongo.db.collection(collection).findOne({ _id: new ObjectID(id) });
+        return this.mongo.db.collection(collection).findOne({ userId: new ObjectID(id) });
     }
 
     public async findNear(args: {

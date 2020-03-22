@@ -28,6 +28,10 @@ export class ConfigService {
         prefix: process.env.RABBITMQ_PREFIX || 'default',
     };
 
+    public fcm = {
+        serverKey: process.env.FCM_SERVER_KEY,
+    };
+
     public jwt = {
         accessTokenSecret:
             process.env.ACCESS_TOKEN_SECRET || 'du:<9tv:B{P^X/s~Lv4+MsT7.>%w%!A$zU%_C~Pj3[,]+~c2LB;;fLBE5E@NKFg',

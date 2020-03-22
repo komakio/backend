@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Put, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param } from '@nestjs/common';
 import { IsString, IsBoolean, IsIn, IsOptional, ValidateNested, IsNotEmpty } from 'class-validator';
 import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
-import { Location, Profile } from './profile.model';
+import { Location, Profile, Phone } from './profile.model';
 import { User } from '@users/users/users.model';
 
 class CreateProfilesDto {
@@ -22,10 +22,14 @@ class CreateProfilesDto {
     public disabled?: boolean;
     @IsIn(['helper', 'needer'])
     public role: 'helper' | 'needer';
-    @IsString()
-    public phone: string;
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(() => Phone)    
+    public phone: Phone;
     @IsString()
     public country: string;
+    @IsString({each: true})
+    public deviceIds: string[];
 }
 
 class PatchProfilesDto {
@@ -34,7 +38,7 @@ class PatchProfilesDto {
     public self?: boolean;
     @IsOptional()
     @IsString()
-    public name: string;
+    public name?: string;
     @IsOptional()
     @ValidateNested()
     @Type(() => Location)
@@ -44,13 +48,16 @@ class PatchProfilesDto {
     public disabled?: boolean;
     @IsOptional()
     @IsIn(['helper', 'needer'])
-    public role: 'helper' | 'needer';
+    public role?: 'helper' | 'needer';
     @IsOptional()
     @IsString()
-    public phone: string;
+    public phone?: string;
     @IsOptional()
     @IsString()
-    public country: string;
+    public country?: string;
+    @IsOptional()
+    @IsString({each: true})
+    public deviceIds?: string[];
 }
 
 @Controller('v1/profiles')
@@ -70,12 +77,5 @@ export class ProfilesController {
     @Put(':id')
     public async patch(@Param('id') id: string, @Body() data: PatchProfilesDto) {
         await this.profile.patchOneById({ id: new ObjectID(id), data });
-    }
-
-    @Auth()
-    @Get()
-    public async lookupHelp(@UserReq() user: User) {
-        const profiles = await this.profile.findNearHelpers({ id: new ObjectID(user._id), maxDistance: 1000 });
-        console.log({ profiles }); // logic for sending the request to helpers goes here
     }
 }
