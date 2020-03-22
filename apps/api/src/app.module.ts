@@ -6,10 +6,9 @@ import { UsersModule } from '@users/users';
 import { ProfilesModule } from '@profiles/profiles';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@users/users/auth/auth.guard';
-import { RabbitmqModule } from '@rabbitmq/rabbitmq';
 import { RequestsModule } from 'libs/requests/src';
 
-const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule, RabbitmqModule, RequestsModule];
+const modules = [MongoModule, ProfilesModule, ConfigModule, LoggerModule, UsersModule, RequestsModule];
 @Module({
     providers: [
         {

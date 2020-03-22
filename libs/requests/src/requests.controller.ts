@@ -9,7 +9,7 @@ export class RequestsController {
 
     @Auth()
     @Post()
-    public async create(@UserReq() user: User): Promise<void> {
+    public async create(@UserReq() user: User): Promise<void> {        
         await this.requestsRabbitMQ.sendToRequests({ userId: user._id });
     }
 }

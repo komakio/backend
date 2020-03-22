@@ -22,7 +22,7 @@ export class RequestsConsumer {
         try {
             await this.mongo.waitReady();
             const profiles = await this.profile.findNearHelpers({ id: new ObjectID(userId), maxDistance: 1000 });
-            console.log({ profiles });
+            console.log(profiles);
 
             ack();
         } catch (err) {
