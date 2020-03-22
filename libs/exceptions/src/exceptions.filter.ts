@@ -40,7 +40,7 @@ export class ExceptionsFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
-        
+
 
         const path = request.originalUrl;
 

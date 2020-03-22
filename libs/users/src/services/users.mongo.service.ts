@@ -9,7 +9,7 @@ export class UsersMongoService {
     constructor(private mongo: MongoService) {}
 
     public onApplicationBootstrap() {
-        this.mongo.addIndex(collection, { uuid: 1 });
+        this.mongo.addIndex(collection, { username: 1 });
     }
 
     public async createOne(user: Partial<User>): Promise<User> {
@@ -23,9 +23,9 @@ export class UsersMongoService {
         return this.mongo.db.collection(collection).updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
     }
 
-    public async findOneByUsername(uuid: string): Promise<User> {
+    public async findOneByUsername(username: string): Promise<User> {
         await this.mongo.waitReady();
-        const user = await this.mongo.db.collection(collection).findOne({ uuid });
+        const user = await this.mongo.db.collection(collection).findOne({ username });
         return user ? new User(user) : null;
     }
 }
