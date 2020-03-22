@@ -30,7 +30,7 @@ export class ConfigService {
 
   public fcm = {
     serverKey: process.env.FCM_SERVER_KEY,
-    restrictedPackageName: 'put io.komak.app'
+    restrictedPackageName: 'io.komak.app'
   };
 
   public jwt = {
