@@ -15,7 +15,15 @@ import { NotificationsModule } from '@backend/notifications';
 @Module({
     controllers: [RequestsController],
     providers: [RequestsService, RequestsMongoService, RequestsRabbitMQService, RequestsConsumer],
-    imports: [MongoModule, RabbitmqModule, ConfigModule, LoggerModule, ProfilesModule, ExceptionsModule, NotificationsModule],
+    imports: [
+        MongoModule,
+        RabbitmqModule,
+        ConfigModule,
+        LoggerModule,
+        ProfilesModule,
+        ExceptionsModule,
+        NotificationsModule,
+    ],
     exports: [RequestsService],
 })
 export class RequestsModule {}

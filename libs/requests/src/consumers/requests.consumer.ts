@@ -7,6 +7,7 @@ import { QueueRequest } from '../requests.model';
 import { ProfilesService } from '@backend/profiles';
 import { ObjectID } from 'mongodb';
 import { NotificationsService } from '@backend/notifications';
+import { RequestsService } from '../requests.service';
 
 @Injectable()
 export class RequestsConsumer {
@@ -15,7 +16,8 @@ export class RequestsConsumer {
         private mongo: MongoService,
         private logger: LoggerService,
         private profiles: ProfilesService,
-        private notifications: NotificationsService
+        private notifications: NotificationsService,
+        private requests: RequestsService,
     ) {}
 
     public async consume({ message, ack }: RMQHelper<QueueRequest>) {
@@ -28,14 +30,22 @@ export class RequestsConsumer {
                 ids = [...ids, ...profile.deviceIds];
                 return ids;
             }, []);
+
+            await this.requests.createOne({
+                status: 'pending',
+                userIds: profiles.map(p => p._id),
+                requestedUserId: userId,
+                type: 'misc',
+            });
+
             await this.notifications.send({
                 deviceIds,
                 message: {
                     title: 'I need help',
                     body: 'Please help me!',
-                    icon: 'icon'
-                }
-            })
+                    icon: 'icon',
+                },
+            });
 
             ack();
         } catch (err) {

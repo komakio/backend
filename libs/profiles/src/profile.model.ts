@@ -1,7 +1,8 @@
 import { ObjectID } from 'mongodb';
-import { IsIn, IsNumber, ArrayMinSize, ArrayMaxSize } from 'class-validator';
+import { IsIn, IsNumber, ArrayMinSize, ArrayMaxSize, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class Location {
+export class Geo {
     @IsIn(['Point'])
     public type: 'Point';
     @IsNumber({}, { each: true })
@@ -10,11 +11,21 @@ export class Location {
     public coordinates?: [number, number];
 }
 
+export class Location {
+    @IsString()
+    public address: string;
+    @IsString()
+    public country: string;
+    @ValidateNested()
+    @Type(() => Location)
+    public geo?: Geo;
+}
+
 export class Phone {
-    @IsNumber()
-    dialCode: number;
-    @IsNumber()
-    number: number
+    @IsString()
+    dialCode: string;
+    @IsString()
+    number: string;
 }
 
 export class Profile {
@@ -24,11 +35,11 @@ export class Profile {
     public lastActivityAt: Date;
     public lastAffirmativeAt: Date;
     public self?: boolean;
-    public name: string;
+    public firstName: string;
+    public lastName: string;
     public location?: Location;
     public disabled?: boolean;
     public role: 'helper' | 'needer';
     public phone: Phone;
-    public country: string;
     public deviceIds: string[];
 }

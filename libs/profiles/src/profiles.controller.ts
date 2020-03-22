@@ -12,7 +12,9 @@ class CreateProfilesDto {
     @IsBoolean()
     public self?: boolean;
     @IsString()
-    public name: string;
+    public firstName: string;
+    @IsString()
+    public lastName: string;
     @IsNotEmpty()
     @ValidateNested()
     @Type(() => Location)
@@ -24,11 +26,9 @@ class CreateProfilesDto {
     public role: 'helper' | 'needer';
     @IsNotEmpty()
     @ValidateNested()
-    @Type(() => Phone)    
+    @Type(() => Phone)
     public phone: Phone;
-    @IsString()
-    public country: string;
-    @IsString({each: true})
+    @IsString({ each: true })
     public deviceIds: string[];
 }
 
@@ -36,9 +36,10 @@ class PatchProfilesDto {
     @IsOptional()
     @IsBoolean()
     public self?: boolean;
-    @IsOptional()
     @IsString()
-    public name?: string;
+    public firstName: string;
+    @IsString()
+    public lastName: string;
     @IsOptional()
     @ValidateNested()
     @Type(() => Location)
@@ -49,15 +50,12 @@ class PatchProfilesDto {
     @IsOptional()
     @IsIn(['helper', 'needer'])
     public role?: 'helper' | 'needer';
-    @IsNotEmpty()
+    @IsOptional()
     @ValidateNested()
-    @Type(() => Phone)    
+    @Type(() => Phone)
     public phone: Phone;
     @IsOptional()
-    @IsString()
-    public country?: string;
-    @IsOptional()
-    @IsString({each: true})
+    @IsString({ each: true })
     public deviceIds?: string[];
 }
 

@@ -9,7 +9,7 @@ import { ExceptionsService } from '@backend/exceptions';
 export class NotificationsService {
     private sender: fcm.Sender;
 
-    constructor(private config: ConfigService, private logger: LoggerService, private exceptions: ExceptionsService) {
+    constructor(private config: ConfigService) {
         this.sender = new fcm.Sender(this.config.fcm.serverKey);
     }
 
@@ -23,11 +23,11 @@ export class NotificationsService {
             dryRun: !this.config.isProduction,
             data: args.payload,
             notification: args.message,
-        });        
+        });
 
         // Actually send the message
         const promise = new Promise((resolve, reject) => {
-            this.sender.send(message, { registrationTokens: args.deviceIds }, function(err, response) {
+            this.sender.send(message, { registrationTokens: args.deviceIds }, (response, err) => {
                 if (err) {
                     reject(err);
                 } else {
