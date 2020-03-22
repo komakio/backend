@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { ConsumerModule } from 'libs/rabbitmq/src/consumer/consumer.module';
 import { LoggerService } from '@backend/logger';
-import { ExceptionsService } from 'libs/exceptions/src';
+// import { ExceptionsService } from 'libs/exceptions/src';
 import { AppConsumerModule } from 'apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
@@ -36,9 +36,9 @@ async function bootstrap() {
     });
     app.get(RabbitMQService).connect();
 
-    process.on('uncaughtException', (err: Error) => {
-        app.get(ExceptionsService).report(err);
-    });
+    // process.on('uncaughtException', (err: Error) => {
+    //     app.get(ExceptionsService).report(err);
+    // });
 
     const requestsRabbitMQ = app.get(RequestsRabbitMQService);
 
