@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as fcm from 'node-gcm';
 import { ConfigService } from '@backend/config';
 import { SendNotificationArgs } from './notifications.model';
-import { LoggerService } from '@backend/logger';
-import { ExceptionsService } from '@backend/exceptions';
 
 @Injectable()
 export class NotificationsService {
