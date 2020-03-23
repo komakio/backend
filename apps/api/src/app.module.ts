@@ -7,6 +7,8 @@ import { ProfilesModule } from '@backend/profiles';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@backend/users/auth/auth.guard';
 import { RequestsModule } from 'libs/requests/src';
+import { TerminusModule } from '@nestjs/terminus';
+import { TerminusOptionsService } from './terminus-options.service';
 
 const modules = [
   MongoModule,
@@ -23,7 +25,9 @@ const modules = [
       useClass: AuthGuard,
     },
   ],
-  imports: [...modules],
+  imports: [TerminusModule.forRootAsync({
+    useClass: TerminusOptionsService,
+  }), ...modules],
 })
 export class AppModule {}
 
