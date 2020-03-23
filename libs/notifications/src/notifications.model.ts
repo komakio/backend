@@ -1,7 +1,7 @@
 import { IMessageOptions } from 'node-gcm';
 
 export interface SendNotificationArgs {
-  deviceIds: string[];
+  registrationTokens: string[];
   message: IMessageOptions['notification'];
   payload?: IMessageOptions['data'];
 }

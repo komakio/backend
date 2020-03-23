@@ -80,7 +80,7 @@ export class RequestsController {
   public async test(@Param('id') deviceId: string): Promise<void> {
     try {
       await this.notifications.send({
-        deviceIds: [deviceId],
+        registrationTokens: [deviceId],
         message: {
           title: 'dummy title',
           body: 'this is the message body.',

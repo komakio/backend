@@ -28,7 +28,7 @@ export class NotificationsService {
     const promise = new Promise((resolve, reject) => {
       this.sender.send(
         message,
-        { registrationTokens: args.deviceIds },
+        { registrationTokens: args.registrationTokens },
         (response, err) => {
           if (err) {
             reject(err);
