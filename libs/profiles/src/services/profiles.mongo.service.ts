@@ -38,7 +38,7 @@ export class ProfilesMongoService {
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
-      .findOne({ userId: new ObjectID(id) });
+      .findOne({ _id: new ObjectID(id) });
   }
 
   public async findNear(args: {

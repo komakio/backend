@@ -21,17 +21,24 @@ export class RequestsMongoService {
     return req.ops[0];
   }
 
-  public async patchOne(args: {
+  public async findOneById(id: ObjectID): Promise<HelpRequest> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .findOne({ _id: new ObjectID(id) });
+  }
+
+  public async patchOneById(args: {
     id: ObjectID;
-    userId: ObjectID;
+    filters?: any;
     data: Partial<HelpRequest>;
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
       .updateOne(
-        { _id: new ObjectID(args.id), userId: new ObjectID(args.userId) },
-        { $set: args.data }
+        { _id: new ObjectID(args.id), ...args.filters },
+        { $set: { ...args.data, updatedAt: new Date() } }
       );
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { ProfilesMongoService } from './services/profiles.mongo.service';
 import { Profile } from './profile.model';
 import { ObjectID } from 'mongodb';
@@ -9,6 +9,16 @@ export class ProfilesService {
 
   public async create(profile: Partial<Profile>) {
     return this.profilesMongo.createOne(profile);
+  }
+
+  public async validateProfileUserMatch(args: {
+    id: ObjectID;
+    userId: ObjectID;
+  }) {
+    const profile = await this.profilesMongo.findOneById(new ObjectID(args.id));
+    if (profile.userId !== new ObjectID(args.userId)) {
+      throw new HttpException('USER_PROFILE_MISMATCH', HttpStatus.FORBIDDEN);
+    }
   }
 
   public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
