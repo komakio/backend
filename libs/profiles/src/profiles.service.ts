@@ -29,16 +29,16 @@ export class ProfilesService {
   }
 
   public async findNearHelpers(args: { id: ObjectID; maxDistance: number }) {
-    const { location } = await this.profilesMongo.findOneById(
+    const { address } = await this.profilesMongo.findOneById(
       new ObjectID(args.id)
     );
     return this.profilesMongo.findNear({
       filters: {
         role: 'helper',
         disabled: false,
-        'location.country': location.country,
+        'address.country': address.country,
       },
-      coordinates: location.geo.coordinates,
+      coordinates: address.location.coordinates,
       maxDistance: args.maxDistance,
     });
   }

@@ -12,7 +12,7 @@ import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
-import { Location, Profile, Phone, UuidRegTokenPair } from './profile.model';
+import { Profile, Phone, UuidRegTokenPair, Address } from './profile.model';
 import { User } from '@backend/users/users.model';
 
 class CreateProfilesDto {
@@ -25,8 +25,8 @@ class CreateProfilesDto {
   public lastName: string;
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => Location)
-  public location?: Location;
+  @Type(() => Address)
+  public address?: Address;
   @IsOptional()
   @IsBoolean()
   public disabled?: boolean;
@@ -44,14 +44,16 @@ class PatchProfilesDto {
   @IsOptional()
   @IsBoolean()
   public self?: boolean;
+  @IsOptional()
   @IsString()
   public firstName: string;
+  @IsOptional()
   @IsString()
   public lastName: string;
   @IsOptional()
   @ValidateNested()
-  @Type(() => Location)
-  public location?: Location;
+  @Type(() => Address)
+  public address?: Address;
   @IsOptional()
   @IsBoolean()
   public disabled?: boolean;

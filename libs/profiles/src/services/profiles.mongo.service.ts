@@ -13,7 +13,7 @@ export class ProfilesMongoService {
     this.mongo.addIndex(collection, { role: 1 });
     this.mongo.addIndex(collection, { country: 1 });
     this.mongo.addIndex(collection, { disabled: 1 });
-    this.mongo.addIndex(collection, { location: '2dsphere' });
+    this.mongo.addIndex(collection, { 'address.location': '2dsphere' });
   }
 
   public async createOne(profile: Partial<Profile>): Promise<Profile> {
@@ -52,7 +52,7 @@ export class ProfilesMongoService {
       .collection(collection)
       .find({
         ...args.filters,
-        location: {
+        'address.location': {
           $near: {
             $geometry: { type: 'Point', coordinates: args.coordinates },
             $minDistance: args.minDistance || 0,

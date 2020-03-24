@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class Geo {
+export class Location {
   @IsIn(['Point'])
   public type: 'Point';
   @IsNumber({}, { each: true })
@@ -18,14 +18,14 @@ export class Geo {
   public coordinates?: [number, number];
 }
 
-export class Location {
+export class Address {
   @IsString()
-  public address: string;
+  public raw: string;
   @IsString()
   public country: string;
   @ValidateNested()
   @Type(() => Location)
-  public geo?: Geo;
+  public location?: Location;
 }
 
 export class Phone {
@@ -48,7 +48,7 @@ export class Profile {
   public self?: boolean;
   public firstName: string;
   public lastName: string;
-  public location?: Location;
+  public address?: Address;
   public disabled?: boolean;
   public role: 'helper' | 'needer';
   public phone: Phone;
