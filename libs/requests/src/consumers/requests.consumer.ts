@@ -27,7 +27,7 @@ export class RequestsConsumer {
         id: new ObjectID(profileId),
         maxDistance: 1000,
       });
-      const regTokens = profiles.reduce((ids, profile) => {
+      const registrationTokens = profiles.reduce((ids, profile) => {
         ids = [...ids, ...Object.values(profile.uuidRegTokenPair)];
         return ids;
       }, []);
@@ -38,7 +38,7 @@ export class RequestsConsumer {
       });
 
       await this.notifications.send({
-        regTokens,
+        registrationTokens,
         message: {
           title: 'I need help',
           body: 'Please help me!',
