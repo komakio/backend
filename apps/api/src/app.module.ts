@@ -25,9 +25,12 @@ const modules = [
       useClass: AuthGuard,
     },
   ],
-  imports: [TerminusModule.forRootAsync({
-    useClass: TerminusOptionsService,
-  }), ...modules],
+  imports: [
+    TerminusModule.forRootAsync({
+      useClass: TerminusOptionsService,
+    }),
+    ...modules,
+  ],
 })
 export class AppModule {}
 
