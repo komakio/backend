@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { RequestsMongoService } from './services/requests-mongo.service';
 import { HelpRequest } from './requests.model';
+import { ObjectID } from 'mongodb';
 
 @Injectable()
 export class RequestsService {
@@ -8,5 +9,43 @@ export class RequestsService {
 
   public async createOne(request: Partial<HelpRequest>) {
     return this.requestsMongo.createOne(request);
+  }
+
+  public async cancelOne(id: ObjectID) {
+    return this.requestsMongo.patchOneById({
+      id: new ObjectID(id),
+      data: { status: 'canceled', profileIds: [] },
+    });
+  }
+
+  public async acceptOne(args: { id: ObjectID; acceptorProfileId: ObjectID }) {
+    return this.requestsMongo.patchOneById({
+      id: new ObjectID(args.id),
+      data: {
+        status: 'accepted',
+        acceptorProfileId: new ObjectID(args.acceptorProfileId),
+        profileIds: [],
+      },
+    });
+  }
+
+  public async patchOne(args: { id: ObjectID; data: Partial<HelpRequest> }) {
+    return this.requestsMongo.patchOneById({
+      id: new ObjectID(args.id),
+      data: args.data,
+    });
+  }
+
+  public async validateRequestResponseMatch(args: {
+    id: ObjectID;
+    responseProfileId: ObjectID;
+  }) {
+    const request = await this.requestsMongo.findOneById(new ObjectID(args.id));
+    if (!request.profileIds.includes(new ObjectID(args.responseProfileId))) {
+      throw new HttpException(
+        'REQUEST_RESPONSE_MISMATCH',
+        HttpStatus.FORBIDDEN
+      );
+    }
   }
 }

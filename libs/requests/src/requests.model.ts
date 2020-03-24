@@ -14,14 +14,16 @@ export type HelpRequestType = typeof RequestTypeEnum[number];
 export class HelpRequest {
   public _id: ObjectID;
   public createdAt: Date;
+  public updatedAt: Date;
   public status: HelpRequestStatus;
-  public userIds: ObjectID[];
-  public requestedUserId: ObjectID;
-  public acceptedUserId: ObjectID;
+  public profileIds: ObjectID[];
+  public requesterProfileId: ObjectID;
+  public acceptorProfileId: ObjectID;
   public type: HelpRequestType;
   public comment: string;
 }
 
 export class QueueRequest {
-  public userId: ObjectID;
+  public profileId: ObjectID;
+  public requestId: ObjectID;
 }

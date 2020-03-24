@@ -19,12 +19,12 @@ export class RequestsConsumer {
   ) {}
 
   public async consume({ message, ack }: RMQHelper<QueueRequest>) {
-    const { userId } = message;
+    const { profileId, requestId } = message;
 
     try {
       await this.mongo.waitReady();
       const profiles = await this.profiles.findNearHelpers({
-        id: new ObjectID(userId),
+        id: new ObjectID(profileId),
         maxDistance: 1000,
       });
       const deviceIds = profiles.reduce((ids, profile) => {
@@ -32,11 +32,9 @@ export class RequestsConsumer {
         return ids;
       }, []);
 
-      await this.requests.createOne({
-        status: 'pending',
-        userIds: profiles.map(p => p._id),
-        requestedUserId: userId,
-        type: 'misc',
+      await this.requests.patchOne({
+        id: new ObjectID(requestId),
+        data: { profileIds: profiles.map(p => p._id) },
       });
 
       await this.notifications.send({

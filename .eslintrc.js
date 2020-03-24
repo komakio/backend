@@ -4,7 +4,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'prettier'],
   extends: [
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -42,7 +42,6 @@ module.exports = {
       { accessibility: 'explicit', overrides: { constructors: 'no-public' } },
     ],
     'no-duplicate-imports': ['error'],
-    'no-trailing-spaces': 2,
-    'no-multiple-empty-lines': 2
+    'prettier/prettier': 'error'
   },
 };
