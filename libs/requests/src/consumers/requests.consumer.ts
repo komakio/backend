@@ -20,6 +20,7 @@ export class RequestsConsumer {
 
   public async consume({ message, ack }: RMQHelper<QueueRequest>) {
     const { profileId, requestId } = message;
+    console.log({ profileId, requestId });
 
     try {
       await this.mongo.waitReady();
