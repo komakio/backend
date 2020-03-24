@@ -23,7 +23,11 @@ export class HelpRequest {
   public comment: string;
 }
 
-export class QueueRequest {
+export class DispatchQueueRequest {
   public profileId: ObjectID;
+  public requestId: ObjectID;
+}
+
+export class AcceptQueueRequest {
   public requestId: ObjectID;
 }

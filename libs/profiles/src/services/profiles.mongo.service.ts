@@ -41,6 +41,20 @@ export class ProfilesMongoService {
       .findOne({ _id: new ObjectID(id) });
   }
 
+  public async findManyById(args: {
+    ids: ObjectID[];
+    skip?: number;
+    limit?: number;
+  }): Promise<Profile[]> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .find({ _id: { $in: args.ids } })
+      .skip(args.skip || 0)
+      .limit(args.limit || 0)
+      .toArray();
+  }
+
   public async findNear(args: {
     coordinates: [number, number];
     maxDistance: number;

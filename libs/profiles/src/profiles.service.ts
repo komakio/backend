@@ -21,6 +21,18 @@ export class ProfilesService {
     }
   }
 
+  public async findManyById(args: {
+    ids: ObjectID[];
+    skip?: number;
+    limit?: number;
+  }) {
+    return this.profilesMongo.findManyById({
+      ids: args.ids,
+      skip: args.skip,
+      limit: args.limit,
+    });
+  }
+
   public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
     return this.profilesMongo.patchOneById({
       id: new ObjectID(args.id),
@@ -32,7 +44,7 @@ export class ProfilesService {
     const { address } = await this.profilesMongo.findOneById(
       new ObjectID(args.id)
     );
-    return this.profilesMongo.findNear({
+    const near = await this.profilesMongo.findNear({
       filters: {
         role: 'helper',
         disabled: false,
@@ -41,5 +53,6 @@ export class ProfilesService {
       coordinates: address.location.coordinates,
       maxDistance: args.maxDistance,
     });
+    return near.filter(n => !n._id.equals(args.id));
   }
 }
