@@ -13,6 +13,6 @@ async function bootstrap() {
 
   app.get(RabbitMQService).connect();
 
-  await app.listen(3000);
+  await app.listen(3100);
 }
 bootstrap();
