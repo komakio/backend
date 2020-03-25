@@ -17,6 +17,6 @@ export class GoogleService {
     } catch (e) {
       console.log(e);
     }
-    return ticket.getUserId();
+    return ticket?.getUserId();
   }
 }
