@@ -15,7 +15,7 @@ class RegisterDto {
 
 class AppleLoginDto {
   @IsString()
-  public authorizationCode: string;
+  public identityToken: string;
 }
 
 export class LoginDto {
@@ -45,7 +45,7 @@ export class UsersController {
   @Post('login/apple')
   // public async appleLogin(@Body() body: AppleLoginDto): Promise<LoginResult> {
   public async appleLogin(@Body() body: AppleLoginDto): Promise<{}> {
-    const user = await this.users.appleLogin(body.authorizationCode);
+    const user = await this.users.appleLogin(body.identityToken);
     // const accessToken = await this.auth.generateAccessToken(user);
     // return { user: user.serialize(), accessToken };
     return {};

@@ -35,7 +35,7 @@ export class UsersService {
     });
   }
 
-  public async appleLogin(authorizationCode: string) {
-    this.apple.login(authorizationCode);
+  public async appleLogin(identityToken: string) {
+    this.apple.login(identityToken);
   }
 }
