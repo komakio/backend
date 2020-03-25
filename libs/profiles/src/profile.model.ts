@@ -24,7 +24,7 @@ export class Address {
   public raw: string;
   @IsOptional()
   @IsString()
-  public country: string;
+  public country?: string;
   @ValidateNested()
   @Type(() => Location)
   public location?: Location;
@@ -33,7 +33,7 @@ export class Address {
 export class Phone {
   @IsOptional()
   @IsString()
-  public dialCode: string;
+  public dialCode?: string;
   @IsString()
   public number: string;
 }
