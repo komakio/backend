@@ -9,7 +9,6 @@ export class UsersMongoService {
   constructor(private mongo: MongoService) {}
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { username: 1 });
     this.mongo.addIndex(collection, { authType: 1 });
     this.mongo.addIndex(collection, { authId: 1 });
   }

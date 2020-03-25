@@ -19,7 +19,7 @@ export class NotificationsService {
       delayWhileIdle: true,
       timeToLive: 60 * 60 * 24,
       dryRun: !this.config.isProduction,
-      restrictedPackageName: this.config.fcm.restrictedPackageName,
+      restrictedPackageName: this.config.packageName,
       data: args.payload,
       notification: args.message,
     });

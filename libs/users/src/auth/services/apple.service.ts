@@ -9,7 +9,7 @@ export class AppleService {
     let appleId: string;
     try {
       const result = await appleSignin.verifyIdToken(identityToken, {
-        audience: this.config.fcm.restrictedPackageName,
+        audience: this.config.packageName,
       });
       appleId = result.sub;
     } catch {
