@@ -8,22 +8,21 @@ Komak uses geolocation services to send requests for help with groceries, for ex
 
 Komak is meant to be open-source, as we need all of the help we can get in this hopefully short-lived endeavor. 
 
-### Safety
+## General info
+This repo is the backend for Komak, written in Nest.js.
+	
+## Setup
+npm install
 
-Our initiative is born as an attempt to help the current situation, and fight the frustration of not being able to help. We aim to help flatten the curve and protect the ones most at risk of contracting or spreading the virus. 
+### run the dev server on post 3100:
+npm run start:dev
 
-This a fluid situation, and our hope is that everyone, all over the world, takes the proper precautions that will turn these few months into a distant memory. Our service might change as the situation unfolds, but we hope it can provide some support in the fight against this virus.
+### run containers (MongoDB and RabbitMQ)
+docker-compose up -d
 
-In the meantime, however, we have been in contact with medical professionals to give everyone involved the proper advice on staying safe and healthy. We are committed to supporting the use of our service in safe conditions.
+### run queues
+npm run dev:jobs
 
-You can read our indications for volunteers and at-risk groups [here](https://komak.io/user-instructions/).
 
-### How can I contribute?
-
-We are a volunteer-led organization and community. Anyone everywhere can help our initiative in the following ways:
-
-- Become a volunteer by downloading the app 
-- Spreading the word, especially with the people most in need of volunteer services
-- Development; Time is of the essence - you can find out what you can help develop according to our plans on our github.
-- Other skills; We can use all the help we can get. Please send an email and any relevant work you’ve done to komak.contact@gmail.com. 
-- [Join our open Slack community](https://join.slack.com/t/komak/shared_invite/zt-cv316nyt-JW4Py2oCcxvUfesp7YCqIg). We have channels both for users of the app and people that want to contribute with feedback and ideas. We’re eager to hear and learn from you!
+We can use all the help we can get. Please send an email and any relevant work you’ve done to komak.contact@gmail.com. 
+[Join our open Slack community](https://join.slack.com/t/komak/shared_invite/zt-cv316nyt-JW4Py2oCcxvUfesp7YCqIg).
