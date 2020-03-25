@@ -3,12 +3,14 @@ import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
 import { User } from './users.model';
 import { AppleService } from './auth/services/apple.service';
+import { GoogleService } from './auth/services/google.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private usersMongo: UsersMongoService,
-    private apple: AppleService
+    private apple: AppleService,
+    private google: GoogleService
   ) {}
 
   public async patch(args: { id: ObjectID; data: Partial<User> }) {
@@ -36,5 +38,9 @@ export class UsersService {
       authType: 'apple',
       authId: appleId,
     });
+  }
+
+  public async googleLogin(identityToken: string) {
+    this.google.login(identityToken);
   }
 }

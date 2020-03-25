@@ -6,9 +6,16 @@ import { AuthService } from './auth/services/auth.service';
 import { MongoModule } from '@backend/mongo';
 import { ConfigModule } from '@backend/config';
 import { AppleService } from './auth/services/apple.service';
+import { GoogleService } from './auth/services/google.service';
 
 @Module({
-  providers: [UsersService, UsersMongoService, AuthService, AppleService],
+  providers: [
+    UsersService,
+    UsersMongoService,
+    AuthService,
+    AppleService,
+    GoogleService,
+  ],
   controllers: [UsersController],
   imports: [MongoModule, ConfigModule],
   exports: [UsersService, AuthService],
