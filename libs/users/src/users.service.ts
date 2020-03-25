@@ -1,9 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { LoginDto } from './users.controller';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
 import { User } from './users.model';
-import { compareHash, hashString } from 'utils/hash';
 import { AppleService } from './auth/services/apple.service';
 
 @Injectable()
@@ -13,21 +11,6 @@ export class UsersService {
     private apple: AppleService
   ) {}
 
-  public async registerOrLogin(data: LoginDto) {
-    const user = await this.usersMongo.findOneByUsername(data.username);
-    if (user) {
-      if (!(await compareHash(data.password, user.password))) {
-        throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
-      }
-      return user;
-    }
-    const hashedPassword = await hashString(data.password);
-    return this.usersMongo.createOne({
-      username: data.username,
-      password: hashedPassword,
-    });
-  }
-
   public async patch(args: { id: ObjectID; data: Partial<User> }) {
     return this.usersMongo.patchOneById({
       id: new ObjectID(args.id),
@@ -36,6 +19,22 @@ export class UsersService {
   }
 
   public async appleLogin(identityToken: string) {
-    this.apple.login(identityToken);
+    const appleId = await this.apple.getAppleId(identityToken);
+    if (!appleId) {
+      throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
+    }
+
+    const user = await this.usersMongo.findOneByAuthIdType({
+      authId: appleId,
+      authType: 'apple',
+    });
+    if (user) {
+      return user;
+    }
+
+    return this.usersMongo.createOne({
+      authType: 'apple',
+      authId: appleId,
+    });
   }
 }
