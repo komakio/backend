@@ -7,11 +7,16 @@ const oAuth2Client = new OAuth2Client();
 export class GoogleService {
   constructor(private config: ConfigService) {}
 
-  public async login(identityToken: string) {
-    const ticket = await oAuth2Client.verifyIdToken({
-      audience: this.config.fcm.googleProject,
-      idToken: identityToken,
-    });
-    console.log(ticket);
+  public async getTicket(identityToken: string) {
+    let ticket: string;
+    try {
+      ticket = await oAuth2Client.verifyIdToken({
+        audience: this.config.googleAuthProject,
+        idToken: identityToken,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    return ticket;
   }
 }

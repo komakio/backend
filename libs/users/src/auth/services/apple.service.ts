@@ -12,8 +12,9 @@ export class AppleService {
         audience: this.config.packageName,
       });
       appleId = result.sub;
-    } catch {
-      return appleId;
+    } catch (e) {
+      console.log(e);
     }
+    return appleId;
   }
 }
