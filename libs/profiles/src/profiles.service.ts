@@ -21,6 +21,10 @@ export class ProfilesService {
     }
   }
 
+  public async findOneById(id: ObjectID) {
+    return this.profilesMongo.findOneById(new ObjectID(id));
+  }
+
   public async findManyById(args: {
     ids: ObjectID[];
     skip?: number;
