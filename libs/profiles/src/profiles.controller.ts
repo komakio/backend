@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, Get } from '@nestjs/common';
 import {
   IsString,
   IsBoolean,
@@ -72,6 +72,12 @@ class PatchProfilesDto {
 @Controller('v1/profiles')
 export class ProfilesController {
   constructor(private profile: ProfilesService) {}
+
+  @Auth()
+  @Get()
+  public async get(@UserReq() user: User): Promise<Profile[]> {
+    return this.profile.findAllByUserId(new ObjectID(user._id));
+  }
 
   @Auth()
   @Post()

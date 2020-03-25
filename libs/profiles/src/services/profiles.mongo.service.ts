@@ -41,6 +41,14 @@ export class ProfilesMongoService {
       .findOne({ _id: new ObjectID(id) });
   }
 
+  public async findAllByUserId(userId: ObjectID): Promise<Profile[]> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .find({ userId: new ObjectID(userId) })
+      .toArray();
+  }
+
   public async findManyById(args: {
     ids: ObjectID[];
     skip?: number;
