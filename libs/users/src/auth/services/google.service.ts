@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client, LoginTicket } from 'google-auth-library';
 import { ConfigService } from '@backend/config';
 const oAuth2Client = new OAuth2Client();
 
@@ -8,7 +8,7 @@ export class GoogleService {
   constructor(private config: ConfigService) {}
 
   public async getTicket(identityToken: string) {
-    let ticket: string;
+    let ticket: LoginTicket;
     try {
       ticket = await oAuth2Client.verifyIdToken({
         audience: this.config.googleAuthProject,
@@ -17,6 +17,6 @@ export class GoogleService {
     } catch (e) {
       console.log(e);
     }
-    return ticket;
+    return ticket.getUserId();
   }
 }
