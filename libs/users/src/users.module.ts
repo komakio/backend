@@ -5,9 +5,10 @@ import { UsersMongoService } from './services/users.mongo.service';
 import { AuthService } from './auth/services/auth.service';
 import { MongoModule } from '@backend/mongo';
 import { ConfigModule } from '@backend/config';
+import { AppleService } from './auth/services/apple.service';
 
 @Module({
-  providers: [UsersService, UsersMongoService, AuthService],
+  providers: [UsersService, UsersMongoService, AuthService, AppleService],
   controllers: [UsersController],
   imports: [MongoModule, ConfigModule],
   exports: [UsersService, AuthService],
