@@ -6,6 +6,7 @@ import {
   ArrayMaxSize,
   IsString,
   ValidateNested,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -21,6 +22,7 @@ export class Location {
 export class Address {
   @IsString()
   public raw: string;
+  @IsOptional()
   @IsString()
   public country: string;
   @ValidateNested()
@@ -29,6 +31,7 @@ export class Address {
 }
 
 export class Phone {
+  @IsOptional()
   @IsString()
   public dialCode: string;
   @IsString()
