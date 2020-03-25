@@ -11,16 +11,16 @@ Komak is meant to be open-source, as we need all of the help we can get in this 
 ## General info
 This repo is the backend for Komak, written in Nest.js.
 	
-**Setup**
+###### Setup:
 npm install
 
-**run the dev server on port 3100**
+###### run the dev server on port 3100:
 npm run start:dev
 
-**run containers (MongoDB and RabbitMQ)**
+###### run containers (MongoDB and RabbitMQ):
 docker-compose up -d
 
-**run queues**
+###### run queues:
 npm run dev:jobs
 
 
