@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../users.model';
+import { User, AuthType } from '../users.model';
 import { ObjectID } from 'mongodb';
 import { MongoService } from '@backend/mongo';
 
@@ -9,7 +9,8 @@ export class UsersMongoService {
   constructor(private mongo: MongoService) {}
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { username: 1 });
+    this.mongo.addIndex(collection, { authType: 1 });
+    this.mongo.addIndex(collection, { authId: 1 });
   }
 
   public async createOne(user: Partial<User>): Promise<User> {
@@ -27,11 +28,14 @@ export class UsersMongoService {
       .updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
   }
 
-  public async findOneByUsername(username: string): Promise<User> {
+  public async findOneByAuthIdType(args: {
+    authId: string;
+    authType: AuthType;
+  }): Promise<User> {
     await this.mongo.waitReady();
     const user = await this.mongo.db
       .collection(collection)
-      .findOne({ username });
+      .findOne({ authType: args.authType, authId: args.authId });
     return user ? new User(user) : null;
   }
 }

@@ -1,12 +1,15 @@
 import { ObjectID } from 'bson';
 import { Exclude, classToClass } from 'class-transformer';
 
+export const authType = ['apple', 'google'];
+export type AuthType = typeof authType[number];
+
 export class User {
   public _id: ObjectID;
-  public username?: string;
   @Exclude()
-  public password?: string;
-  public createdAt: Date;
+  public authId?: string;
+  public authType?: AuthType;
+  public createdAt?: Date;
   public lastLoginAt?: Date;
   public isAdmin?: boolean;
 

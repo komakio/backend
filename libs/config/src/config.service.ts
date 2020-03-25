@@ -9,6 +9,7 @@ export class ConfigService {
   public host = process.env.HOST;
   public sentryDsn = process.env.SENTRY_BACKEND;
   public tag = process.env.TAG;
+  public packageName = 'io.komak.app';
 
   public mongo = {
     srv: process.env.MONGO_SRV,
@@ -30,7 +31,6 @@ export class ConfigService {
 
   public fcm = {
     serverKey: process.env.FCM_SERVER_KEY,
-    restrictedPackageName: 'io.komak.app',
   };
 
   public jwt = {
