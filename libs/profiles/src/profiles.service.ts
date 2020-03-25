@@ -52,7 +52,6 @@ export class ProfilesService {
       filters: {
         role: 'helper',
         disabled: false,
-        'address.country': address.country,
       },
       coordinates: address.location.coordinates,
       maxDistance: args.maxDistance,
