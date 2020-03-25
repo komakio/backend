@@ -6,7 +6,8 @@ import { LoggerService } from '@backend/logger';
 import { AppConsumerModule } from 'apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
-import { RequestsConsumer } from 'libs/requests/src/consumers/requests.consumer';
+import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
+import { AcceptRequestsConsumer } from '@backend/requests/consumers/accept-requests.consumer';
 
 const logger = new LoggerService();
 
@@ -51,8 +52,13 @@ async function bootstrap() {
 
   await Promise.all([
     bootstrapQueue(
-      ConsumerModule.register(app.get(RequestsConsumer)),
-      requestsRabbitMQ.requestQueueName,
+      ConsumerModule.register(app.get(DispatchRequestsConsumer)),
+      requestsRabbitMQ.dispatchRequestQueueName,
+      30
+    ),
+    bootstrapQueue(
+      ConsumerModule.register(app.get(AcceptRequestsConsumer)),
+      requestsRabbitMQ.acceptRequestQueueName,
       30
     ),
   ]);

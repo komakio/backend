@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Get, Patch, Body } from '@nestjs/common';
+import { Controller, Post, Param, Get, Body } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
@@ -38,7 +38,7 @@ export class RequestsController {
       requesterProfileId: new ObjectID(body.profileId),
       type: 'misc',
     });
-    await this.requestsRabbitMQ.sendToRequests({
+    await this.requestsRabbitMQ.sendToDispatchRequests({
       profileId: new ObjectID(body.profileId),
       requestId: new ObjectID(request._id),
     });
@@ -46,7 +46,7 @@ export class RequestsController {
   }
 
   @Auth()
-  @Patch(':id')
+  @Post(':id/cancel')
   public async cancel(
     @Param('id') id: string,
     @UserReq() user: User,
@@ -63,7 +63,6 @@ export class RequestsController {
   @Post(':id/accept')
   public async accept(
     @Param('id') id: string,
-    @UserReq() user: User,
     @Body() body: RequestBodyDto
   ): Promise<void> {
     await this.requests.validateRequestResponseMatch({
@@ -74,6 +73,7 @@ export class RequestsController {
       id: new ObjectID(id),
       acceptorProfileId: new ObjectID(body.profileId),
     });
+    this.requestsRabbitMQ.sendToAcceptRequests({ requestId: new ObjectID(id) });
   }
 
   @Get(':id')

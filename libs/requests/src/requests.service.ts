@@ -11,6 +11,10 @@ export class RequestsService {
     return this.requestsMongo.createOne(request);
   }
 
+  public async findOneById(id: ObjectID) {
+    return this.requestsMongo.findOneById(new ObjectID(id));
+  }
+
   public async cancelOne(id: ObjectID) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(id),
@@ -41,7 +45,7 @@ export class RequestsService {
     responseProfileId: ObjectID;
   }) {
     const request = await this.requestsMongo.findOneById(new ObjectID(args.id));
-    if (!request.profileIds.includes(new ObjectID(args.responseProfileId))) {
+    if (!request.profileIds.find(id => id.equals(args.responseProfileId))) {
       throw new HttpException(
         'REQUEST_RESPONSE_MISMATCH',
         HttpStatus.FORBIDDEN

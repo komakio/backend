@@ -16,9 +16,21 @@ export class ProfilesService {
     userId: ObjectID;
   }) {
     const profile = await this.profilesMongo.findOneById(new ObjectID(args.id));
-    if (profile.userId !== new ObjectID(args.userId)) {
+    if (!profile.userId.equals(args.userId)) {
       throw new HttpException('USER_PROFILE_MISMATCH', HttpStatus.FORBIDDEN);
     }
+  }
+
+  public async findManyById(args: {
+    ids: ObjectID[];
+    skip?: number;
+    limit?: number;
+  }) {
+    return this.profilesMongo.findManyById({
+      ids: args.ids,
+      skip: args.skip,
+      limit: args.limit,
+    });
   }
 
   public async patchOneById(args: { id: ObjectID; data: Partial<Profile> }) {
@@ -32,7 +44,7 @@ export class ProfilesService {
     const { address } = await this.profilesMongo.findOneById(
       new ObjectID(args.id)
     );
-    return this.profilesMongo.findNear({
+    const near = await this.profilesMongo.findNear({
       filters: {
         role: 'helper',
         disabled: false,
@@ -41,5 +53,6 @@ export class ProfilesService {
       coordinates: address.location.coordinates,
       maxDistance: args.maxDistance,
     });
+    return near.filter(n => !n._id.equals(args.id));
   }
 }
