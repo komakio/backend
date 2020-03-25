@@ -74,13 +74,9 @@ export class ProfilesController {
   constructor(private profile: ProfilesService) {}
 
   @Auth()
-  @Get(':id')
-  public async get(@Param('id') id: string, @UserReq() user: User) {
-    await this.profile.validateProfileUserMatch({
-      id: new ObjectID(id),
-      userId: user._id,
-    });
-    return this.profile.findOneById(new ObjectID(id));
+  @Get()
+  public async get(@UserReq() user: User): Promise<Profile[]> {
+    return this.profile.findAllByUserId(new ObjectID(user._id));
   }
 
   @Auth()

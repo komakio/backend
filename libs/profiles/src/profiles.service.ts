@@ -21,8 +21,8 @@ export class ProfilesService {
     }
   }
 
-  public async findOneById(id: ObjectID) {
-    return this.profilesMongo.findOneById(new ObjectID(id));
+  public async findAllByUserId(userId: ObjectID) {
+    return this.profilesMongo.findAllByUserId(new ObjectID(userId));
   }
 
   public async findManyById(args: {
