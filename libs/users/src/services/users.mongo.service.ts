@@ -21,6 +21,16 @@ export class UsersMongoService {
     return new User(req.ops[0]);
   }
 
+  public async findOneById(id: ObjectID): Promise<User> {
+    return this.mongo.db
+      .collection(collection)
+      .findOne({ _id: new ObjectID(id) });
+  }
+
+  public async findManyByIds(ids: ObjectID[]): Promise<User[]> {
+    return this.mongo.db.collection(collection).findOne({ _id: { $in: ids } });
+  }
+
   public async patchOneById(args: { id: ObjectID; data: Partial<User> }) {
     await this.mongo.waitReady();
     return this.mongo.db

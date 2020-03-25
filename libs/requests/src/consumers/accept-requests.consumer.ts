@@ -7,6 +7,7 @@ import { ProfilesService } from '@backend/profiles';
 import { ObjectID } from 'mongodb';
 import { NotificationsService } from '@backend/notifications';
 import { RequestsService } from '../requests.service';
+import { UsersService } from '@backend/users';
 
 @Injectable()
 export class AcceptRequestsConsumer {
@@ -15,7 +16,8 @@ export class AcceptRequestsConsumer {
     private logger: LoggerService,
     private profiles: ProfilesService,
     private notifications: NotificationsService,
-    private requests: RequestsService
+    private requests: RequestsService,
+    private users: UsersService
   ) {}
 
   public async consume({ message, ack }: RMQHelper<AcceptQueueRequest>) {
@@ -23,13 +25,17 @@ export class AcceptRequestsConsumer {
     try {
       await this.mongo.waitReady();
       const request = await this.requests.findOneById(new ObjectID(requestId));
-      const recipientProfiles = await this.profiles.findManyById({
-        ids: request.profileIds,
-      });
+      const users = await this.users.findManyByIds(
+        request.profileIds.map(id => new ObjectID(id))
+      );
+      const registrationTokens = users
+        .filter(
+          u => u.uuidRegTokenPair && Object.keys(u.uuidRegTokenPair).length
+        )
+        .map(u => Object.values(u.uuidRegTokenPair)?.[0]);
+
       await this.notifications.send({
-        registrationTokens: recipientProfiles.map(
-          r => Object.values(r.uuidRegTokenPair)[0]
-        ),
+        registrationTokens,
         message: {
           title: 'The request accepted',
           body: 'The request accepted!',

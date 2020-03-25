@@ -1,13 +1,20 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { IsString } from 'class-validator';
+import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { IsString, IsObject } from 'class-validator';
 import { UsersService } from './users.service';
-import { User } from './users.model';
+import { User, UuidRegTokenPair } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
+import { UserReq } from 'utils/decorators';
+import { ObjectID } from 'mongodb';
 
 class LoginDto {
   @IsString()
   public identityToken: string;
+}
+
+class RegistrationTokenDto {
+  @IsObject()
+  public uuidRegTokenPair: UuidRegTokenPair;
 }
 
 class LoginResult {
@@ -31,5 +38,13 @@ export class UsersController {
     const user = await this.users.googleLogin(body.identityToken);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user.serialize(), accessToken };
+  }
+
+  @Patch('registration-token')
+  public async registrationToken(
+    @UserReq() user: User,
+    @Body() body: RegistrationTokenDto
+  ): Promise<void> {
+    await this.users.patch({ id: new ObjectID(user._id), data: body });
   }
 }

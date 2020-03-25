@@ -11,6 +11,7 @@ import { ProfilesModule } from '@backend/profiles';
 import { RequestsController } from './requests.controller';
 import { NotificationsModule } from '@backend/notifications';
 import { AcceptRequestsConsumer } from './consumers/accept-requests.consumer';
+import { UsersModule } from '@backend/users';
 
 @Module({
   controllers: [RequestsController],
@@ -28,6 +29,7 @@ import { AcceptRequestsConsumer } from './consumers/accept-requests.consumer';
     LoggerModule,
     ProfilesModule,
     NotificationsModule,
+    UsersModule,
   ],
   exports: [RequestsService],
 })

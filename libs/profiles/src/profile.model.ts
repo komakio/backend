@@ -38,10 +38,6 @@ export class Phone {
   public number: string;
 }
 
-export class UuidRegTokenPair {
-  [uuid: string]: string;
-}
-
 export class Profile {
   public _id: ObjectID;
   public userId: ObjectID;
@@ -55,5 +51,4 @@ export class Profile {
   public disabled?: boolean;
   public role: 'helper' | 'needer';
   public phone: Phone;
-  public uuidRegTokenPair: UuidRegTokenPair;
 }
