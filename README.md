@@ -1,75 +1,29 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Welcome to Komak’s open-source repository 🙏
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## What is Komak?
 
-## Description
+Komak is an app born out of necessity in the wake of the COVID-19 events. There are people in our community more susceptible or already exposed to the effects of the virus than others. The goal of Komak is to provide a digital platform for healthy volunteers to help out those most in need. 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Komak uses geolocation services to send requests for help with groceries, for example, to nearby volunteers that are willing to help out.
 
-## Installation
+Komak is meant to be open-source, as we need all of the help we can get in this hopefully short-lived endeavor. 
 
-```bash
-$ npm install
-```
+### Safety
 
-## Running the app
+Our initiative is born as an attempt to help the current situation, and fight the frustration of not being able to help. We aim to help flatten the curve and protect the ones most at risk of contracting or spreading the virus. 
 
-```bash
-# development
-$ npm run start
+This a fluid situation, and our hope is that everyone, all over the world, takes the proper precautions that will turn these few months into a distant memory. Our service might change as the situation unfolds, but we hope it can provide some support in the fight against this virus.
 
-# watch mode
-$ npm run start:dev
+In the meantime, however, we have been in contact with medical professionals to give everyone involved the proper advice on staying safe and healthy. We are committed to supporting the use of our service in safe conditions.
 
-# production mode
-$ npm run start:prod
-```
+You can read our indications for volunteers and at-risk groups [here](https://komak.io/user-instructions/).
 
-## Test
+### How can I contribute?
 
-```bash
-# unit tests
-$ npm run test
+We are a volunteer-led organization and community. Anyone everywhere can help our initiative in the following ways:
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-  Nest is [MIT licensed](LICENSE).
+- Become a volunteer by downloading the app 
+- Spreading the word, especially with the people most in need of volunteer services
+- Development; Time is of the essence - you can find out what you can help develop according to our plans on our github.
+- Other skills; We can use all the help we can get. Please send an email and any relevant work you’ve done to komak.contact@gmail.com. 
+- [Join our open Slack community](https://join.slack.com/t/komak/shared_invite/zt-cv316nyt-JW4Py2oCcxvUfesp7YCqIg). We have channels both for users of the app and people that want to contribute with feedback and ideas. We’re eager to hear and learn from you!
