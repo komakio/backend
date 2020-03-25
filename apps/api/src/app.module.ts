@@ -8,7 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@backend/users/auth/auth.guard';
 import { RequestsModule } from 'libs/requests/src';
 import { TerminusModule } from '@nestjs/terminus';
-import { TerminusOptionsService } from './terminus-options.service';
+import { HealthController } from './health-controller.controller';
 
 const modules = [
   MongoModule,
@@ -19,18 +19,14 @@ const modules = [
   RequestsModule,
 ];
 @Module({
+  controllers: [HealthController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
-  imports: [
-    TerminusModule.forRootAsync({
-      useClass: TerminusOptionsService,
-    }),
-    ...modules,
-  ],
+  imports: [TerminusModule, ...modules],
 })
 export class AppModule {}
 
