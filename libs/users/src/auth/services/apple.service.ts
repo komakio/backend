@@ -1,20 +1,13 @@
-import * as appleSignin from 'apple-signin';
+import appleSignin from 'apple-signin-auth';
 import { Injectable } from '@nestjs/common';
-
-const clientId = 'io.komak.app';
-const clientSecret = appleSignin.getClientSecret({
-  clientID: clientId,
-});
 
 @Injectable()
 export class AppleService {
   public async login(authorizationCode: string) {
-    const tokens = await appleSignin.getAuthorizationToken(authorizationCode, {
-      clientID: clientId,
-      clientSecret,
-      redirectUri: '/',
+    const result = await appleSignin.verifyIdToken(authorizationCode, {
+      audience: 'io.komak.app', // SHOULD BE ENV VARIABLE
     });
-    // tokens.access_token
-    // tokens.id_token
+    const appleId = result.sub;
+    console.log(appleId);
   }
 }
