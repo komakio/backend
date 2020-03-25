@@ -1,8 +1,7 @@
-import { Controller, Post, Param, Get, Body } from '@nestjs/common';
+import { Controller, Post, Param, Body } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
-import { NotificationsService } from '@backend/notifications';
 import { RequestsService } from './requests.service';
 import { ObjectID } from 'mongodb';
 import { IsString } from 'class-validator';
@@ -19,8 +18,7 @@ export class RequestsController {
   constructor(
     private requestsRabbitMQ: RequestsRabbitMQService,
     private requests: RequestsService,
-    private profiles: ProfilesService,
-    private notifications: NotificationsService
+    private profiles: ProfilesService
   ) {}
 
   @Auth()
@@ -74,21 +72,5 @@ export class RequestsController {
       acceptorProfileId: new ObjectID(body.profileId),
     });
     this.requestsRabbitMQ.sendToAcceptRequests({ requestId: new ObjectID(id) });
-  }
-
-  @Get(':id')
-  public async test(@Param('id') deviceId: string): Promise<void> {
-    try {
-      await this.notifications.send({
-        registrationTokens: [deviceId],
-        message: {
-          title: 'dummy title',
-          body: 'this is the message body.',
-          icon: 'no-icon',
-        },
-      });
-    } catch (err) {
-      console.log('failed', { err });
-    }
   }
 }
