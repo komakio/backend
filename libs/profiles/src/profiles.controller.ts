@@ -6,13 +6,12 @@ import {
   IsOptional,
   ValidateNested,
   IsNotEmpty,
-  IsObject,
 } from 'class-validator';
 import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
-import { Profile, Phone, UuidRegTokenPair, Address } from './profile.model';
+import { Profile, Phone, Address } from './profile.model';
 import { User } from '@backend/users/users.model';
 
 class CreateProfilesDto {
@@ -36,8 +35,6 @@ class CreateProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
-  @IsObject()
-  public uuidRegTokenPair: UuidRegTokenPair;
 }
 
 class PatchProfilesDto {
@@ -64,9 +61,6 @@ class PatchProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
-  @IsOptional()
-  @IsObject()
-  public uuidRegTokenPair: UuidRegTokenPair;
 }
 
 @Controller('v1/profiles')

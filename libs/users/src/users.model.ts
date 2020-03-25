@@ -4,6 +4,10 @@ import { Exclude, classToClass } from 'class-transformer';
 export const authType = ['apple', 'google'];
 export type AuthType = typeof authType[number];
 
+export class UuidRegTokenPair {
+  [uuid: string]: string;
+}
+
 export class User {
   public _id: ObjectID;
   @Exclude()
@@ -12,6 +16,7 @@ export class User {
   public createdAt?: Date;
   public lastLoginAt?: Date;
   public isAdmin?: boolean;
+  public uuidRegTokenPair: UuidRegTokenPair;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

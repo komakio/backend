@@ -30,6 +30,14 @@ export class UsersService {
     return this.getUser({ authId, authType: 'google' });
   }
 
+  public async findOneById(id: ObjectID) {
+    return this.usersMongo.findOneById(id);
+  }
+
+  public async findManyByIds(ids: ObjectID[]) {
+    return this.usersMongo.findManyByIds(ids);
+  }
+
   private async getUser(args: { authId: string; authType: AuthType }) {
     if (!args.authId) {
       throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
