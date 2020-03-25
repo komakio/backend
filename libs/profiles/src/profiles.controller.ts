@@ -36,8 +36,6 @@ class CreateProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
-  @IsObject()
-  public uuidRegTokenPair: UuidRegTokenPair;
 }
 
 class PatchProfilesDto {
@@ -64,9 +62,6 @@ class PatchProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
-  @IsOptional()
-  @IsObject()
-  public uuidRegTokenPair: UuidRegTokenPair;
 }
 
 @Controller('v1/profiles')
