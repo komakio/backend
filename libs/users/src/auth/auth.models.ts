@@ -11,7 +11,7 @@ export class AccessToken {
 
 export class AccessTokenResponse {
   @IsString()
-  public accessToken: string;
+  public token: string;
   /** Timestamp of expiration in ms */
   @IsNumber()
   public expiration: number;
