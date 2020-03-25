@@ -1,14 +1,16 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
-import { User } from './users.model';
+import { User, AuthType } from './users.model';
 import { AppleService } from './auth/services/apple.service';
+import { GoogleService } from './auth/services/google.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private usersMongo: UsersMongoService,
-    private apple: AppleService
+    private apple: AppleService,
+    private google: GoogleService
   ) {}
 
   public async patch(args: { id: ObjectID; data: Partial<User> }) {
@@ -19,22 +21,31 @@ export class UsersService {
   }
 
   public async appleLogin(identityToken: string) {
-    const appleId = await this.apple.getAppleId(identityToken);
-    if (!appleId) {
+    const authId = await this.apple.getAppleId(identityToken);
+    return this.getUser({ authId, authType: 'apple' });
+  }
+
+  public async googleLogin(identityToken: string) {
+    const authId = await this.google.getTicket(identityToken);
+    return this.getUser({ authId, authType: 'google' });
+  }
+
+  private async getUser(args: { authId: string; authType: AuthType }) {
+    if (!args.authId) {
       throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
     }
 
     const user = await this.usersMongo.findOneByAuthIdType({
-      authId: appleId,
-      authType: 'apple',
+      authId: args.authId,
+      authType: args.authType,
     });
     if (user) {
       return user;
     }
 
     return this.usersMongo.createOne({
-      authType: 'apple',
-      authId: appleId,
+      authType: args.authType,
+      authId: args.authId,
     });
   }
 }

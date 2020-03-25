@@ -10,6 +10,7 @@ export class ConfigService {
   public sentryDsn = process.env.SENTRY_BACKEND;
   public tag = process.env.TAG;
   public packageName = 'io.komak.app';
+  public googleAuthProject = process.env.GOOGLE_AUTH_PROJECT;
 
   public mongo = {
     srv: process.env.MONGO_SRV,
