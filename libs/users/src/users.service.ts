@@ -4,10 +4,14 @@ import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
 import { User } from './users.model';
 import { compareHash, hashString } from 'utils/hash';
+import { AppleService } from './auth/services/apple.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private usersMongo: UsersMongoService) {}
+  constructor(
+    private usersMongo: UsersMongoService,
+    private apple: AppleService
+  ) {}
 
   public async registerOrLogin(data: LoginDto) {
     const user = await this.usersMongo.findOneByUsername(data.username);
@@ -29,5 +33,9 @@ export class UsersService {
       id: new ObjectID(args.id),
       data: args.data,
     });
+  }
+
+  public async appleLogin(identityToken: string) {
+    this.apple.login(identityToken);
   }
 }

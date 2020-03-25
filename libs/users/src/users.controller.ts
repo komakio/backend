@@ -13,6 +13,11 @@ class RegisterDto {
   public password: string;
 }
 
+class AppleLoginDto {
+  @IsString()
+  public identityToken: string;
+}
+
 export class LoginDto {
   @IsString()
   public username: string;
@@ -35,5 +40,14 @@ export class UsersController {
     const user = await this.users.registerOrLogin(body);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user.serialize(), accessToken };
+  }
+
+  @Post('login/apple')
+  // public async appleLogin(@Body() body: AppleLoginDto): Promise<LoginResult> {
+  public async appleLogin(@Body() body: AppleLoginDto): Promise<{}> {
+    const user = await this.users.appleLogin(body.identityToken);
+    // const accessToken = await this.auth.generateAccessToken(user);
+    // return { user: user.serialize(), accessToken };
+    return {};
   }
 }
