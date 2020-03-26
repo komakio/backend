@@ -43,14 +43,27 @@ export class UsersController {
   }
 
   @Patch('registration-token')
-  public async registrationToken(
+  public async patchRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
   ): Promise<void> {
     await this.users.patch({
       id: new ObjectID(user._id),
-      data: {
+      set: {
         [`uuidRegTokenPair.${body.uuid}`]: body.registrationToken,
+      },
+    });
+  }
+
+  @Post('registration-token/unset')
+  public async deleteRegistrationToken(
+    @UserReq() user: User,
+    @Body() body: RegistrationTokenDto
+  ): Promise<void> {
+    await this.users.patch({
+      id: new ObjectID(user._id),
+      unset: {
+        [`uuidRegTokenPair.${body.uuid}`]: '',
       },
     });
   }

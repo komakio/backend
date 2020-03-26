@@ -34,11 +34,22 @@ export class UsersMongoService {
       .toArray();
   }
 
-  public async patchOneById(args: { id: ObjectID; data: Partial<User> }) {
+  public async patchOneById(args: {
+    id: ObjectID;
+    set: Partial<User>;
+    unset: Partial<User>;
+  }) {
     await this.mongo.waitReady();
+    const query: any = {};
+    if (args.set) {
+      query.$set = args.set;
+    }
+    if (args.unset) {
+      query.$unset = args.unset;
+    }
     return this.mongo.db
       .collection(collection)
-      .updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
+      .updateOne({ _id: new ObjectID(args.id) }, { ...query });
   }
 
   public async findOneByAuthIdType(args: {
