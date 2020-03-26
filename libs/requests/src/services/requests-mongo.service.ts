@@ -28,6 +28,14 @@ export class RequestsMongoService {
       .findOne({ _id: new ObjectID(id) });
   }
 
+  public async findManyBy(filters: any): Promise<HelpRequest[]> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .find(filters)
+      .toArray();
+  }
+
   public async patchOneById(args: {
     id: ObjectID;
     filters?: any;
