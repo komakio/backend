@@ -28,9 +28,11 @@ export class DispatchRequestsConsumer {
         id: new ObjectID(profileId),
         maxDistance: 1000,
       });
+
       const users = await this.users.findManyByIds(
         profiles?.map(p => new ObjectID(p.userId))
       );
+
       const registrationTokens =
         users
           ?.filter(

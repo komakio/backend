@@ -54,6 +54,7 @@ export class RequestsController {
       profileId: new ObjectID(body.profileId),
       requestId: new ObjectID(request._id),
     });
+
     return request;
   }
 
