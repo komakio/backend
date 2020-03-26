@@ -84,13 +84,8 @@ export class RequestsController {
   @Get(':id/profiles/:profileId')
   public async getProfileRequests(
     @Param('id') id: string,
-    @Param('profileId') profileId: string,
-    @UserReq() user: User
+    @Param('profileId') profileId: string
   ): Promise<Profile[]> {
-    await this.profiles.validateProfileUserMatch({
-      id: new ObjectID(profileId),
-      userId: new ObjectID(user._id),
-    });
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
       profileId: new ObjectID(profileId),
