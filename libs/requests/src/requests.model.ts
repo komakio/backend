@@ -21,6 +21,7 @@ export class HelpRequest {
   public acceptorProfileId: ObjectID;
   public type: HelpRequestType;
   public comment: string;
+  public firstName: string;
 }
 
 export class DispatchQueueRequest {
