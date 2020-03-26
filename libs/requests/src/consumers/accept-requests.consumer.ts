@@ -28,11 +28,12 @@ export class AcceptRequestsConsumer {
       const users = await this.users.findManyByIds(
         request.profileIds.map(id => new ObjectID(id))
       );
-      const registrationTokens = users
-        .filter(
-          u => u.uuidRegTokenPair && Object.keys(u.uuidRegTokenPair).length
-        )
-        .map(u => Object.values(u.uuidRegTokenPair)?.[0]);
+      const registrationTokens =
+        users
+          ?.filter(
+            u => u.uuidRegTokenPair && Object.keys(u.uuidRegTokenPair).length
+          )
+          .map(u => Object.values(u.uuidRegTokenPair)?.[0]) || [];
 
       await this.notifications.send({
         registrationTokens,
@@ -42,7 +43,7 @@ export class AcceptRequestsConsumer {
           icon: 'icon',
         },
         payload: {
-          requestId: requestId.toString(),
+          requestId: requestId?.toString(),
         },
       });
 

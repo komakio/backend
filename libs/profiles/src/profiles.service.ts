@@ -56,6 +56,6 @@ export class ProfilesService {
       coordinates: address.location.coordinates,
       maxDistance: args.maxDistance,
     });
-    return near.filter(n => !n._id.equals(args.id));
+    return near?.length ? near.filter(n => !n._id.equals(args.id)) : [];
   }
 }

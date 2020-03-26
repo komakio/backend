@@ -29,17 +29,18 @@ export class DispatchRequestsConsumer {
         maxDistance: 1000,
       });
       const users = await this.users.findManyByIds(
-        profiles.map(p => new ObjectID(p.userId))
+        profiles?.map(p => new ObjectID(p.userId))
       );
-      const registrationTokens = users
-        .filter(
-          u => u.uuidRegTokenPair && Object.keys(u.uuidRegTokenPair).length
-        )
-        .map(u => Object.values(u.uuidRegTokenPair)?.[0]);
+      const registrationTokens =
+        users
+          ?.filter(
+            u => u.uuidRegTokenPair && Object.keys(u.uuidRegTokenPair).length
+          )
+          .map(u => Object.values(u.uuidRegTokenPair)?.[0]) || [];
 
       await this.requests.patchOne({
         id: new ObjectID(requestId),
-        data: { profileIds: profiles.map(p => p._id) },
+        data: { profileIds: profiles?.map(p => p._id) },
       });
 
       await this.notifications.send({
@@ -50,7 +51,7 @@ export class DispatchRequestsConsumer {
           icon: 'icon',
         },
         payload: {
-          requestId: requestId.toString(),
+          requestId: requestId?.toString(),
         },
       });
 
