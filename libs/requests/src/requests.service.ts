@@ -19,7 +19,7 @@ export class RequestsService {
     return this.requestsMongo.findOneById(new ObjectID(id));
   }
 
-  public async findAllByProfileId(args: {
+  public async findAllNewestByProfileId(args: {
     profileId: ObjectID;
     skip?: number;
     limit?: number;

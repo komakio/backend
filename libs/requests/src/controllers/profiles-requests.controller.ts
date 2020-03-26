@@ -23,7 +23,9 @@ export class ProfilesRequestsController {
       id: new ObjectID(id),
       userId: new ObjectID(user._id),
     });
-    const requests = await this.requests.findAllByProfileId(new ObjectID(id));
+    const requests = await this.requests.findAllNewestByProfileId({
+      profileId: new ObjectID(id),
+    });
     return requests.reverse();
   }
 }
