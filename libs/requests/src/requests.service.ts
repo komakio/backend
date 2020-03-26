@@ -69,12 +69,15 @@ export class RequestsService {
     }
   }
 
-  public async findRequestProfilesDetailsById(id: ObjectID) {
-    const request = await this.findOneById(new ObjectID(id));
+  public async findRequestProfilesDetailsById(args: {
+    id: ObjectID;
+    profileId: ObjectID;
+  }) {
+    const request = await this.findOneById(new ObjectID(args.id));
     if (
       request.status !== 'accepted' ||
-      (!request.acceptorProfileId.equals(id) &&
-        !request.requesterProfileId.equals(id))
+      (!request.acceptorProfileId.equals(args.profileId) &&
+        !request.requesterProfileId.equals(args.profileId))
     ) {
       throw new HttpException('FORBIDDEN_REQUEST', HttpStatus.FORBIDDEN);
     }

@@ -77,8 +77,19 @@ export class RequestsController {
   }
 
   @Auth()
-  @Get(':id/profiles')
-  public async getProfileRequests(@Param('id') id: string): Promise<Profile[]> {
-    return this.requests.findRequestProfilesDetailsById(new ObjectID(id));
+  @Get(':id/profiles/:profileId')
+  public async getProfileRequests(
+    @Param('id') id: string,
+    @Param('profileId') profileId: string,
+    @UserReq() user: User
+  ): Promise<Profile[]> {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(profileId),
+      userId: new ObjectID(user._id),
+    });
+    return this.requests.findRequestProfilesDetailsById({
+      id: new ObjectID(id),
+      profileId: new ObjectID(profileId),
+    });
   }
 }
