@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body, Get } from '@nestjs/common';
+import { Controller, Post, Param, Body } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
@@ -22,7 +22,7 @@ export class RequestsController {
   ) {}
 
   @Auth()
-  @Get()
+  @Post()
   public async get(
     @UserReq() user: User,
     @Body() body: RequestBodyDto
