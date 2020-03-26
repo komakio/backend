@@ -91,6 +91,10 @@ export class RequestsController {
       id: new ObjectID(profileId),
       userId: new ObjectID(user._id),
     });
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(profileId),
+      userId: new ObjectID(user._id),
+    });
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
       profileId: new ObjectID(profileId),
