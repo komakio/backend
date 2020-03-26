@@ -47,9 +47,9 @@ export class DispatchRequestsConsumer {
       await this.notifications.send({
         registrationTokens,
         message: {
-          title: 'I need help',
-          body: 'Please help me!',
-          icon: 'icon',
+          title: 'KOMAK',
+          body: 'Someone is in need of your help.',
+          icon: '',
         },
         payload: {
           requestId: requestId?.toString(),

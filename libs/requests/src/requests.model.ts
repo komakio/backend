@@ -32,10 +32,6 @@ export class DispatchRequestQueue {
   public requestId: ObjectID;
 }
 
-export class AcceptRequestQueue {
-  public requestId: ObjectID;
-}
-
 export class SubscribeNewHelperRequestQueue {
   public profileId: ObjectID;
   public registrationToken: string;

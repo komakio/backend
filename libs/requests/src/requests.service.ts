@@ -88,9 +88,9 @@ export class RequestsService {
       await this.notifications.send({
         registrationTokens: [args.registrationToken],
         message: {
-          title: 'I need help',
-          body: 'Please help me!',
-          icon: 'icon',
+          title: 'KOMAK',
+          body: 'Someone is in need of your help.',
+          icon: '',
         },
         payload: {
           requestId: r._id?.toString(),

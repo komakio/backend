@@ -10,7 +10,6 @@ import { LoggerModule } from '@backend/logger';
 import { ProfilesModule } from '@backend/profiles';
 import { RequestsController } from './controllers/requests.controller';
 import { NotificationsModule } from '@backend/notifications';
-import { AcceptRequestsConsumer } from './consumers/accept-requests.consumer';
 import { UsersModule } from '@backend/users';
 import { ProfilesRequestsController } from './controllers/profiles-requests.controller';
 import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.consumer';
@@ -22,7 +21,6 @@ import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.con
     RequestsMongoService,
     RequestsRabbitMQService,
     DispatchRequestsConsumer,
-    AcceptRequestsConsumer,
     SubscribeNewHelperConsumer,
   ],
   imports: [

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Patch } from '@nestjs/common';
-import { IsString, IsObject } from 'class-validator';
+import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
-import { User, UuidRegTokenPair } from './users.model';
+import { User } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
 import { UserReq } from 'utils/decorators';
