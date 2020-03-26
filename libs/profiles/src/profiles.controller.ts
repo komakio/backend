@@ -13,6 +13,7 @@ import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';
 import { Profile, Phone, Address } from './profile.model';
 import { User } from '@backend/users/users.model';
+import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 
 class CreateProfilesDto {
   @IsOptional()
@@ -65,7 +66,10 @@ class PatchProfilesDto {
 
 @Controller('v1/profiles')
 export class ProfilesController {
-  constructor(private profile: ProfilesService) {}
+  constructor(
+    private profile: ProfilesService,
+    private profileRabbitMQ: ProfilesRabbitMQService
+  ) {}
 
   @Auth()
   @Get()
@@ -79,10 +83,20 @@ export class ProfilesController {
     @Body() body: CreateProfilesDto,
     @UserReq() user: User
   ): Promise<Profile> {
-    return this.profile.create({
+    const profile = await this.profile.create({
       ...body,
       userId: new ObjectID(user._id),
     });
+    const registrationToken =
+      user.uuidRegTokenPair && Object.values(user.uuidRegTokenPair)?.[0];
+
+    if (body.self && body.role === 'helper' && registrationToken) {
+      await this.profileRabbitMQ.sendToSubscribeNewHelperRequests({
+        profileId: profile._id,
+        registrationToken,
+      });
+    }
+    return profile;
   }
 
   @Auth()

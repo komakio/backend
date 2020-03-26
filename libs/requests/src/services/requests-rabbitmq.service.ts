@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
 import { RabbitMQService } from '@backend/rabbitmq';
-import {
-  DispatchRequestQueue,
-  AcceptRequestQueue,
-  SubscribeNewHelperRequestQueue,
-} from '../requests.model';
+import { DispatchRequestQueue, AcceptRequestQueue } from '../requests.model';
 
 @Injectable()
 export class RequestsRabbitMQService {
   public dispatchRequestQueueName = `${this.config.rabbitmq.prefix}dispatchRequestQueue`;
   public acceptRequestQueueName = `${this.config.rabbitmq.prefix}acceptRequestQueue`;
-  public subscribeNewHelperRequestQueueName = `${this.config.rabbitmq.prefix}subscribeNewHelperRequestQueue`;
 
   constructor(
     private config: ConfigService,
@@ -23,13 +18,5 @@ export class RequestsRabbitMQService {
   }
   public async sendToAcceptRequests(props: AcceptRequestQueue) {
     await this.rabbitMQ.sendToQueue(this.acceptRequestQueueName, props);
-  }
-  public async sendToSubscribeNewHelperRequests(
-    props: SubscribeNewHelperRequestQueue
-  ) {
-    await this.rabbitMQ.sendToQueue(
-      this.subscribeNewHelperRequestQueueName,
-      props
-    );
   }
 }
