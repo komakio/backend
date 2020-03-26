@@ -81,14 +81,14 @@ export class RequestsController {
   }
 
   @Auth()
-  @Get(':id/profiles/:oppositeProfileId')
+  @Get(':id/profiles/:profileId')
   public async getProfileRequests(
     @Param('id') id: string,
-    @Param('oppositeProfileId') oppositeProfileId: string
+    @Param('profileId') profileId: string
   ): Promise<Profile[]> {
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
-      profileId: new ObjectID(oppositeProfileId),
+      profileId: new ObjectID(profileId),
     });
   }
 }
