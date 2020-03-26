@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
@@ -55,7 +55,7 @@ export class UsersController {
     });
   }
 
-  @Delete('registration-token')
+  @Post('registration-token/unset')
   public async deleteRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
