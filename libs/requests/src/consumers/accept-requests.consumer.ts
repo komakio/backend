@@ -3,7 +3,6 @@ import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
 import { AcceptQueueRequest } from '../requests.model';
-import { ProfilesService } from '@backend/profiles';
 import { ObjectID } from 'mongodb';
 import { NotificationsService } from '@backend/notifications';
 import { RequestsService } from '../requests.service';
@@ -14,7 +13,6 @@ export class AcceptRequestsConsumer {
   constructor(
     private mongo: MongoService,
     private logger: LoggerService,
-    private profiles: ProfilesService,
     private notifications: NotificationsService,
     private requests: RequestsService,
     private users: UsersService
