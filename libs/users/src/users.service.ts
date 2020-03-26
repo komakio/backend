@@ -13,10 +13,15 @@ export class UsersService {
     private google: GoogleService
   ) {}
 
-  public async patch(args: { id: ObjectID; data: Partial<User> }) {
+  public async patch(args: {
+    id: ObjectID;
+    set?: Partial<User>;
+    unset?: Partial<User>;
+  }) {
     return this.usersMongo.patchOneById({
       id: new ObjectID(args.id),
-      data: args.data,
+      set: args.set,
+      unset: args.unset,
     });
   }
 

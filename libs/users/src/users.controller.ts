@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Delete } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
@@ -43,14 +43,27 @@ export class UsersController {
   }
 
   @Patch('registration-token')
-  public async registrationToken(
+  public async patchRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
   ): Promise<void> {
     await this.users.patch({
       id: new ObjectID(user._id),
-      data: {
+      set: {
         [`uuidRegTokenPair.${body.uuid}`]: body.registrationToken,
+      },
+    });
+  }
+
+  @Delete('registration-token')
+  public async deleteRegistrationToken(
+    @UserReq() user: User,
+    @Body() body: RegistrationTokenDto
+  ): Promise<void> {
+    await this.users.patch({
+      id: new ObjectID(user._id),
+      unset: {
+        [`uuidRegTokenPair.${body.uuid}`]: '',
       },
     });
   }
