@@ -3,12 +3,14 @@ import { RequestsMongoService } from './services/requests-mongo.service';
 import { HelpRequest } from './requests.model';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
+import { NotificationsService } from '@backend/notifications';
 
 @Injectable()
 export class RequestsService {
   constructor(
     private requestsMongo: RequestsMongoService,
-    private profiles: ProfilesService
+    private profiles: ProfilesService,
+    private notifications: NotificationsService
   ) {}
 
   public async createOne(request: Partial<HelpRequest>) {
@@ -65,6 +67,37 @@ export class RequestsService {
       id: new ObjectID(args.id),
       data: args.data,
     });
+  }
+
+  public async subscribeToRequests(args: {
+    profileId: ObjectID;
+    registrationToken: string;
+  }) {
+    const profile = await this.profiles.findOneById(
+      new ObjectID(args.profileId)
+    );
+    const requests = await this.requestsMongo.findManyNear({
+      coordinates: profile?.address?.location?.coordinates,
+    });
+
+    const promises = requests.slice(3).map(async r => {
+      await this.requestsMongo.pushToProfileIds({
+        profileId: new ObjectID(args.profileId),
+        id: new ObjectID(r._id),
+      });
+      await this.notifications.send({
+        registrationTokens: [args.registrationToken],
+        message: {
+          title: 'I need help',
+          body: 'Please help me!',
+          icon: 'icon',
+        },
+        payload: {
+          requestId: r._id?.toString(),
+        },
+      });
+    });
+    await Promise.all(promises);
   }
 
   public async validateRequestResponseMatch(args: {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
 import { RabbitMQService } from '@backend/rabbitmq';
-import { DispatchQueueRequest, AcceptQueueRequest } from '../requests.model';
+import { DispatchRequestQueue, AcceptRequestQueue } from '../requests.model';
 
 @Injectable()
 export class RequestsRabbitMQService {
@@ -13,10 +13,10 @@ export class RequestsRabbitMQService {
     private rabbitMQ: RabbitMQService
   ) {}
 
-  public async sendToDispatchRequests(props: DispatchQueueRequest) {
+  public async sendToDispatchRequests(props: DispatchRequestQueue) {
     await this.rabbitMQ.sendToQueue(this.dispatchRequestQueueName, props);
   }
-  public async sendToAcceptRequests(props: AcceptQueueRequest) {
+  public async sendToAcceptRequests(props: AcceptRequestQueue) {
     await this.rabbitMQ.sendToQueue(this.acceptRequestQueueName, props);
   }
 }

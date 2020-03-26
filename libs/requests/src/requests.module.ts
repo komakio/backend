@@ -13,6 +13,7 @@ import { NotificationsModule } from '@backend/notifications';
 import { AcceptRequestsConsumer } from './consumers/accept-requests.consumer';
 import { UsersModule } from '@backend/users';
 import { ProfilesRequestsController } from './controllers/profiles-requests.controller';
+import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.consumer';
 
 @Module({
   controllers: [RequestsController, ProfilesRequestsController],
@@ -22,6 +23,7 @@ import { ProfilesRequestsController } from './controllers/profiles-requests.cont
     RequestsRabbitMQService,
     DispatchRequestsConsumer,
     AcceptRequestsConsumer,
+    SubscribeNewHelperConsumer,
   ],
   imports: [
     MongoModule,

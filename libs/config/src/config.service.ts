@@ -18,6 +18,7 @@ export class ConfigService {
       process.env.GOOGLE_AUTH_PROJECT_ANDROID ||
       '50726922019-2n2928603iapbq7kslc4leo7ikgs5l7b.apps.googleusercontent.com',
   };
+  public maxDistance = process.env.MAX_DISTANCE || 1000;
 
   public mongo = {
     srv: process.env.MONGO_SRV,
