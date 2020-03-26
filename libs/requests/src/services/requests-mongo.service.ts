@@ -30,7 +30,7 @@ export class RequestsMongoService {
       .findOne({ _id: new ObjectID(id) });
   }
 
-  public async findOneNear(args: {
+  public async findManyNear(args: {
     coordinates: Location['coordinates'];
     filters?: any;
     minDistance?: number;

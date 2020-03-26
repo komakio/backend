@@ -76,7 +76,7 @@ export class RequestsService {
     const profile = await this.profiles.findOneById(
       new ObjectID(args.profileId)
     );
-    const requests = await this.requestsMongo.findOneNear({
+    const requests = await this.requestsMongo.findManyNear({
       coordinates: profile?.address?.location?.coordinates,
     });
 
