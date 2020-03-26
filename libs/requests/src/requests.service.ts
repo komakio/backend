@@ -2,10 +2,14 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { RequestsMongoService } from './services/requests-mongo.service';
 import { HelpRequest } from './requests.model';
 import { ObjectID } from 'mongodb';
+import { ProfilesService } from '@backend/profiles';
 
 @Injectable()
 export class RequestsService {
-  constructor(private requestsMongo: RequestsMongoService) {}
+  constructor(
+    private requestsMongo: RequestsMongoService,
+    private profiles: ProfilesService
+  ) {}
 
   public async createOne(request: Partial<HelpRequest>) {
     return this.requestsMongo.createOne(request);
@@ -63,5 +67,20 @@ export class RequestsService {
         HttpStatus.FORBIDDEN
       );
     }
+  }
+
+  public async findRequestProfilesDetailsById(id: ObjectID) {
+    const request = await this.findOneById(new ObjectID(id));
+    if (
+      request.status !== 'accepted' ||
+      (!request.acceptorProfileId.equals(id) &&
+        !request.requesterProfileId.equals(id))
+    ) {
+      throw new HttpException('FORBIDDEN_REQUEST', HttpStatus.FORBIDDEN);
+    }
+    const profiles = await this.profiles.findManyById({
+      ids: [request.acceptorProfileId, request.requesterProfileId],
+    });
+    return profiles;
   }
 }

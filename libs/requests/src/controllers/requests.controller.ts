@@ -7,6 +7,7 @@ import { ObjectID } from 'mongodb';
 import { IsString } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
+import { Profile } from '@backend/profiles/profile.model';
 
 class RequestBodyDto {
   @IsString()
@@ -73,5 +74,12 @@ export class RequestsController {
       acceptorProfileId: new ObjectID(body.profileId),
     });
     this.requestsRabbitMQ.sendToAcceptRequests({ requestId: new ObjectID(id) });
+  }
+
+  @Auth()
+  @Get(':id/profiles')
+  public async getProfileRequests(@Param('id') id: string): Promise<Profile[]> {
+    // todo: validation
+    return this.requests.findRequestProfilesDetailsById(new ObjectID(id));
   }
 }
