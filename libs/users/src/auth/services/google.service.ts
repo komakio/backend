@@ -11,7 +11,10 @@ export class GoogleService {
     let ticket: LoginTicket;
     try {
       ticket = await oAuth2Client.verifyIdToken({
-        audience: this.config.googleAuthProject,
+        audience: [
+          this.config.googleAuthProject.ios,
+          this.config.googleAuthProject.android,
+        ],
         idToken: identityToken,
       });
     } catch (e) {
