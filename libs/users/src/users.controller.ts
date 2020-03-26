@@ -50,10 +50,7 @@ export class UsersController {
     await this.users.patch({
       id: new ObjectID(user._id),
       data: {
-        uuidRegTokenPair: {
-          ...user.uuidRegTokenPair,
-          [body.uuid]: body.registrationToken,
-        },
+        [`uuidRegTokenPair.${body.uuid}`]: body.registrationToken,
       },
     });
   }
