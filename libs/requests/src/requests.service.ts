@@ -36,7 +36,7 @@ export class RequestsService {
           { requesterProfileId: new ObjectID(args.profileId) },
         ],
       },
-      orderBy: { _id: -1 },
+      orderBy: { $natural: -1 },
       skip: args.skip,
       limit: args.limit,
     });
