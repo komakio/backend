@@ -7,7 +7,6 @@ import { AppConsumerModule } from 'apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
 import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
-import { AcceptRequestsConsumer } from '@backend/requests/consumers/accept-requests.consumer';
 import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 import { ProfilesRabbitMQService } from '@backend/profiles/services/profiles-rabbitmq.service';
 
@@ -57,11 +56,6 @@ async function bootstrap() {
     bootstrapQueue(
       ConsumerModule.register(app.get(DispatchRequestsConsumer)),
       requestsRabbitMQ.dispatchRequestQueueName,
-      30
-    ),
-    bootstrapQueue(
-      ConsumerModule.register(app.get(AcceptRequestsConsumer)),
-      requestsRabbitMQ.acceptRequestQueueName,
       30
     ),
     bootstrapQueue(

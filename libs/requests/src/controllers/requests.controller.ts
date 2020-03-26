@@ -78,7 +78,6 @@ export class RequestsController {
       id: new ObjectID(id),
       acceptorProfileId: new ObjectID(body.profileId),
     });
-    this.requestsRabbitMQ.sendToAcceptRequests({ requestId: new ObjectID(id) });
   }
 
   @Auth()
