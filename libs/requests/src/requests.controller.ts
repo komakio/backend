@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body } from '@nestjs/common';
+import { Controller, Post, Param, Body, Get } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
@@ -20,6 +20,22 @@ export class RequestsController {
     private requests: RequestsService,
     private profiles: ProfilesService
   ) {}
+
+  @Auth()
+  @Get()
+  public async get(
+    @UserReq() user: User,
+    @Body() body: RequestBodyDto
+  ): Promise<HelpRequest[]> {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(body.profileId),
+      userId: new ObjectID(user._id),
+    });
+    const requests = await this.requests.findAllByProfileId(
+      new ObjectID(body.profileId)
+    );
+    return requests;
+  }
 
   @Auth()
   @Post()

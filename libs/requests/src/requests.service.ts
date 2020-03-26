@@ -15,6 +15,12 @@ export class RequestsService {
     return this.requestsMongo.findOneById(new ObjectID(id));
   }
 
+  public async findAllByProfileId(profileId: ObjectID) {
+    return this.requestsMongo.findManyBy({
+      profileIds: new ObjectID(profileId),
+    });
+  }
+
   public async cancelOne(id: ObjectID) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(id),
