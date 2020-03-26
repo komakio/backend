@@ -1,12 +1,12 @@
 import { Controller, Post, Param, Body, Get } from '@nestjs/common';
 import { UserReq, Auth } from 'utils/decorators';
 import { User } from '@backend/users/users.model';
-import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
-import { RequestsService } from './requests.service';
+import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
+import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { IsString } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
-import { HelpRequest } from './requests.model';
+import { HelpRequest } from '../requests.model';
 
 class RequestBodyDto {
   @IsString()
@@ -20,20 +20,6 @@ export class RequestsController {
     private requests: RequestsService,
     private profiles: ProfilesService
   ) {}
-
-  @Auth()
-  @Get('profile/:id/requests')
-  public async getProfileRequests(
-    @UserReq() user: User,
-    @Param('id') id: string
-  ): Promise<HelpRequest[]> {
-    await this.profiles.validateProfileUserMatch({
-      id: new ObjectID(id),
-      userId: new ObjectID(user._id),
-    });
-    const requests = await this.requests.findAllByProfileId(new ObjectID(id));
-    return requests;
-  }
 
   @Auth()
   @Post()
