@@ -8,13 +8,14 @@ import { RequestsMongoService } from './services/requests-mongo.service';
 import { DispatchRequestsConsumer } from './consumers/dispatch-requests.consumer';
 import { LoggerModule } from '@backend/logger';
 import { ProfilesModule } from '@backend/profiles';
-import { RequestsController } from './requests.controller';
+import { RequestsController } from './controllers/requests.controller';
 import { NotificationsModule } from '@backend/notifications';
 import { AcceptRequestsConsumer } from './consumers/accept-requests.consumer';
 import { UsersModule } from '@backend/users';
+import { ProfilesRequestsController } from './controllers/profiles-requests.controller';
 
 @Module({
-  controllers: [RequestsController],
+  controllers: [RequestsController, ProfilesRequestsController],
   providers: [
     RequestsService,
     RequestsMongoService,

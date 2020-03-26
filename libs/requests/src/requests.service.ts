@@ -17,7 +17,13 @@ export class RequestsService {
 
   public async findAllByProfileId(profileId: ObjectID) {
     return this.requestsMongo.findManyBy({
-      profileIds: new ObjectID(profileId),
+      $or: [
+        {
+          profileIds: new ObjectID(profileId),
+        },
+        { acceptorProfileId: new ObjectID(profileId) },
+        { requesterProfileId: new ObjectID(profileId) },
+      ],
     });
   }
 
