@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb';
+import { Location } from '@backend/profiles/profile.model';
 
 export const HelpRequestStatusEnum = [
   'pending',
@@ -23,13 +24,19 @@ export class HelpRequest {
   public comment: string;
   public requesterShortName: string;
   public acceptorShortName: string;
+  public location: Location;
 }
 
-export class DispatchQueueRequest {
+export class DispatchRequestQueue {
   public profileId: ObjectID;
   public requestId: ObjectID;
 }
 
-export class AcceptQueueRequest {
+export class AcceptRequestQueue {
   public requestId: ObjectID;
+}
+
+export class SubscribeNewHelperRequestQueue {
+  public profileId: ObjectID;
+  public registrationToken: string;
 }

@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
-import { AcceptQueueRequest } from '../requests.model';
 import { ObjectID } from 'mongodb';
 import { NotificationsService } from '@backend/notifications';
 import { RequestsService } from '../requests.service';
 import { UsersService } from '@backend/users';
+import { AcceptRequestQueue } from '../requests.model';
 
 @Injectable()
 export class AcceptRequestsConsumer {
@@ -18,7 +18,7 @@ export class AcceptRequestsConsumer {
     private users: UsersService
   ) {}
 
-  public async consume({ message, ack }: RMQHelper<AcceptQueueRequest>) {
+  public async consume({ message, ack }: RMQHelper<AcceptRequestQueue>) {
     const { requestId } = message;
     try {
       await this.mongo.waitReady();

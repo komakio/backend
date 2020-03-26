@@ -48,18 +48,15 @@ export class ProfilesService {
     });
   }
 
-  public async findNearHelpers(args: { id: ObjectID; maxDistance: number }) {
-    const { address } = await this.profilesMongo.findOneById(
-      new ObjectID(args.id)
-    );
+  public async findNearHelpersById(id: ObjectID) {
+    const { address } = await this.profilesMongo.findOneById(new ObjectID(id));
     const near = await this.profilesMongo.findNear({
       filters: {
         role: 'helper',
         disabled: { $ne: true },
       },
       coordinates: address.location.coordinates,
-      maxDistance: args.maxDistance,
     });
-    return near?.length ? near.filter(n => !n._id.equals(args.id)) : [];
+    return near?.length ? near.filter(n => !n._id.equals(id)) : [];
   }
 }

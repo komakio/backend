@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
 import { HelpRequest } from '../requests.model';
 import { UpdateWriteOpResult, ObjectID } from 'mongodb';
+import { Location } from '@backend/profiles/profile.model';
+import { ConfigService } from '@backend/config';
 
 const collection = 'requests';
 @Injectable()
 export class RequestsMongoService {
-  constructor(private mongo: MongoService) {}
+  constructor(private mongo: MongoService, private config: ConfigService) {}
 
   public onApplicationBootstrap() {
     this.mongo.addIndex(collection, { status: 1 });
@@ -26,6 +28,32 @@ export class RequestsMongoService {
     return this.mongo.db
       .collection(collection)
       .findOne({ _id: new ObjectID(id) });
+  }
+
+  public async findOneNear(args: {
+    coordinates: Location['coordinates'];
+    filters?: any;
+    minDistance?: number;
+    maxDistance?: number;
+    skip?: number;
+    limit?: number;
+  }): Promise<HelpRequest[]> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .find({
+        ...args.filters,
+        location: {
+          $near: {
+            $geometry: { type: 'Point', coordinates: args.coordinates },
+            $minDistance: args.minDistance || 0,
+            $maxDistance: args.maxDistance || this.config.maxDistance,
+          },
+        },
+      })
+      .skip(args.skip || 0)
+      .limit(args.limit || 10)
+      .toArray();
   }
 
   public async findManyBy(args: {
@@ -55,6 +83,19 @@ export class RequestsMongoService {
       .updateOne(
         { _id: new ObjectID(args.id), ...args.filters },
         { $set: { ...args.data, updatedAt: new Date() } }
+      );
+  }
+
+  public async pushToProfileIds(args: {
+    id: ObjectID;
+    profileId: ObjectID;
+  }): Promise<UpdateWriteOpResult> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .updateOne(
+        { _id: new ObjectID(args.id) },
+        { $push: { profileIds: new ObjectID(args.profileId) } }
       );
   }
 }

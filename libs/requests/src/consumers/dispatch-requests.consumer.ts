@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
-import { DispatchQueueRequest } from '../requests.model';
+import { DispatchRequestQueue } from '../requests.model';
 import { ProfilesService } from '@backend/profiles';
 import { ObjectID } from 'mongodb';
 import { NotificationsService } from '@backend/notifications';
@@ -20,14 +20,13 @@ export class DispatchRequestsConsumer {
     private users: UsersService
   ) {}
 
-  public async consume({ message, ack }: RMQHelper<DispatchQueueRequest>) {
+  public async consume({ message, ack }: RMQHelper<DispatchRequestQueue>) {
     const { profileId, requestId } = message;
     try {
       await this.mongo.waitReady();
-      const profiles = await this.profiles.findNearHelpers({
-        id: new ObjectID(profileId),
-        maxDistance: 1000,
-      });
+      const profiles = await this.profiles.findNearHelpersById(
+        new ObjectID(profileId)
+      );
 
       const users = await this.users.findManyByIds(
         profiles?.map(p => new ObjectID(p.userId))

@@ -37,6 +37,7 @@ export class RequestsController {
     );
     const request = await this.requests.createOne({
       requesterShortName: profile.firstName,
+      location: profile?.address?.location,
       status: 'pending',
       requesterProfileId: new ObjectID(body.profileId),
       type: 'misc',
@@ -89,6 +90,30 @@ export class RequestsController {
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
       profileId: new ObjectID(profileId),
+    });
+  }
+
+  @Auth()
+  @Post('subscribe')
+  public async subscribeToRequests(
+    @Body() body: RequestBodyDto,
+    @UserReq() user: User
+  ) {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(body.profileId),
+      userId: new ObjectID(user._id),
+    });
+
+    const registrationToken =
+      user.uuidRegTokenPair && Object.values(user.uuidRegTokenPair)?.[0];
+
+    if (!registrationToken) {
+      return;
+    }
+
+    await this.requestsRabbitMQ.sendToSubscribeNewHelperRequests({
+      profileId: new ObjectID(body.profileId),
+      registrationToken,
     });
   }
 }

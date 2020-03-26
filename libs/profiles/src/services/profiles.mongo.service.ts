@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
 import { Profile } from '../profile.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
+import { ConfigService } from '@backend/config';
 
 const collection = 'profiles';
 @Injectable()
 export class ProfilesMongoService {
-  constructor(private mongo: MongoService) {}
+  constructor(private mongo: MongoService, private config: ConfigService) {}
 
   public onApplicationBootstrap() {
     this.mongo.addIndex(collection, { userId: 1 });
@@ -65,7 +66,7 @@ export class ProfilesMongoService {
 
   public async findNear(args: {
     coordinates: [number, number];
-    maxDistance: number;
+    maxDistance?: number;
     minDistance?: number;
     filters?: any;
   }): Promise<Profile[]> {
@@ -78,7 +79,7 @@ export class ProfilesMongoService {
           $near: {
             $geometry: { type: 'Point', coordinates: args.coordinates },
             $minDistance: args.minDistance || 0,
-            $maxDistance: args.maxDistance,
+            $maxDistance: args.maxDistance || this.config.maxDistance,
           },
         },
       })

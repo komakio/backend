@@ -8,6 +8,7 @@ import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
 import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
 import { AcceptRequestsConsumer } from '@backend/requests/consumers/accept-requests.consumer';
+import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 
 const logger = new LoggerService();
 
@@ -59,6 +60,11 @@ async function bootstrap() {
     bootstrapQueue(
       ConsumerModule.register(app.get(AcceptRequestsConsumer)),
       requestsRabbitMQ.acceptRequestQueueName,
+      30
+    ),
+    bootstrapQueue(
+      ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
+      requestsRabbitMQ.subscribeNewHelperRequestQueueName,
       30
     ),
   ]);
