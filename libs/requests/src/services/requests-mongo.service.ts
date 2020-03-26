@@ -28,11 +28,19 @@ export class RequestsMongoService {
       .findOne({ _id: new ObjectID(id) });
   }
 
-  public async findManyBy(filters: any): Promise<HelpRequest[]> {
+  public async findManyBy(args: {
+    filters: any;
+    orderBy: { [key: string]: 1 | -1 };
+    skip: number;
+    limit: number;
+  }): Promise<HelpRequest[]> {
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
-      .find(filters)
+      .find(args.filters)
+      .sort(args.orderBy)
+      .skip(args.skip || 0)
+      .limit(args.limit || 10)
       .toArray();
   }
 
