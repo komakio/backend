@@ -79,7 +79,6 @@ export class RequestsController {
   @Auth()
   @Get(':id/profiles')
   public async getProfileRequests(@Param('id') id: string): Promise<Profile[]> {
-    // todo: validation
     return this.requests.findRequestProfilesDetailsById(new ObjectID(id));
   }
 }
