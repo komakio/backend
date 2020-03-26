@@ -19,15 +19,24 @@ export class RequestsService {
     return this.requestsMongo.findOneById(new ObjectID(id));
   }
 
-  public async findAllByProfileId(profileId: ObjectID) {
+  public async findAllNewestByProfileId(args: {
+    profileId: ObjectID;
+    skip?: number;
+    limit?: number;
+  }) {
     return this.requestsMongo.findManyBy({
-      $or: [
-        {
-          profileIds: new ObjectID(profileId),
-        },
-        { acceptorProfileId: new ObjectID(profileId) },
-        { requesterProfileId: new ObjectID(profileId) },
-      ],
+      filters: {
+        $or: [
+          {
+            profileIds: new ObjectID(args.profileId),
+          },
+          { acceptorProfileId: new ObjectID(args.profileId) },
+          { requesterProfileId: new ObjectID(args.profileId) },
+        ],
+      },
+      orderBy: { _id: -1 },
+      skip: args.skip,
+      limit: args.limit,
     });
   }
 

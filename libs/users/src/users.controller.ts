@@ -13,8 +13,10 @@ class LoginDto {
 }
 
 class RegistrationTokenDto {
-  @IsObject()
-  public uuidRegTokenPair: UuidRegTokenPair;
+  @IsString()
+  public uuid: string;
+  @IsString()
+  public registrationToken: string;
 }
 
 class LoginResult {
@@ -45,6 +47,11 @@ export class UsersController {
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
   ): Promise<void> {
-    await this.users.patch({ id: new ObjectID(user._id), data: body });
+    await this.users.patch({
+      id: new ObjectID(user._id),
+      data: {
+        [`uuidRegTokenPair.${body.uuid}`]: body.registrationToken,
+      },
+    });
   }
 }
