@@ -39,12 +39,14 @@ export class RequestsService {
   }
 
   public async acceptOne(args: { id: ObjectID; acceptorProfileId: ObjectID }) {
+    const profile = await this.profiles.findOneById(args.acceptorProfileId);
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: {
         status: 'accepted',
         acceptorProfileId: new ObjectID(args.acceptorProfileId),
         profileIds: [],
+        acceptorShortName: profile.firstName,
       },
     });
   }

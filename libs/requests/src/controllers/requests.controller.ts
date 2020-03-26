@@ -36,7 +36,7 @@ export class RequestsController {
       new ObjectID(body.profileId)
     );
     const request = await this.requests.createOne({
-      firstName: profile.firstName,
+      requesterShortName: profile.firstName,
       status: 'pending',
       requesterProfileId: new ObjectID(body.profileId),
       type: 'misc',
