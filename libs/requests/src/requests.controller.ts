@@ -41,6 +41,8 @@ export class RequestsController {
     @UserReq() user: User,
     @Body() body: RequestBodyDto
   ): Promise<HelpRequest> {
+    console.log('hi');
+
     await this.profiles.validateProfileUserMatch({
       id: new ObjectID(body.profileId),
       userId: new ObjectID(user._id),
@@ -54,6 +56,7 @@ export class RequestsController {
       profileId: new ObjectID(body.profileId),
       requestId: new ObjectID(request._id),
     });
+
     return request;
   }
 
