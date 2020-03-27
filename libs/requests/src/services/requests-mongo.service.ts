@@ -39,8 +39,6 @@ export class RequestsMongoService {
     skip?: number;
     limit?: number;
   }): Promise<HelpRequest[]> {
-    console.log(JSON.stringify(args, null, 2));
-
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
