@@ -99,4 +99,17 @@ export class RequestsMongoService {
         { $push: { profileIds: new ObjectID(args.profileId) } }
       );
   }
+
+  public async pullFromProfileIds(args: {
+    id: ObjectID;
+    profileId: ObjectID;
+  }): Promise<UpdateWriteOpResult> {
+    await this.mongo.waitReady();
+    return this.mongo.db
+      .collection(collection)
+      .updateOne(
+        { _id: new ObjectID(args.id) },
+        { $pull: { profileIds: new ObjectID(args.profileId) } }
+      );
+  }
 }

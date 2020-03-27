@@ -81,6 +81,22 @@ export class RequestsController {
   }
 
   @Auth()
+  @Post(':id/refuse')
+  public async refuse(
+    @Param('id') id: string,
+    @Body() body: RequestBodyDto
+  ): Promise<void> {
+    await this.requests.validateRequestResponseMatch({
+      id: new ObjectID(id),
+      responseProfileId: new ObjectID(body.profileId),
+    });
+    await this.requests.refuseOne({
+      id: new ObjectID(id),
+      refuserProfileId: new ObjectID(body.profileId),
+    });
+  }
+
+  @Auth()
   @Get(':id/profiles/:profileId')
   public async getProfileRequests(
     @Param('id') id: string,

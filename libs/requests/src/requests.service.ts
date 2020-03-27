@@ -87,6 +87,13 @@ export class RequestsService {
     });
   }
 
+  public async refuseOne(args: { id: ObjectID; refuserProfileId: ObjectID }) {
+    return this.requestsMongo.pullFromProfileIds({
+      profileId: new ObjectID(args.refuserProfileId),
+      id: new ObjectID(args.id),
+    });
+  }
+
   public async patchOne(args: { id: ObjectID; data: Partial<HelpRequest> }) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
