@@ -44,6 +44,8 @@ export class DispatchRequestsConsumer {
         data: { profileIds: profiles?.map(p => p._id) },
       });
 
+      const request = await this.requests.findOneById(requestId);
+
       await this.notifications.send({
         registrationTokens,
         message: {
@@ -52,7 +54,7 @@ export class DispatchRequestsConsumer {
           icon: '',
         },
         payload: {
-          requestId: requestId?.toString(),
+          request: JSON.stringify(request),
         },
       });
 
