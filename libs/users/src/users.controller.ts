@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { User } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
-import { UserReq } from 'utils/decorators';
+import { UserReq, Auth } from 'utils/decorators';
 import { ObjectID } from 'mongodb';
 
 class LoginDto {
@@ -24,11 +24,12 @@ class LoginResult {
   public accessToken: AccessTokenResponse;
 }
 
-@Controller('v1/users/current')
+@Controller('v1/users')
 export class UsersController {
   constructor(private users: UsersService, private auth: AuthService) {}
 
-  @Get()
+  @Auth()
+  @Get('/current')
   public async getCurrent(@UserReq() user: User): Promise<User> {
     return user.serialize();
   }
