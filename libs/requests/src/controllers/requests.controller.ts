@@ -107,7 +107,7 @@ export class RequestsController {
       id: new ObjectID(id),
       profileId: new ObjectID(body.profileId),
     });
-    await this.requests.finish({
+    await this.requests.finishOne({
       id: new ObjectID(id),
       profileId: new ObjectID(body.profileId),
     });

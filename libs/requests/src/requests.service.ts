@@ -94,7 +94,7 @@ export class RequestsService {
     });
   }
 
-  public async finish(args: { id: ObjectID; profileId: ObjectID }) {
+  public async finishOne(args: { id: ObjectID; profileId: ObjectID }) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: { status: 'used' },
