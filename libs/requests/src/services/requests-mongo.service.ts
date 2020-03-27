@@ -59,9 +59,9 @@ export class RequestsMongoService {
 
   public async findManyBy(args: {
     filters: any;
-    orderBy: { [key: string]: 1 | -1 };
-    skip: number;
-    limit: number;
+    orderBy?: { [key: string]: 1 | -1 };
+    skip?: number;
+    limit?: number;
   }): Promise<HelpRequest[]> {
     await this.mongo.waitReady();
     return this.mongo.db
@@ -71,6 +71,11 @@ export class RequestsMongoService {
       .skip(args.skip || 0)
       .limit(args.limit || 10)
       .toArray();
+  }
+
+  public async findOneBy(filters: any): Promise<HelpRequest> {
+    await this.mongo.waitReady();
+    return this.mongo.db.collection(collection).findOne(filters);
   }
 
   public async patchOneById(args: {

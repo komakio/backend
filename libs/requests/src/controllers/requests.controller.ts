@@ -97,6 +97,23 @@ export class RequestsController {
   }
 
   @Auth()
+  @Post(':id/finish')
+  public async finish(
+    @Param('id') id: string,
+    @Body() body: RequestBodyDto
+  ): Promise<void> {
+    //todo: validate
+    await this.requests.validateRequestProfileIdMatch({
+      id: new ObjectID(id),
+      profileId: new ObjectID(body.profileId),
+    });
+    await this.requests.finish({
+      id: new ObjectID(id),
+      profileId: new ObjectID(body.profileId),
+    });
+  }
+
+  @Auth()
   @Get(':id/profiles/:profileId')
   public async getProfileRequests(
     @Param('id') id: string,

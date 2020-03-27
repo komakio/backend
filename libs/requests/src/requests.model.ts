@@ -6,7 +6,7 @@ export const HelpRequestStatusEnum = [
   'canceled',
   'accepted',
   'used',
-];
+] as const;
 export type HelpRequestStatus = typeof HelpRequestStatusEnum[number];
 
 export const RequestTypeEnum = ['misc'];

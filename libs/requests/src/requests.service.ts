@@ -94,6 +94,13 @@ export class RequestsService {
     });
   }
 
+  public async finish(args: { id: ObjectID; profileId: ObjectID }) {
+    return this.requestsMongo.patchOneById({
+      id: new ObjectID(args.id),
+      data: { status: 'used' },
+    });
+  }
+
   public async patchOne(args: { id: ObjectID; data: Partial<HelpRequest> }) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
@@ -142,6 +149,21 @@ export class RequestsService {
         'REQUEST_RESPONSE_MISMATCH',
         HttpStatus.FORBIDDEN
       );
+    }
+  }
+
+  public async validateRequestProfileIdMatch(args: {
+    id: ObjectID;
+    profileId: ObjectID;
+  }) {
+    const request = await this.requestsMongo.findOneBy({
+      $or: [
+        { acceptorProfileId: new ObjectID(args.profileId) },
+        { requesterProfileId: new ObjectID(args.profileId) },
+      ],
+    });
+    if (!request) {
+      throw new HttpException('FORBIDDEN_PROFILE_ID', HttpStatus.FORBIDDEN);
     }
   }
 
