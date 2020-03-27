@@ -37,7 +37,8 @@ export class UsersController {
 
   @Auth()
   @Get('/current')
-  public async getCurrent(@UserReq() user: User): Promise<User> {
+  public async getCurrent(@UserReq() userRed: User): Promise<User> {
+    const user = await this.users.findOneById(new ObjectID(userRed._id));
     return user.serialize();
   }
 

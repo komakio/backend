@@ -13,6 +13,7 @@ export class RequestsMongoService {
   public onApplicationBootstrap() {
     this.mongo.addIndex(collection, { status: 1 });
     this.mongo.addIndex(collection, { createdAt: 1 });
+    this.mongo.addIndex(collection, { location: '2dsphere' });
   }
 
   public async createOne(request: Partial<HelpRequest>): Promise<HelpRequest> {
@@ -38,6 +39,8 @@ export class RequestsMongoService {
     skip?: number;
     limit?: number;
   }): Promise<HelpRequest[]> {
+    console.log(JSON.stringify(args, null, 2));
+
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
