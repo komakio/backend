@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Get } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
-import { UserReq } from 'utils/decorators';
+import { UserReq, Auth } from 'utils/decorators';
 import { ObjectID } from 'mongodb';
 
 class LoginDto {
@@ -27,6 +27,12 @@ class LoginResult {
 @Controller('v1/users')
 export class UsersController {
   constructor(private users: UsersService, private auth: AuthService) {}
+
+  @Auth()
+  @Get('/current')
+  public async getCurrent(@UserReq() user: User): Promise<User> {
+    return user.serialize();
+  }
 
   @Post('login/apple')
   public async appleLogin(@Body() body: LoginDto): Promise<LoginResult> {
