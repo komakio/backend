@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User, AuthType } from '../users.model';
+import { User, SocialAuthType } from '../users.model';
 import { ObjectID } from 'mongodb';
 import { MongoService } from '@backend/mongo';
 
@@ -9,7 +9,7 @@ export class UsersMongoService {
   constructor(private mongo: MongoService) {}
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { authType: 1 });
+    this.mongo.addIndex(collection, { SocialAuthType: 1 });
     this.mongo.addIndex(collection, { authId: 1 });
   }
 
@@ -52,14 +52,23 @@ export class UsersMongoService {
       .updateOne({ _id: new ObjectID(args.id) }, { ...query });
   }
 
-  public async findOneByAuthIdType(args: {
-    authId: string;
-    authType: AuthType;
+  public async findOneBySocialAuth(args: {
+    socialAuthId: string;
+    socialAuthType: SocialAuthType;
   }): Promise<User> {
+    await this.mongo.waitReady();
+    const user = await this.mongo.db.collection(collection).findOne({
+      socialAuthType: args.socialAuthType,
+      socialAuthId: args.socialAuthId,
+    });
+    return user ? new User(user) : null;
+  }
+
+  public async findOneByUsername(username: string): Promise<User> {
     await this.mongo.waitReady();
     const user = await this.mongo.db
       .collection(collection)
-      .findOne({ authType: args.authType, authId: args.authId });
+      .findOne({ username });
     return user ? new User(user) : null;
   }
 }

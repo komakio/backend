@@ -1,8 +1,8 @@
 import { ObjectID } from 'bson';
 import { Exclude, classToClass } from 'class-transformer';
 
-export const authType = ['apple', 'google'];
-export type AuthType = typeof authType[number];
+export const socialAuthType = ['apple', 'google'];
+export type SocialAuthType = typeof socialAuthType[number];
 
 export class UuidRegTokenPair {
   [uuid: string]: string;
@@ -11,12 +11,15 @@ export class UuidRegTokenPair {
 export class User {
   public _id: ObjectID;
   @Exclude()
-  public authId?: string;
-  public authType?: AuthType;
+  public socialAuthId?: string;
+  public socialAuthType?: SocialAuthType;
   public createdAt?: Date;
   public lastLoginAt?: Date;
   public isAdmin?: boolean;
-  public uuidRegTokenPair: UuidRegTokenPair;
+  public uuidRegTokenPair?: UuidRegTokenPair;
+  public username?: string;
+  @Exclude()
+  public password?: string;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
