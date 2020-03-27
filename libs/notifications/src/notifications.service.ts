@@ -24,6 +24,7 @@ export class NotificationsService {
       notification: args.message,
     });
 
+    console.log({ serverKey: this.config.fcm.serverKey });
     console.log({ argsInSend: JSON.stringify(args, null, 2) });
     console.log({ messageInSend: JSON.stringify(message, null, 2) });
 
