@@ -1,9 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
-import { User, AuthType } from './users.model';
+import { User, SocialAuthType } from './users.model';
 import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
+import { compareHash, hashString } from 'utils/hash';
 
 @Injectable()
 export class UsersService {
@@ -26,13 +27,28 @@ export class UsersService {
   }
 
   public async appleLogin(identityToken: string) {
-    const authId = await this.apple.getAppleId(identityToken);
-    return this.getUser({ authId, authType: 'apple' });
+    const socialAuthId = await this.apple.getAppleId(identityToken);
+    return this.getUser({ socialAuthId, socialAuthType: 'apple' });
   }
 
   public async googleLogin(identityToken: string) {
-    const authId = await this.google.getTicket(identityToken);
-    return this.getUser({ authId, authType: 'google' });
+    const socialAuthId = await this.google.getTicket(identityToken);
+    return this.getUser({ socialAuthId, socialAuthType: 'google' });
+  }
+
+  public async passwordLogin(args: { username: string; password: string }) {
+    const user = await this.usersMongo.findOneByUsername(args.username);
+    if (user) {
+      if (!(await compareHash(args.password, user.password))) {
+        throw new HttpException('BAD_CREDENTIALS', HttpStatus.FORBIDDEN);
+      }
+      return user;
+    }
+    const hashedPassword = await hashString(args.password);
+    return this.usersMongo.createOne({
+      username: args.username,
+      password: hashedPassword,
+    });
   }
 
   public async findOneById(id: ObjectID) {
@@ -43,22 +59,25 @@ export class UsersService {
     return this.usersMongo.findManyByIds(ids);
   }
 
-  private async getUser(args: { authId: string; authType: AuthType }) {
-    if (!args.authId) {
+  private async getUser(args: {
+    socialAuthId: string;
+    socialAuthType: SocialAuthType;
+  }) {
+    if (!args.socialAuthId) {
       throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
     }
 
-    const user = await this.usersMongo.findOneByAuthIdType({
-      authId: args.authId,
-      authType: args.authType,
+    const user = await this.usersMongo.findOneBySocialAuth({
+      socialAuthType: args.socialAuthType,
+      socialAuthId: args.socialAuthId,
     });
     if (user) {
       return user;
     }
 
     return this.usersMongo.createOne({
-      authType: args.authType,
-      authId: args.authId,
+      socialAuthType: args.socialAuthType,
+      socialAuthId: args.socialAuthId,
     });
   }
 }

@@ -7,7 +7,14 @@ import { AccessTokenResponse } from './auth/auth.models';
 import { UserReq, Auth } from 'utils/decorators';
 import { ObjectID } from 'mongodb';
 
-class LoginDto {
+class UserPassLoginDto {
+  @IsString()
+  public username: string;
+  @IsString()
+  public password: string;
+}
+
+class IdentityTokenLoginDto {
   @IsString()
   public identityToken: string;
 }
@@ -34,15 +41,26 @@ export class UsersController {
     return user.serialize();
   }
 
+  @Post('login')
+  public async register(@Body() body: UserPassLoginDto): Promise<LoginResult> {
+    const user = await this.users.passwordLogin(body);
+    const accessToken = await this.auth.generateAccessToken(user);
+    return { user: user.serialize(), accessToken };
+  }
+
   @Post('login/apple')
-  public async appleLogin(@Body() body: LoginDto): Promise<LoginResult> {
+  public async appleLogin(
+    @Body() body: IdentityTokenLoginDto
+  ): Promise<LoginResult> {
     const user = await this.users.appleLogin(body.identityToken);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user.serialize(), accessToken };
   }
 
   @Post('login/google')
-  public async googleLogin(@Body() body: LoginDto): Promise<LoginResult> {
+  public async googleLogin(
+    @Body() body: IdentityTokenLoginDto
+  ): Promise<LoginResult> {
     const user = await this.users.googleLogin(body.identityToken);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user.serialize(), accessToken };
