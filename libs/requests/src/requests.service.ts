@@ -72,6 +72,7 @@ export class RequestsService {
     const registrationToken =
       requesterUser.uuidRegTokenPair &&
       Object.values(requesterUser.uuidRegTokenPair)?.[0];
+    console.log({ registrationTokensInAcceptOne: registrationToken });
 
     if (!registrationToken) {
       return;

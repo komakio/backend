@@ -24,6 +24,9 @@ export class NotificationsService {
       notification: args.message,
     });
 
+    console.log({ argsInSend: JSON.stringify(args, null, 2) });
+    console.log({ messageInSend: JSON.stringify(message, null, 2) });
+
     // Actually send the message
     const promise = new Promise((resolve, reject) => {
       this.sender.send(
@@ -31,9 +34,11 @@ export class NotificationsService {
         { registrationTokens: args.registrationTokens },
         (response, err) => {
           if (err) {
+            console.log({ err });
             reject(err);
           } else {
-            !this.config.isProduction ? console.log({ response }) : null;
+            console.log({ responseInSend: response });
+            // !this.config.isProduction ? console.log({ response }) : null;
             resolve(response);
           }
         }

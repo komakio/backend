@@ -45,6 +45,7 @@ export class DispatchRequestsConsumer {
       });
 
       const request = await this.requests.findOneById(requestId);
+      console.log({ registrationTokensInConsumer: registrationTokens });
 
       await this.notifications.send({
         registrationTokens,

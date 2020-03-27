@@ -8,6 +8,7 @@ import { IsString } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { Profile } from '@backend/profiles/profile.model';
+import { NotificationsService } from '@backend/notifications';
 
 class RequestBodyDto {
   @IsString()
@@ -18,6 +19,7 @@ class RequestBodyDto {
 export class RequestsController {
   constructor(
     private requestsRabbitMQ: RequestsRabbitMQService,
+    private notifications: NotificationsService,
     private requests: RequestsService,
     private profiles: ProfilesService
   ) {}
@@ -122,6 +124,28 @@ export class RequestsController {
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
       profileId: new ObjectID(profileId),
+    });
+  }
+
+  @Get('test/:regtoken')
+  public async triggerNotification(
+    @Param('id') regtoken: string
+  ): Promise<void> {
+    console.log('inside test controller', { regtoken });
+
+    await this.notifications.send({
+      registrationTokens: [regtoken],
+      message: {
+        title: 'TEST',
+        body: 'Someone is in need of your help.',
+        icon: '',
+      },
+      payload: {
+        request: JSON.stringify({
+          test: 'test',
+          id: 'id',
+        }),
+      },
     });
   }
 }
