@@ -73,9 +73,9 @@ export class RequestsMongoService {
       .toArray();
   }
 
-  public async findOneBy(args: { filters: any }): Promise<HelpRequest> {
+  public async findOneBy(filters: any): Promise<HelpRequest> {
     await this.mongo.waitReady();
-    return this.mongo.db.collection(collection).findOne(args.filters);
+    return this.mongo.db.collection(collection).findOne(filters);
   }
 
   public async patchOneById(args: {

@@ -157,12 +157,10 @@ export class RequestsService {
     profileId: ObjectID;
   }) {
     const request = await this.requestsMongo.findOneBy({
-      filters: {
-        $or: [
-          { acceptorProfileId: new ObjectID(args.profileId) },
-          { requesterProfileId: new ObjectID(args.profileId) },
-        ],
-      },
+      $or: [
+        { acceptorProfileId: new ObjectID(args.profileId) },
+        { requesterProfileId: new ObjectID(args.profileId) },
+      ],
     });
     if (!request) {
       throw new HttpException('FORBIDDEN_PROFILE_ID', HttpStatus.FORBIDDEN);
