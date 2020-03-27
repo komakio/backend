@@ -103,7 +103,7 @@ export class RequestsController {
     @Body() body: RequestBodyDto
   ): Promise<void> {
     //todo: validate
-    this.requests.validateRequestProfileIdMatch({
+    await this.requests.validateRequestProfileIdMatch({
       id: new ObjectID(id),
       profileId: new ObjectID(body.profileId),
     });
