@@ -34,7 +34,7 @@ export class AuthService {
       }
     );
 
-    this.users.patch({ id: user._id, data: { lastLoginAt: new Date() } });
+    this.users.patch({ id: user._id, set: { lastLoginAt: new Date() } });
 
     return { expiration: Date.now() + expiration * 1000, token: accessToken };
   };
