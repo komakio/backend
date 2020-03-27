@@ -165,7 +165,7 @@ export class RequestsService {
       },
     });
     if (!request) {
-      throw new HttpException('FOR_PROFILE_ID', HttpStatus.FORBIDDEN);
+      throw new HttpException('FORBIDDEN_PROFILE_ID', HttpStatus.FORBIDDEN);
     }
   }
 
