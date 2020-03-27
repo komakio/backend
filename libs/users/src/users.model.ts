@@ -1,7 +1,7 @@
 import { ObjectID } from 'bson';
 import { Exclude, classToClass } from 'class-transformer';
 
-export const socialAuthType = ['apple', 'google'];
+export const socialAuthType = ['apple', 'google'] as const;
 export type SocialAuthType = typeof socialAuthType[number];
 
 export class UuidRegTokenPair {
