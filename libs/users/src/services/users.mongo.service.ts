@@ -22,9 +22,10 @@ export class UsersMongoService {
   }
 
   public async findOneById(id: ObjectID): Promise<User> {
-    return this.mongo.db
+    const user = await this.mongo.db
       .collection(collection)
       .findOne({ _id: new ObjectID(id) });
+    return user ? new User(user) : null;
   }
 
   public async findManyByIds(ids: ObjectID[]): Promise<User[]> {
