@@ -8,6 +8,7 @@ import { IsString } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { Profile } from '@backend/profiles/profile.model';
+import { UsersService } from '@backend/users';
 
 class RequestBodyDto {
   @IsString()

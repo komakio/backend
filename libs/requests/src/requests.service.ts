@@ -4,12 +4,15 @@ import { HelpRequest } from './requests.model';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { NotificationsService } from '@backend/notifications';
+import { UsersService } from '@backend/users';
 
 @Injectable()
 export class RequestsService {
   constructor(
     private requestsMongo: RequestsMongoService,
+    private requests: RequestsService,
     private profiles: ProfilesService,
+    private users: UsersService,
     private notifications: NotificationsService
   ) {}
 
@@ -51,13 +54,36 @@ export class RequestsService {
 
   public async acceptOne(args: { id: ObjectID; acceptorProfileId: ObjectID }) {
     const profile = await this.profiles.findOneById(args.acceptorProfileId);
-    return this.requestsMongo.patchOneById({
+    await this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: {
         status: 'accepted',
         acceptorProfileId: new ObjectID(args.acceptorProfileId),
         profileIds: [],
         acceptorShortName: profile.firstName,
+      },
+    });
+    const request = await this.requests.findOneById(new ObjectID(args.id));
+    const requesterProfile = await this.profiles.findOneById(
+      new ObjectID(request.requesterProfileId)
+    );
+    const requesterUser = await this.users.findOneById(
+      new ObjectID(requesterProfile.userId)
+    );
+    const registrationToken =
+      requesterUser.uuidRegTokenPair &&
+      Object.values(requesterUser.uuidRegTokenPair)?.[0];
+
+    if (!registrationToken) {
+      return;
+    }
+
+    await this.notifications.send({
+      registrationTokens: [registrationToken],
+      message: {
+        title: 'KOMAK',
+        body: 'Someone accepted you request.',
+        icon: '',
       },
     });
   }
