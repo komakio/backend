@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Get } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
@@ -24,9 +24,14 @@ class LoginResult {
   public accessToken: AccessTokenResponse;
 }
 
-@Controller('v1/users')
+@Controller('v1/users/current')
 export class UsersController {
   constructor(private users: UsersService, private auth: AuthService) {}
+
+  @Get()
+  public async getCurrent(@UserReq() user: User): Promise<User> {
+    return user.serialize();
+  }
 
   @Post('login/apple')
   public async appleLogin(@Body() body: LoginDto): Promise<LoginResult> {
