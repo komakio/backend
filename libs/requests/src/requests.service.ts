@@ -10,7 +10,6 @@ import { UsersService } from '@backend/users';
 export class RequestsService {
   constructor(
     private requestsMongo: RequestsMongoService,
-    private requests: RequestsService,
     private profiles: ProfilesService,
     private users: UsersService,
     private notifications: NotificationsService
@@ -63,7 +62,7 @@ export class RequestsService {
         acceptorShortName: profile.firstName,
       },
     });
-    const request = await this.requests.findOneById(new ObjectID(args.id));
+    const request = await this.findOneById(new ObjectID(args.id));
     const requesterProfile = await this.profiles.findOneById(
       new ObjectID(request.requesterProfileId)
     );
