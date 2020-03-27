@@ -14,6 +14,7 @@ import { Type } from 'class-transformer';
 import { Profile, Phone, Address } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
+import { UsersService } from '@backend/users';
 
 class CreateProfilesDto {
   @IsOptional()
@@ -67,28 +68,32 @@ class PatchProfilesDto {
 @Controller('v1/profiles')
 export class ProfilesController {
   constructor(
-    private profile: ProfilesService,
+    private users: UsersService,
+    private profiles: ProfilesService,
     private profileRabbitMQ: ProfilesRabbitMQService
   ) {}
 
   @Auth()
   @Get()
   public async get(@UserReq() user: User): Promise<Profile[]> {
-    return this.profile.findAllByUserId(new ObjectID(user._id));
+    return this.profiles.findAllByUserId(new ObjectID(user._id));
   }
 
   @Auth()
   @Post()
   public async create(
     @Body() body: CreateProfilesDto,
-    @UserReq() user: User
+    @UserReq() userReq: User
   ): Promise<Profile> {
-    const profile = await this.profile.create({
+    const profile = await this.profiles.create({
       ...body,
-      userId: new ObjectID(user._id),
+      userId: new ObjectID(userReq._id),
     });
+    const user = await this.users.findOneById(new ObjectID(userReq._id));
+
     const registrationToken =
       user.uuidRegTokenPair && Object.values(user.uuidRegTokenPair)?.[0];
+    console.log({ user, registrationToken: user.uuidRegTokenPair, body });
 
     if (body.self && body.role === 'helper' && registrationToken) {
       await this.profileRabbitMQ.sendToSubscribeNewHelperRequests({
@@ -102,6 +107,6 @@ export class ProfilesController {
   @Auth()
   @Put(':id')
   public async patch(@Param('id') id: string, @Body() data: PatchProfilesDto) {
-    await this.profile.patchOneById({ id: new ObjectID(id), data });
+    await this.profiles.patchOneById({ id: new ObjectID(id), data });
   }
 }

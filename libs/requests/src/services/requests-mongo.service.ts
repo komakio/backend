@@ -13,6 +13,7 @@ export class RequestsMongoService {
   public onApplicationBootstrap() {
     this.mongo.addIndex(collection, { status: 1 });
     this.mongo.addIndex(collection, { createdAt: 1 });
+    this.mongo.addIndex(collection, { location: '2dsphere' });
   }
 
   public async createOne(request: Partial<HelpRequest>): Promise<HelpRequest> {
