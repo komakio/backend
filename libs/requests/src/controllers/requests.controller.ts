@@ -86,14 +86,14 @@ export class RequestsController {
     @Param('id') id: string,
     @Body() body: RequestBodyDto
   ): Promise<void> {
-    // await this.requests.validateRequestResponseMatch({
-    //   id: new ObjectID(id),
-    //   responseProfileId: new ObjectID(body.profileId),
-    // });
-    // await this.requests.acceptOne({
-    //   id: new ObjectID(id),
-    //   acceptorProfileId: new ObjectID(body.profileId),
-    // });
+    await this.requests.validateRequestResponseMatch({
+      id: new ObjectID(id),
+      responseProfileId: new ObjectID(body.profileId),
+    });
+    await this.requests.refuseOne({
+      id: new ObjectID(id),
+      refuserProfileId: new ObjectID(body.profileId),
+    });
   }
 
   @Auth()
