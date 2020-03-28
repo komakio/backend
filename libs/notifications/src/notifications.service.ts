@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import * as fcm from 'node-gcm';
 import { ConfigService } from '@backend/config';
 import { SendNotificationArgs } from './notifications.model';
+import { LoggerService } from '@backend/logger';
 
 @Injectable()
 export class NotificationsService {
   private sender: fcm.Sender;
 
-  constructor(private config: ConfigService) {
+  constructor(private config: ConfigService, private logger: LoggerService) {
     this.sender = new fcm.Sender(this.config.fcm.serverKey);
   }
 
@@ -31,9 +32,14 @@ export class NotificationsService {
         { registrationTokens: args.registrationTokens },
         (response, err) => {
           if (err) {
+            this.logger.verbose({
+              route: 'send-notification',
+              registrationTokens: args.registrationTokens,
+              message,
+              error: err,
+            });
             reject(err);
           } else {
-            !this.config.isProduction ? console.log({ response }) : null;
             resolve(response);
           }
         }
