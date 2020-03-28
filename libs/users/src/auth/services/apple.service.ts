@@ -16,8 +16,8 @@ export class AppleService {
       return appleId;
     });
 
-    await resolveIfOneResolves(promises);
+    const res = await resolveIfOneResolves(promises);
 
-    return promises.find(p => p);
+    return res.find(p => p);
   }
 }
