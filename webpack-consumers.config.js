@@ -6,6 +6,8 @@ module.exports = function(options) {
     ...options,
     entry: {
       main: './apps/consumers/src/main.ts'
+      // SAMPLE_FILE_CONSUMER: './apps/consumers/src/file-consumer.ts',
+
     },
     externals: [
       nodeExternals(),
