@@ -12,8 +12,8 @@ export class GoogleService {
     try {
       ticket = await oAuth2Client.verifyIdToken({
         audience: [
-          this.config.googleAuthProject.ios,
-          this.config.googleAuthProject.android,
+          ...this.config.googleAuthProjects.ios,
+          ...this.config.googleAuthProjects.android,
         ],
         idToken: identityToken,
       });
