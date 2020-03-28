@@ -9,14 +9,16 @@ export class ConfigService {
   public host = process.env.HOST;
   public sentryDsn = process.env.SENTRY_BACKEND;
   public tag = process.env.TAG;
-  public packageName = 'io.komak.app';
-  public googleAuthProject = {
-    ios:
-      process.env.GOOGLE_AUTH_PROJECT_IOS ||
-      '50726922019-rm0ehq9702sgre48e6c6anou4sk6i4jg.apps.googleusercontent.com',
-    android:
-      process.env.GOOGLE_AUTH_PROJECT_ANDROID ||
-      '50726922019-2n2928603iapbq7kslc4leo7ikgs5l7b.apps.googleusercontent.com',
+  public packageNames = process.env.PACKAGES_NAMES?.split(',') || [
+    'io.komak.app.dev',
+  ];
+  public googleAuthProjects = {
+    ios: process.env.GOOGLE_AUTH_PROJECT_IOS?.split(',') || [
+      '50726922019-5cff1qhkilhft8jtaecj7gqeo980pghe.apps.googleusercontent.com',
+    ],
+    android: process.env.GOOGLE_AUTH_PROJECT_ANDROID?.split(',') || [
+      '50726922019-3mba9hr53ob7dbj43s658gr92i5ndsf3.apps.googleusercontent.com',
+    ],
   };
   public maxDistance = parseInt(process.env.MAX_DISTANCE, 10) || 1000;
 
