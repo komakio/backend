@@ -30,7 +30,7 @@ export class NotificationsService {
       this.sender.send(
         message,
         { registrationTokens: args.registrationTokens },
-        (response, err) => {
+        (err, response) => {
           if (err) {
             this.logger.verbose({
               route: 'send-notification',
