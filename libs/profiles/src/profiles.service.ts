@@ -64,6 +64,7 @@ export class ProfilesService {
           disabled: { $ne: true },
         },
         coordinates: address.location.coordinates,
+        limit: 500,
       })
     ).filter(p => !p._id.equals(id));
 
