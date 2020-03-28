@@ -51,4 +51,5 @@ export class Profile {
   public disabled?: boolean;
   public role: 'helper' | 'needer';
   public phone: Phone;
+  public coverage: number;
 }

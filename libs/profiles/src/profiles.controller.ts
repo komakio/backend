@@ -6,6 +6,7 @@ import {
   IsOptional,
   ValidateNested,
   IsNotEmpty,
+  IsNumber,
 } from 'class-validator';
 import { UserReq, Auth } from 'utils/decorators';
 import { ProfilesService } from './profiles.service';
@@ -37,6 +38,9 @@ class CreateProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
+  @IsOptional()
+  @IsNumber()
+  public coverage: number;
 }
 
 class PatchProfilesDto {
@@ -63,6 +67,9 @@ class PatchProfilesDto {
   @ValidateNested()
   @Type(() => Phone)
   public phone: Phone;
+  @IsOptional()
+  @IsNumber()
+  public coverage: number;
 }
 
 @Controller('v1/profiles')
@@ -90,15 +97,12 @@ export class ProfilesController {
       userId: new ObjectID(userReq._id),
     });
     const user = await this.users.findOneById(new ObjectID(userReq._id));
+    const registrationTokens = Object.values(user.uuidRegTokenPair || {});
 
-    const registrationToken =
-      user.uuidRegTokenPair && Object.values(user.uuidRegTokenPair)?.[0];
-    console.log({ user, registrationToken: user.uuidRegTokenPair, body });
-
-    if (body.self && body.role === 'helper' && registrationToken) {
+    if (body.self && body.role === 'helper' && registrationTokens.length) {
       await this.profileRabbitMQ.sendToSubscribeNewHelperRequests({
         profileId: profile._id,
-        registrationToken,
+        registrationTokens,
       });
     }
     return profile;
