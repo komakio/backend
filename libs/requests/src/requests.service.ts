@@ -166,7 +166,7 @@ export class RequestsService {
         from: r?.location?.coordinates,
         to: profile?.address?.location?.coordinates,
       });
-      if (distance > profile.coverage || this.config.maxDistance) {
+      if (distance > (profile.coverage || this.config.maxDistance)) {
         return;
       }
       await this.requestsMongo.pushToCandidates({
