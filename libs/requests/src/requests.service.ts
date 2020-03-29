@@ -47,7 +47,7 @@ export class RequestsService {
   public async cancelOne(id: ObjectID) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(id),
-      data: { status: 'canceled', profileIds: [] },
+      data: { status: 'canceled', candidates: [] },
     });
   }
 
@@ -58,7 +58,7 @@ export class RequestsService {
       data: {
         status: 'accepted',
         acceptorProfileId: new ObjectID(args.acceptorProfileId),
-        profileIds: [],
+        candidates: [],
         acceptorShortName: profile.firstName,
       },
     });
@@ -66,19 +66,13 @@ export class RequestsService {
     const requesterProfile = await this.profiles.findOneById(
       new ObjectID(request.requesterProfileId)
     );
-    const requesterUser = await this.users.findOneById(
+    const user = await this.users.findOneById(
       new ObjectID(requesterProfile.userId)
     );
-    const registrationToken =
-      requesterUser.uuidRegTokenPair &&
-      Object.values(requesterUser.uuidRegTokenPair)?.[0];
-
-    if (!registrationToken) {
-      return;
-    }
+    const registrationTokens = Object.values(user.uuidRegTokenPair || {});
 
     await this.notifications.send({
-      registrationTokens: [registrationToken],
+      registrationTokens,
       message: {
         title: 'KOMAK',
         body: 'Someone accepted you request.',
@@ -108,9 +102,51 @@ export class RequestsService {
     });
   }
 
+  public async dispatchRequest(args: {
+    requestId: ObjectID;
+    profileId: ObjectID;
+  }) {
+    const profilesWithDistance = await this.profiles.findNearHelpersWithDistanceById(
+      new ObjectID(args.profileId)
+    );
+
+    const users = await this.users.findManyByIds(
+      profilesWithDistance.map(p => new ObjectID(p.userId))
+    );
+
+    const registrationTokens = users?.reduce((total, u) => {
+      const tokens = Object.values(u.uuidRegTokenPair || {});
+      return [...total, ...tokens];
+    }, []);
+
+    await this.patchOne({
+      id: new ObjectID(args.requestId),
+      data: {
+        candidates: profilesWithDistance?.map(p => ({
+          profileId: p._id,
+          distance: p.distance,
+        })),
+      },
+    });
+
+    const request = await this.findOneById(args.requestId);
+
+    await this.notifications.send({
+      registrationTokens,
+      message: {
+        title: 'KOMAK',
+        body: 'Someone is in need of your help.',
+        icon: '',
+      },
+      payload: {
+        request: JSON.stringify(request),
+      },
+    });
+  }
+
   public async subscribeToRequests(args: {
     profileId: ObjectID;
-    registrationToken: string;
+    registrationTokens: string[];
   }) {
     const profile = await this.profiles.findOneById(
       new ObjectID(args.profileId)
@@ -119,13 +155,13 @@ export class RequestsService {
       coordinates: profile?.address?.location?.coordinates,
     });
 
-    const promises = requests.slice(3).map(async r => {
+    const promises = requests?.slice(3).map(async r => {
       await this.requestsMongo.pushToProfileIds({
         profileId: new ObjectID(args.profileId),
         id: new ObjectID(r._id),
       });
       await this.notifications.send({
-        registrationTokens: [args.registrationToken],
+        registrationTokens: args.registrationTokens,
         message: {
           title: 'KOMAK',
           body: 'Someone is in need of your help.',
@@ -136,6 +172,7 @@ export class RequestsService {
         },
       });
     });
+
     await Promise.all(promises);
   }
 
@@ -144,7 +181,11 @@ export class RequestsService {
     responseProfileId: ObjectID;
   }) {
     const request = await this.requestsMongo.findOneById(new ObjectID(args.id));
-    if (!request.profileIds.find(id => id.equals(args.responseProfileId))) {
+    if (
+      !request.candidates.find(({ profileId }) =>
+        profileId.equals(args.responseProfileId)
+      )
+    ) {
       throw new HttpException(
         'REQUEST_RESPONSE_MISMATCH',
         HttpStatus.FORBIDDEN

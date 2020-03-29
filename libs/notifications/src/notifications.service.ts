@@ -14,6 +14,9 @@ export class NotificationsService {
   }
 
   public async send(args: SendNotificationArgs) {
+    if (!args.registrationTokens?.length) {
+      return;
+    }
     // Prepare a message to be sent
     const promises = this.config.packageNames.map(packageName => {
       const message = new fcm.Message({

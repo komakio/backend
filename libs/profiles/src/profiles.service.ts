@@ -2,6 +2,7 @@ import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { ProfilesMongoService } from './services/profiles.mongo.service';
 import { Profile } from './profile.model';
 import { ObjectID } from 'mongodb';
+import { getDistance } from 'utils/distance';
 
 @Injectable()
 export class ProfilesService {
@@ -48,15 +49,33 @@ export class ProfilesService {
     });
   }
 
-  public async findNearHelpersById(id: ObjectID) {
+  public async findNearHelpersWithDistanceById(
+    id: ObjectID
+  ): Promise<Array<Profile & { distance: number }>> {
     const { address } = await this.profilesMongo.findOneById(new ObjectID(id));
-    const near = await this.profilesMongo.findNear({
-      filters: {
-        role: 'helper',
-        disabled: { $ne: true },
-      },
-      coordinates: address.location.coordinates,
-    });
-    return near?.length ? near.filter(n => !n._id.equals(id)) : [];
+    if (!address?.location?.coordinates) {
+      return [];
+    }
+
+    const profiles = (
+      await this.profilesMongo.findNear({
+        filters: {
+          role: 'helper',
+          disabled: { $ne: true },
+        },
+        coordinates: address.location.coordinates,
+        limit: 500,
+      })
+    ).filter(p => !p._id.equals(id));
+
+    profiles
+      .map(p => ({
+        ...p,
+        distance: getDistance({
+          from: p.address.location.coordinates,
+          to: address.location.coordinates,
+        }),
+      }))
+      .filter(p => p.distance <= p.coverage);
   }
 }

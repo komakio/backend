@@ -69,6 +69,8 @@ export class ProfilesMongoService {
     maxDistance?: number;
     minDistance?: number;
     filters?: any;
+    skip?: number;
+    limit?: number;
   }): Promise<Profile[]> {
     await this.mongo.waitReady();
     return this.mongo.db
@@ -83,6 +85,8 @@ export class ProfilesMongoService {
           },
         },
       })
+      .skip(args.skip || 0)
+      .limit(args.limit || 10)
       .toArray();
   }
 }

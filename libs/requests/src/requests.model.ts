@@ -9,7 +9,7 @@ export const HelpRequestStatusEnum = [
 ] as const;
 export type HelpRequestStatus = typeof HelpRequestStatusEnum[number];
 
-export const RequestTypeEnum = ['misc'];
+export const RequestTypeEnum = ['misc'] as const;
 export type HelpRequestType = typeof RequestTypeEnum[number];
 
 export class HelpRequest {
@@ -17,7 +17,7 @@ export class HelpRequest {
   public createdAt: Date;
   public updatedAt: Date;
   public status: HelpRequestStatus;
-  public profileIds: ObjectID[];
+  public candidates: { profileId: ObjectID; distance: number }[];
   public requesterProfileId: ObjectID;
   public acceptorProfileId: ObjectID;
   public type: HelpRequestType;
@@ -34,5 +34,5 @@ export class DispatchRequestQueue {
 
 export class SubscribeNewHelperRequestQueue {
   public profileId: ObjectID;
-  public registrationToken: string;
+  public registrationTokens: string[];
 }
