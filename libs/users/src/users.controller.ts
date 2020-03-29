@@ -9,26 +9,26 @@ import { ObjectID } from 'mongodb';
 import { ApiProperty, ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
 
 class UserPassLoginDto {
-  @ApiProperty()
   @IsString()
+  @ApiProperty()
   public username: string;
-  @ApiProperty()
   @IsString()
+  @ApiProperty()
   public password: string;
 }
 
 class IdentityTokenLoginDto {
-  @ApiProperty()
   @IsString()
+  @ApiProperty()
   public identityToken: string;
 }
 
 class RegistrationTokenDto {
-  @ApiProperty()
   @IsString()
+  @ApiProperty()
   public uuid: string;
-  @ApiProperty()
   @IsString()
+  @ApiProperty()
   public registrationToken: string;
 }
 
