@@ -72,7 +72,7 @@ export class ProfilesService {
       })
     ).filter(p => !p._id.equals(id));
 
-    profiles
+    return profiles
       .map(p => ({
         ...p,
         distance: getDistance({
