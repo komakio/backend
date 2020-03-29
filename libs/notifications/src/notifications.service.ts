@@ -31,7 +31,6 @@ export class NotificationsService {
           sound: 'default',
           msgcnt: '1',
           'content-available': '1',
-          badge: '1',
         },
         notification: {
           ...args.message,
