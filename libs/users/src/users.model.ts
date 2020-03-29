@@ -1,5 +1,6 @@
 import { ObjectID } from 'bson';
 import { Exclude, classToClass } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const socialAuthType = ['apple', 'google'] as const;
 export type SocialAuthType = typeof socialAuthType[number];
@@ -9,14 +10,21 @@ export class UuidRegTokenPair {
 }
 
 export class User {
+  @ApiProperty()
   public _id: ObjectID;
   @Exclude()
   public socialAuthId?: string;
+  @ApiProperty()
   public socialAuthType?: SocialAuthType;
+  @ApiProperty()
   public createdAt?: Date;
+  @ApiProperty()
   public lastLoginAt?: Date;
+  @ApiProperty()
   public isAdmin?: boolean;
+  @ApiProperty()
   public uuidRegTokenPair?: UuidRegTokenPair;
+  @ApiProperty()
   public username?: string;
   @Exclude()
   public password?: string;
