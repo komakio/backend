@@ -5,6 +5,7 @@ import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { NotificationsService } from '@backend/notifications';
 import { UsersService } from '@backend/users';
+import { getDistance } from 'utils/distance';
 
 @Injectable()
 export class RequestsService {
@@ -84,7 +85,7 @@ export class RequestsService {
   }
 
   public async refuseOne(args: { id: ObjectID; refuserProfileId: ObjectID }) {
-    return this.requestsMongo.pullFromProfileIds({
+    return this.requestsMongo.pullFromCandidates({
       profileId: new ObjectID(args.refuserProfileId),
       id: new ObjectID(args.id),
     });
@@ -158,8 +159,13 @@ export class RequestsService {
     });
 
     const promises = requests?.slice(3).map(async r => {
-      await this.requestsMongo.pushToProfileIds({
+      const distance = getDistance({
+        from: r?.location?.coordinates,
+        to: profile?.address?.location?.coordinates,
+      });
+      await this.requestsMongo.pushToCandidates({
         profileId: new ObjectID(args.profileId),
+        distance,
         id: new ObjectID(r._id),
       });
       await this.notifications.send({

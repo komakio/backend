@@ -92,20 +92,26 @@ export class RequestsMongoService {
       );
   }
 
-  public async pushToProfileIds(args: {
+  public async pushToCandidates(args: {
     id: ObjectID;
     profileId: ObjectID;
+    distance: number;
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
-    return this.mongo.db
-      .collection(collection)
-      .updateOne(
-        { _id: new ObjectID(args.id) },
-        { $push: { profileIds: new ObjectID(args.profileId) } }
-      );
+    return this.mongo.db.collection(collection).updateOne(
+      { _id: new ObjectID(args.id) },
+      {
+        $push: {
+          candidates: {
+            profileId: new ObjectID(args.profileId),
+            distance: args.distance,
+          },
+        },
+      }
+    );
   }
 
-  public async pullFromProfileIds(args: {
+  public async pullFromCandidates(args: {
     id: ObjectID;
     profileId: ObjectID;
   }): Promise<UpdateWriteOpResult> {
@@ -114,7 +120,7 @@ export class RequestsMongoService {
       .collection(collection)
       .updateOne(
         { _id: new ObjectID(args.id) },
-        { $pull: { profileIds: new ObjectID(args.profileId) } }
+        { $pull: { candidates: { profileId: new ObjectID(args.profileId) } } }
       );
   }
 }
