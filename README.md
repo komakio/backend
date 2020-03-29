@@ -8,20 +8,67 @@ Komak uses geolocation services to send requests for help with groceries, for ex
 
 Komak is meant to be open-source, as we need all of the help we can get in this hopefully short-lived endeavor. 
 
-## General info
-This repo is the backend for Komak, written in Nest.js.
-	
-###### Setup:
-npm install
+## Description
 
-###### run the dev server on port 3100:
-npm run start:dev
+This repo is the backend for Komak project (https://github.com/komakio).
 
-###### run containers (MongoDB and RabbitMQ):
-docker-compose up -d
+### Technologies implemented:
 
-###### run queues:
-npm run dev:jobs
+-   [NestJs-typescript](https://docs.nestjs.com/)
+-   [mongoDB](https://www.mongodb.com/)
+-   [RabbitMQ](https://www.rabbitmq.com/)
+-   [Jest](https://jestjs.io/)
+-   [Swagger](https://swagger.io/)
+-   [Docker](https://www.docker.com/)
+
+## Prerequisites
+
+-   [Node.js](https://nodejs.org/) (>= 10.8.0)
+-   [npm](https://www.npmjs.com/) (>= 6.5.0)
+
+## Installation
+
+```bash
+$ npm install
+```
+
+## Running the app
+
+```bash
+# containers
+$ docker-compose up -d
+
+# watch mode on port 3100
+$ npm run start:dev
+
+# queue jobs
+$ npm run dev:jobs
+```
+
+## Test
+
+```bash
+# e2e tests
+$ npm run test
+```
+
+## Other commands
+
+```bash
+# formatting code
+$ npm run format
+
+# run linter
+$ npm run lint
+
+# run typescript compiler
+$ npm run tsc
+```
+
+## Swagger API docs
+
+This project uses the Nest swagger module for API documentation. [NestJS Swagger](https://github.com/nestjs/swagger) - [www.swagger.io](https://swagger.io/)  
+Swagger docs will be available at localhost:3100/api
 
 
 We can use all the help we can get. Please send an email and any relevant work you’ve done to komak.contact@gmail.com. 
