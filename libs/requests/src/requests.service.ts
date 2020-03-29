@@ -32,7 +32,9 @@ export class RequestsService {
       filters: {
         $or: [
           {
-            profileIds: new ObjectID(args.profileId),
+            candidates: {
+              $elemMatch: { profileId: new ObjectID(args.profileId) },
+            },
           },
           { acceptorProfileId: new ObjectID(args.profileId) },
           { requesterProfileId: new ObjectID(args.profileId) },
