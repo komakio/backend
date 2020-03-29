@@ -6,6 +6,7 @@ import { ProfilesService } from '@backend/profiles';
 import { NotificationsService } from '@backend/notifications';
 import { UsersService } from '@backend/users';
 import { getDistance } from 'utils/distance';
+import { ConfigService } from '@backend/config';
 
 @Injectable()
 export class RequestsService {
@@ -13,7 +14,8 @@ export class RequestsService {
     private requestsMongo: RequestsMongoService,
     private profiles: ProfilesService,
     private users: UsersService,
-    private notifications: NotificationsService
+    private notifications: NotificationsService,
+    private config: ConfigService
   ) {}
 
   public async createOne(request: Partial<HelpRequest>) {
@@ -155,14 +157,18 @@ export class RequestsService {
       new ObjectID(args.profileId)
     );
     const requests = await this.requestsMongo.findManyNear({
+      filters: { status: 'pending' },
       coordinates: profile?.address?.location?.coordinates,
     });
 
-    const promises = requests?.slice(3).map(async r => {
+    const promises = requests?.slice(0, 3).map(async r => {
       const distance = getDistance({
         from: r?.location?.coordinates,
         to: profile?.address?.location?.coordinates,
       });
+      if (distance > (profile.coverage || this.config.maxDistance)) {
+        return;
+      }
       await this.requestsMongo.pushToCandidates({
         profileId: new ObjectID(args.profileId),
         distance,
