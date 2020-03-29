@@ -26,8 +26,17 @@ export class NotificationsService {
         timeToLive: 60 * 60 * 24,
         dryRun: !this.config.isProduction,
         restrictedPackageName: packageName,
-        data: args.payload,
-        notification: args.message,
+        data: {
+          ...args.payload,
+          sound: 'default',
+          msgcnt: '1',
+          'content-available': '1',
+        },
+        notification: {
+          ...args.message,
+          sound: 'default',
+          badge: '1',
+        },
       });
 
       return new Promise((resolve, reject) => {
