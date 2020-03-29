@@ -3,10 +3,14 @@ import { ProfilesMongoService } from './services/profiles.mongo.service';
 import { Profile } from './profile.model';
 import { ObjectID } from 'mongodb';
 import { getDistance } from 'utils/distance';
+import { ConfigService } from '@backend/config';
 
 @Injectable()
 export class ProfilesService {
-  constructor(private profilesMongo: ProfilesMongoService) {}
+  constructor(
+    private profilesMongo: ProfilesMongoService,
+    private config: ConfigService
+  ) {}
 
   public async create(profile: Partial<Profile>) {
     return this.profilesMongo.createOne(profile);
@@ -76,6 +80,6 @@ export class ProfilesService {
           to: address.location.coordinates,
         }),
       }))
-      .filter(p => p.distance <= p.coverage);
+      .filter(p => p.distance <= (p.coverage || this.config.maxDistance));
   }
 }
