@@ -6,50 +6,76 @@ import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
 import { UserReq, Auth } from 'utils/decorators';
 import { ObjectID } from 'mongodb';
+import { ApiProperty, ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
 
 class UserPassLoginDto {
+  @ApiProperty()
   @IsString()
   public username: string;
+  @ApiProperty()
   @IsString()
   public password: string;
 }
 
 class IdentityTokenLoginDto {
+  @ApiProperty()
   @IsString()
   public identityToken: string;
 }
 
 class RegistrationTokenDto {
+  @ApiProperty()
   @IsString()
   public uuid: string;
+  @ApiProperty()
   @IsString()
   public registrationToken: string;
 }
 
 class LoginResult {
+  @ApiProperty()
   public user: User;
+  @ApiProperty()
   public accessToken: AccessTokenResponse;
 }
 
 @Controller('v1/users')
+@ApiTags('users')
 export class UsersController {
   constructor(private users: UsersService, private auth: AuthService) {}
 
   @Auth()
   @Get('/current')
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully returned the current user.',
+    type: User,
+  })
   public async getCurrent(@UserReq() userReq: User): Promise<User> {
     const user = await this.users.findOneById(new ObjectID(userReq._id));
     return user.serialize();
   }
 
   @Post('login')
-  public async register(@Body() body: UserPassLoginDto): Promise<LoginResult> {
+  @ApiBody({ type: UserPassLoginDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully logged in.',
+    type: LoginResult,
+  })
+  public async login(@Body() body: UserPassLoginDto): Promise<LoginResult> {
     const user = await this.users.passwordLogin(body);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user.serialize(), accessToken };
   }
 
   @Post('login/apple')
+  @ApiBody({ type: IdentityTokenLoginDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully logged in.',
+    type: LoginResult,
+  })
   public async appleLogin(
     @Body() body: IdentityTokenLoginDto
   ): Promise<LoginResult> {
@@ -59,6 +85,12 @@ export class UsersController {
   }
 
   @Post('login/google')
+  @ApiBody({ type: IdentityTokenLoginDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully logged in.',
+    type: LoginResult,
+  })
   public async googleLogin(
     @Body() body: IdentityTokenLoginDto
   ): Promise<LoginResult> {
@@ -68,6 +100,11 @@ export class UsersController {
   }
 
   @Patch('registration-token')
+  @ApiBody({ type: RegistrationTokenDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully added the registration token.',
+  })
   public async patchRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
@@ -81,6 +118,11 @@ export class UsersController {
   }
 
   @Post('registration-token/unset')
+  @ApiBody({ type: RegistrationTokenDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully removed the registration token.',
+  })
   public async deleteRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
