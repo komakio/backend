@@ -52,7 +52,7 @@ export class UsersController {
   })
   public async getCurrent(@UserReq() userReq: User): Promise<User> {
     const user = await this.users.findOneById(new ObjectID(userReq._id));
-    return user.serialize();
+    return user?.serialize();
   }
 
   @Post('login')
@@ -64,7 +64,7 @@ export class UsersController {
   public async login(@Body() body: UserPassLoginDto): Promise<LoginResult> {
     const user = await this.users.passwordLogin(body);
     const accessToken = await this.auth.generateAccessToken(user);
-    return { user: user.serialize(), accessToken };
+    return { user: user?.serialize(), accessToken };
   }
 
   @Post('login/apple')
@@ -79,7 +79,7 @@ export class UsersController {
   ): Promise<LoginResult> {
     const user = await this.users.appleLogin(body.identityToken);
     const accessToken = await this.auth.generateAccessToken(user);
-    return { user: user.serialize(), accessToken };
+    return { user: user?.serialize(), accessToken };
   }
 
   @Post('login/google')
@@ -94,7 +94,7 @@ export class UsersController {
   ): Promise<LoginResult> {
     const user = await this.users.googleLogin(body.identityToken);
     const accessToken = await this.auth.generateAccessToken(user);
-    return { user: user.serialize(), accessToken };
+    return { user: user?.serialize(), accessToken };
   }
 
   @Patch('registration-token')
