@@ -33,7 +33,11 @@ export class NotificationsService {
           'content-available': '1',
           badge: '1',
         },
-        notification: args.message,
+        notification: {
+          ...args.message,
+          sound: 'default',
+          badge: '1',
+        },
       });
 
       return new Promise((resolve, reject) => {
