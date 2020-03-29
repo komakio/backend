@@ -47,7 +47,6 @@ export class UsersController {
   @Auth()
   @Get('/current')
   @ApiResponse({
-    status: 200,
     description: 'Successfully returned the current user.',
     type: User,
   })
@@ -59,7 +58,6 @@ export class UsersController {
   @Post('login')
   @ApiBody({ type: UserPassLoginDto })
   @ApiResponse({
-    status: 201,
     description: 'Successfully logged in.',
     type: LoginResult,
   })
