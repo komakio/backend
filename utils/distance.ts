@@ -15,5 +15,5 @@ export const getDistance = (args: {
       Math.cos(deg2rad(args.to[0])) *
       Math.sqrt(Math.sin(dLon / 2));
   const angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return (R * angularDistance).toFixed(0); // Distance in m
+  return Math.floor(R * angularDistance); // Distance in m
 };

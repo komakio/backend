@@ -49,7 +49,7 @@ export class ProfilesService {
     });
   }
 
-  public async findNearHelpersById(
+  public async findNearHelpersWithDistanceById(
     id: ObjectID
   ): Promise<Array<Profile & { distance: number }>> {
     const { address } = await this.profilesMongo.findOneById(new ObjectID(id));

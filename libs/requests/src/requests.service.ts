@@ -106,7 +106,7 @@ export class RequestsService {
     requestId: ObjectID;
     profileId: ObjectID;
   }) {
-    const profilesWithDistance = await this.profiles.findNearHelpersById(
+    const profilesWithDistance = await this.profiles.findNearHelpersWithDistanceById(
       new ObjectID(args.profileId)
     );
 
