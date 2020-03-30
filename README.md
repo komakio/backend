@@ -68,7 +68,7 @@ $ npm run tsc
 ## Swagger API docs
 
 This project uses the Nest swagger module for API documentation. [NestJS Swagger](https://github.com/nestjs/swagger) - [www.swagger.io](https://swagger.io/)  
-Swagger docs will be available at localhost:3100/api
+Swagger docs will be available at localhost:3100/docs
 
 
 We can use all the help we can get. Please send an email and any relevant work you’ve done to komak.contact@gmail.com. 
