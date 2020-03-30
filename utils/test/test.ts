@@ -15,6 +15,10 @@ import { AuthService } from '@backend/users/auth/services/auth.service';
 import { UsersModule, UsersService } from '@backend/users';
 import { MongoService } from '@backend/mongo';
 import { dummyUsers } from './users';
+import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
+import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
+import { NotificationsService } from '@backend/notifications';
+import { prePopulateUsers } from './prepopulate';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -120,8 +124,8 @@ export interface InternalTestModuleFixture {
     needer: string;
   };
   services: {
-    apiResolveHttp: MockApiResolveHttpService;
-    rabbitMQ: RabbitMQService;
+    notifications: MockNotificationsService;
+    rabbitMQ: MockRabbitMQService;
   };
 }
 
@@ -137,34 +141,33 @@ const prepareTestController = async (
   uniqueId: string
 ): Promise<InternalTestModuleFixture> => {
   // Make databases config to be unique
-  const configService = new ConfigService();
+  const config = new ConfigService();
   const key = getKey(uniqueId);
-  configService.mongo.database = key;
-  // configService.redis.prefix = key;
-  configService.rabbitmq.prefix = key;
+  config.mongo.database = key;
+
   // Remove debug logs
   const logger = new LoggerService();
   logger.debug = () => {
     // do nothing.
   };
 
-  const apiResolveHttp = new MockApiResolveHttpService();
+  const notifications = new MockNotificationsService();
   const rabbitMQ = new MockRabbitMQService();
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [Module, UsersModule],
   })
     .overrideProvider(ConfigService)
-    .useValue(configService)
+    .useValue(config)
     .overrideProvider(LoggerService)
     .useValue(logger)
-    .overrideProvider(ApiResolveHttpService)
-    .useValue(apiResolveHttp)
+    .overrideProvider(NotificationsService)
+    .useValue(notifications)
     .overrideProvider(RabbitMQService)
     .useValue(rabbitMQ)
     .compile();
 
-  await clean(moduleFixture, uniqueId);
+  await clean(moduleFixture);
 
   const authService = moduleFixture.get(AuthService);
 
@@ -179,21 +182,7 @@ const prepareTestController = async (
     ),
   ]);
 
-  const usersModule = moduleFixture.select(UsersModule);
-
-  const usersService = usersModule.get(UsersService) as UsersService;
-
-  //sign up users
-  await Promise.all(
-    dummyUsers.map(({ user }) =>
-      usersService.passwordLogin({
-        username: user.username,
-        password: user.password,
-      })
-    )
-  );
-
-  //pre-populate companies and leads
+  await prePopulateUsers(moduleFixture);
 
   return {
     moduleFixture,
@@ -202,7 +191,7 @@ const prepareTestController = async (
       needer: needer.token,
     },
     services: {
-      apiResolveHttp,
+      notifications,
       rabbitMQ,
     },
   };
