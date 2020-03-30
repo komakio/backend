@@ -60,10 +60,11 @@ export const prepareHttpTestController = async (
   const app = moduleFixture.createNestApplication(); //fastify adapter
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.init();
-  await app
-    .getHttpAdapter()
-    .getInstance()
-    .ready();
+
+  // await app
+  //   .getHttpAdapter()
+  //   .getInstance()
+  //   .ready();
 
   return {
     app,
@@ -182,7 +183,7 @@ const prepareTestController = async (
     ),
   ]);
 
-  await prePopulateUsers(moduleFixture);
+  // await prePopulateUsers(moduleFixture);
 
   return {
     moduleFixture,
@@ -199,8 +200,8 @@ const prepareTestController = async (
 
 const clean = async (moduleFixture: TestingModule): Promise<void> => {
   const mongoService = moduleFixture.get(MongoService);
-
-  await Promise.all([mongoService.db.dropDatabase()]);
+  await mongoService.waitReady();
+  await mongoService.db.dropDatabase();
 };
 
 export const stopTest = async (app: INestApplication | INestMicroservice) => {

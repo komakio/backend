@@ -94,6 +94,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
+      "@apps/(.*)": "<rootDir>/apps/$1",
+      "@utils/(.*)": "<rootDir>/utils/$1",
       "@backend/config/(.*)": "<rootDir>/libs/config/src/$1",
       "@backend/config": "<rootDir>/libs/config/src",
       "@backend/mongo/(.*)": "<rootDir>/libs/mongo/src/$1",

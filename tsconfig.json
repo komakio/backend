@@ -10,7 +10,14 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "esModuleInterop": true,
     "paths": {
+      "@apps/*": [
+        "apps/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
       "@backend/config": [
         "libs/config/src"
       ],

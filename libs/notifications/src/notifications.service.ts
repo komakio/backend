@@ -3,7 +3,7 @@ import * as fcm from 'node-gcm';
 import { ConfigService } from '@backend/config';
 import { SendNotificationArgs } from './notifications.model';
 import { LoggerService } from '@backend/logger';
-import { resolveIfOneResolves } from 'utils/promise';
+import { resolveIfOneResolves } from '@utils/promise';
 
 @Injectable()
 export class NotificationsService {

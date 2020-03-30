@@ -1,5 +1,5 @@
 import { Controller, Param, Get } from '@nestjs/common';
-import { UserReq, Auth } from 'utils/decorators';
+import { UserReq, Auth } from '@utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';

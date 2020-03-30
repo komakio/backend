@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
-import { waitForSomeSeconds } from 'utils/time';
+import { waitForSomeSeconds } from '@utils/time';
 
 @Injectable()
 export class MongoService {

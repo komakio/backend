@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { User } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { AccessTokenResponse } from './auth/auth.models';
-import { UserReq, Auth } from 'utils/decorators';
+import { UserReq, Auth } from '@utils/decorators';
 import { ObjectID } from 'mongodb';
 import { ApiProperty, ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
 
