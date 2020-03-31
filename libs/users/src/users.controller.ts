@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Get, Put } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Get } from '@nestjs/common';
 import { IsString, IsOptional } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
@@ -147,7 +147,7 @@ export class UsersController {
     status: 200,
     description: 'Successfully updated the user.',
   })
-  public async patch(@UserReq() user: User, @Body() data: PatchUserDto, ) {
+  public async patch(@UserReq() user: User, @Body() data: PatchUserDto) {
     await this.users.patch({ id: new ObjectID(user._id), set: data });
   }
 }
