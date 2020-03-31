@@ -28,6 +28,8 @@ export class User {
   public uuidRegTokenPair?: UuidRegTokenPair;
   @ApiProperty()
   public username?: string;
+  @ApiProperty()
+  public language?: string;
   @Exclude()
   public password?: string;
 

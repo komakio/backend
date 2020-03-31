@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Patch, Get } from '@nestjs/common';
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import { AuthService } from './auth/services/auth.service';
@@ -37,6 +37,13 @@ class LoginResult {
   public user: User;
   @ApiProperty()
   public accessToken: AccessTokenResponse;
+}
+
+class PatchUserDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty()
+  public language?: string;
 }
 
 @Controller('v1/users')
@@ -131,5 +138,16 @@ export class UsersController {
         [`uuidRegTokenPair.${body.uuid}`]: '',
       },
     });
+  }
+
+  @Auth()
+  @Patch()
+  @ApiBody({ type: PatchUserDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully updated the user.',
+  })
+  public async patch(@UserReq() user: User, @Body() data: PatchUserDto) {
+    await this.users.patch({ id: new ObjectID(user._id), set: data });
   }
 }
