@@ -58,16 +58,21 @@ export class RequestsService {
 
   public async acceptOne(args: { id: ObjectID; acceptorProfileId: ObjectID }) {
     const profile = await this.profiles.findOneById(args.acceptorProfileId);
+    const request = await this.findOneById(new ObjectID(args.id));
+
     await this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: {
         status: 'accepted',
         acceptorProfileId: new ObjectID(args.acceptorProfileId),
+        acceptorDistance: request.candidates.find(c =>
+          c.profileId.equals(args.acceptorProfileId)
+        )?.distance,
         candidates: [],
         acceptorShortName: profile.firstName,
       },
     });
-    const request = await this.findOneById(new ObjectID(args.id));
+
     const requesterProfile = await this.profiles.findOneById(
       new ObjectID(request.requesterProfileId)
     );
