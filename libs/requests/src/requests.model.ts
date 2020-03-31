@@ -31,18 +31,20 @@ export class HelpRequest {
   public status: HelpRequestStatus;
   @ApiProperty({ type: Candidate, isArray: true })
   public candidates: Candidate[];
+  @ApiProperty()
+  public requesterShortName: string;
   @ApiProperty({ type: String })
   public requesterProfileId: ObjectID;
+  @ApiProperty()
+  public acceptorShortName: string;
   @ApiProperty({ type: String })
   public acceptorProfileId: ObjectID;
+  @ApiProperty()
+  public acceptorDistance: number;
   @ApiProperty({ enum: RequestTypeEnum })
   public type: HelpRequestType;
   @ApiProperty()
   public comment: string;
-  @ApiProperty()
-  public requesterShortName: string;
-  @ApiProperty()
-  public acceptorShortName: string;
   @ApiProperty({ type: Location })
   public location: Location;
 }
