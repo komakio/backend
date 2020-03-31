@@ -43,10 +43,10 @@ export class UsersMongoService {
     await this.mongo.waitReady();
     const query: any = {};
     if (args.set) {
-      query.$set = args.set;
+      query.$set = { ...args.set, updatedAt: new Date() };
     }
     if (args.unset) {
-      query.$unset = args.unset;
+      query.$unset = { ...args.unset, updatedAt: new Date() };
     }
     return this.mongo.db
       .collection(collection)
