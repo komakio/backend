@@ -32,7 +32,10 @@ export class ProfilesMongoService {
     await this.mongo.waitReady();
     return this.mongo.db
       .collection(collection)
-      .updateOne({ _id: new ObjectID(args.id) }, { $set: args.data });
+      .updateOne(
+        { _id: new ObjectID(args.id) },
+        { $set: { ...args.data, updatedAt: new Date() } }
+      );
   }
 
   public async findOneById(id: ObjectID): Promise<Profile> {

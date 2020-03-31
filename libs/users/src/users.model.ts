@@ -19,6 +19,8 @@ export class User {
   @ApiProperty()
   public createdAt?: Date;
   @ApiProperty()
+  public updatedAt?: Date;
+  @ApiProperty()
   public lastLoginAt?: Date;
   @ApiProperty()
   public isAdmin?: boolean;

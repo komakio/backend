@@ -68,6 +68,8 @@ export class Profile {
   @ApiProperty()
   public createdAt: Date;
   @ApiProperty()
+  public updatedAt: Date;
+  @ApiProperty()
   public lastActivityAt: Date;
   @ApiProperty()
   public lastAffirmativeAt: Date;
