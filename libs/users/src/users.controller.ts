@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Get, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Get, Put } from '@nestjs/common';
 import { IsString, IsOptional } from 'class-validator';
 import { UsersService } from './users.service';
 import { User } from './users.model';
@@ -44,16 +44,6 @@ class PatchUserDto {
   @IsString()
   @ApiProperty()
   public language?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  public username?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  public password?: string;
 }
 
 @Controller('v1/users')
@@ -151,13 +141,13 @@ export class UsersController {
   }
 
   @Auth()
-  @Put(':id')
+  @Patch()
   @ApiBody({ type: PatchUserDto })
   @ApiResponse({
     status: 200,
     description: 'Successfully updated the user.',
   })
-  public async patch(@Param('id') id: string, @Body() data: PatchUserDto) {
-    await this.users.patch({ id: new ObjectID(id), set: data });
+  public async patch(@Body() data: PatchUserDto, @UserReq() user: User) {
+    await this.users.patch({ id: new ObjectID(user._id), set: data });
   }
 }
