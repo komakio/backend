@@ -147,7 +147,7 @@ export class UsersController {
     status: 200,
     description: 'Successfully updated the user.',
   })
-  public async patch(@Body() data: PatchUserDto, @UserReq() user: User) {
+  public async patch(@UserReq() user: User, @Body() data: PatchUserDto, ) {
     await this.users.patch({ id: new ObjectID(user._id), set: data });
   }
 }

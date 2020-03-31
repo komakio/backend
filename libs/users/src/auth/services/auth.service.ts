@@ -24,8 +24,6 @@ export class AuthService {
     user: User,
     expirationOverride?: number
   ): Promise<AccessTokenResponse> => {
-    console.log(user);
-
     const expiration =
       expirationOverride || this.config.jwt.accessTokenExpiration;
     const accessToken = jwt.sign(
