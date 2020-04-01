@@ -32,7 +32,7 @@ class RegistrationTokenDto {
   public registrationToken: string;
 }
 
-class LoginResult {
+export class LoginResult {
   @ApiProperty()
   public user: User;
   @ApiProperty()

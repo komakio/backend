@@ -7,15 +7,16 @@ import {
 import { AppModule } from '@apps/api/src/app.module';
 import { dummyUsers } from '@utils/test/users';
 
-describe('User/Pass login', () => {
+describe('User/Pass user', () => {
   let app: TestApplicationController['app'];
   let tokens: TestApplicationController['tokens'];
   // let services: TestApplicationController['services'];
+  let accessToken;
 
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
       AppModule,
-      'user_pass'
+      'user_pass_user'
     );
     app = testController.app;
     tokens = testController.tokens;
@@ -29,7 +30,7 @@ describe('User/Pass login', () => {
 
     const res = await request(app.getHttpServer())
       .post('/v1/users/login')
-      .send({ username: helper.user.username, password: 'helper.password' });
+      .send({ username: helper.user.username, password: helper.password });
 
     expect(res.status).toBe(201);
     // expect(services.apiResolveHttp.getInfo).toHaveReturned();
