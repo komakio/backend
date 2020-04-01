@@ -9,7 +9,7 @@ import { dummyUsers } from '@utils/test/users';
 
 describe('User/Pass login', () => {
   let app: TestApplicationController['app'];
-  // let tokens: TestApplicationController['tokens'];
+  let tokens: TestApplicationController['tokens'];
   // let services: TestApplicationController['services'];
 
   beforeAll(async () => {
@@ -18,13 +18,13 @@ describe('User/Pass login', () => {
       'user_pass'
     );
     app = testController.app;
-    // tokens = testController.tokens;
+    tokens = testController.tokens;
     // services = testController.services;
   });
 
   afterAll(() => stopTest(app));
 
-  it('/api/v1/login (POST)', async () => {
+  it('/v1/users/login (POST)', async () => {
     const helper = dummyUsers.find(u => u.type === 'helper');
 
     const res = await request(app.getHttpServer())
@@ -32,6 +32,21 @@ describe('User/Pass login', () => {
       .send({ username: helper.user.username, password: 'helper.password' });
 
     expect(res.status).toBe(201);
+    // expect(services.apiResolveHttp.getInfo).toHaveReturned();
+    // expect(services.apiResolveHttp.getInfo).toHaveBeenCalledTimes(1);
+    // expect(res.body.industries).toBeDefined();
+    // expect(res.body.industries.length).toBeGreaterThan(0);
+    // expect(res.body.industries).toEqual([]);
+
+    // expect(redisRes.body.industries).toEqual(res.body.industries);
+  });
+
+  it('/v1/users (GET)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/v1/users/current')
+      .set({ Authorization: `Bearer ${tokens.helper}` });
+
+    expect(res.status).toBe(200);
     // expect(services.apiResolveHttp.getInfo).toHaveReturned();
     // expect(services.apiResolveHttp.getInfo).toHaveBeenCalledTimes(1);
     // expect(res.body.industries).toBeDefined();

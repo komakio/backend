@@ -12,13 +12,13 @@ import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
 import { RabbitMQService } from '@backend/rabbitmq';
 import { AuthService } from '@backend/users/auth/services/auth.service';
-import { UsersModule, UsersService } from '@backend/users';
+import { UsersModule } from '@backend/users';
 import { MongoService } from '@backend/mongo';
 import { dummyUsers } from './users';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
-import { prePopulateUsers } from './prepopulate';
+// import { prePopulateUsers } from './prepopulate';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -88,7 +88,6 @@ export const prepareRabbitMQTestController = async (
   );
 
   const app = moduleFixture.createNestMicroservice({ strategy: null });
-  // @ts-ignore
   expect(app).toBeTruthy();
   await app.init();
 
