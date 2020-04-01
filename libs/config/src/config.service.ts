@@ -22,6 +22,8 @@ export class ConfigService {
   };
   public maxDistance = parseInt(process.env.MAX_DISTANCE, 10) || 1000;
 
+  public peliasUrl = process.env.PELIAS_URL;
+
   public mongo = {
     srv: process.env.MONGO_SRV,
     host: process.env.MONGO_HOST || 'localhost',
