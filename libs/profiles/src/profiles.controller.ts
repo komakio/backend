@@ -148,7 +148,15 @@ export class ProfilesController {
     status: 200,
     description: 'Successfully updated the profile.',
   })
-  public async patch(@Param('id') id: string, @Body() data: PatchProfilesDto) {
+  public async patch(
+    @Param('id') id: string,
+    @UserReq() user: User,
+    @Body() data: PatchProfilesDto
+  ) {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(id),
+      userId: new ObjectID(user._id),
+    });
     await this.profiles.patchOneById({ id: new ObjectID(id), data });
   }
 }

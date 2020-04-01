@@ -40,6 +40,15 @@ export class Address {
   @IsString()
   @ApiProperty()
   public raw: string;
+  @IsString()
+  @ApiProperty()
+  public extra: string;
+  @IsString()
+  @ApiProperty()
+  public postalCode: string;
+  @IsString()
+  @ApiProperty()
+  public city: string;
   @IsOptional()
   @IsString()
   @ApiProperty()
