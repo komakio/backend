@@ -22,8 +22,7 @@ export class ConfigService {
   };
   public maxDistance = parseInt(process.env.MAX_DISTANCE, 10) || 1000;
 
-  public peliasUrl =
-    'https://ocean:HfG7qho8AABMmnEyUE48f22XW3dcjRk9mAQ3dPPAUkuPrmGsQb@proxies.ocean.io/pelias';
+  public peliasUrl = process.env.PELIAS_URL;
 
   public mongo = {
     srv: process.env.MONGO_SRV,
