@@ -104,6 +104,7 @@ export class UsersController {
     return { user: user?.serialize(), accessToken };
   }
 
+  @Auth()
   @Patch('registration-token')
   @ApiBody({ type: RegistrationTokenDto })
   @ApiResponse({
@@ -122,6 +123,7 @@ export class UsersController {
     });
   }
 
+  @Auth()
   @Post('registration-token/unset')
   @ApiBody({ type: RegistrationTokenDto })
   @ApiResponse({
