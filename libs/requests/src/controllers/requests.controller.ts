@@ -1,5 +1,5 @@
 import { Controller, Post, Param, Body, Get } from '@nestjs/common';
-import { UserReq, Auth } from 'utils/decorators';
+import { UserReq, Auth } from '@utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
 import { RequestsService } from '../requests.service';

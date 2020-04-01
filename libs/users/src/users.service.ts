@@ -4,7 +4,7 @@ import { ObjectID } from 'mongodb';
 import { User, SocialAuthType } from './users.model';
 import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
-import { compareHash, hashString } from 'utils/hash';
+import { compareHash, hashString } from '@utils/hash';
 
 @Injectable()
 export class UsersService {

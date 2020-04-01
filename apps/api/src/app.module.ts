@@ -6,7 +6,7 @@ import { UsersModule } from '@backend/users';
 import { ProfilesModule } from '@backend/profiles';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@backend/users/auth/auth.guard';
-import { RequestsModule } from 'libs/requests/src';
+import { RequestsModule } from '@backend/requests/requests.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health-controller.controller';
 

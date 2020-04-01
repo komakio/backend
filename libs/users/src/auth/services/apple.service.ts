@@ -1,7 +1,7 @@
 import appleSignin from 'apple-signin-auth';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
-import { resolveIfOneResolves } from 'utils/promise';
+import { resolveIfOneResolves } from '@utils/promise';
 
 @Injectable()
 export class AppleService {

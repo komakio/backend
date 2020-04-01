@@ -5,8 +5,8 @@ import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { NotificationsService } from '@backend/notifications';
 import { UsersService } from '@backend/users';
-import { getDistance } from 'utils/distance';
 import { ConfigService } from '@backend/config';
+import { getDistance } from '@utils/distance';
 
 @Injectable()
 export class RequestsService {

@@ -8,7 +8,7 @@ import {
   IsNotEmpty,
   IsNumber,
 } from 'class-validator';
-import { UserReq, Auth } from 'utils/decorators';
+import { UserReq, Auth } from '@utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
 import { Type } from 'class-transformer';

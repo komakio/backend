@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import { ConsumerModule } from 'libs/rabbitmq/src/consumer/consumer.module';
+import { ConsumerModule } from '@backend/rabbitmq/consumer/consumer.module';
 import { LoggerService } from '@backend/logger';
 // import { ExceptionsService } from 'libs/exceptions/src';
-import { AppConsumerModule } from 'apps/api/src/app.module';
+import { AppConsumerModule } from '@apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
-import { RequestsRabbitMQService } from 'libs/requests/src/services/requests-rabbitmq.service';
+import { RequestsRabbitMQService } from '@backend/requests/services/requests-rabbitmq.service';
 import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
 import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 import { ProfilesRabbitMQService } from '@backend/profiles/services/profiles-rabbitmq.service';
