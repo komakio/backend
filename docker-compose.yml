@@ -4,10 +4,10 @@ services:
         image: mongo:4
         container_name: "mongodb-komak"
         ports:
-            - 27018:27017
+            - 27017:27017
     rabbitmq:
         image: rabbitmq:3.7-management
         container_name: "rabbitmq-komak"
         ports:
-            - 5673:5672
-            - 15673:15672
+            - 5672:5672
+            - 15672:15672
