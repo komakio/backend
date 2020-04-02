@@ -7,11 +7,21 @@ jobs:
     name: npm run test
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        mongodb-version: [4.0, 4.2]
+
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+
+    - name: Start MongoDB v${{ matrix.mongodb-version }}
+      uses: superchargejs/mongodb-github-action@1.1.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+
     - run: npm install
     - run: npm test -- --coverage
 
