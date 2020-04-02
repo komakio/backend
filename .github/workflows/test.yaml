@@ -18,12 +18,14 @@ jobs:
         node-version: '12.x'
 
     - name: Start MongoDB v${{ matrix.mongodb-version }}
-      uses: superchargejs/mongodb-github-action@1.1.0
+      uses: supercharge/mongodb-github-action@1.2.0
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
 
     - run: npm install
     - run: npm test -- --coverage
+      env:
+        CI: true
 
 
     - uses: codecov/codecov-action@v1
