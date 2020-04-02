@@ -2,6 +2,8 @@
 
 [![codecov](https://codecov.io/gh/komakio/backend/branch/master/graph/badge.svg)](https://codecov.io/gh/komakio/backend)
 [![slackin](https://slack.komak.io/badge.svg)](https://slack.komak.io)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/komakio/backend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/komakio/backend/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/komakio/backend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/komakio/backend/context:javascript)
 
 ![Type checking](https://github.com/komakio/backend/workflows/Type%20checking/badge.svg)
 ![Tests](https://github.com/komakio/backend/workflows/Tests/badge.svg)
