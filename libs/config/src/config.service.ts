@@ -27,7 +27,7 @@ export class ConfigService {
   public mongo = {
     srv: process.env.MONGO_SRV,
     host: process.env.MONGO_HOST || 'localhost',
-    port: parseInt(process.env.MONGO_PORT, 10) || 27018,
+    port: parseInt(process.env.MONGO_PORT, 10) || 27017,
     database: process.env.MONGO_DB || 'default',
     user: process.env.MONGO_USER,
     password: process.env.MONGO_PASSWORD,
@@ -36,7 +36,7 @@ export class ConfigService {
 
   public rabbitmq = {
     host: process.env.RABBITMQ_HOST || 'localhost',
-    port: parseInt(process.env.RABBITMQ_PORT, 10) || 5673,
+    port: parseInt(process.env.RABBITMQ_PORT, 10) || 5672,
     user: process.env.RABBITMQ_USER,
     password: process.env.RABBITMQ_PASSWORD,
     prefix: process.env.RABBITMQ_PREFIX || 'default',
