@@ -1,10 +1,10 @@
-name: Type checking
+name: Tests
 
 on: push
 
 jobs:
   run-linters:
-    name: npm run tsc
+    name: npm run test
     runs-on: ubuntu-latest
 
     steps:
