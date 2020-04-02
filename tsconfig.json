@@ -71,6 +71,12 @@
       ],
       "@backend/notifications/*": [
         "libs/notifications/src/*"
+      ],
+      "@backend/geocoder": [
+        "libs/geocoder/src"
+      ],
+      "@backend/geocoder/*": [
+        "libs/geocoder/src/*"
       ]
     }
   },

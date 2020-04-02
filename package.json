@@ -113,7 +113,9 @@
       "@backend/requests/(.*)": "<rootDir>/libs/requests/src/$1",
       "@backend/requests": "<rootDir>/libs/requests/src",
       "@backend/notifications/(.*)": "<rootDir>/libs/notifications/src/$1",
-      "@backend/notifications": "<rootDir>/libs/notifications/src"
+      "@backend/notifications": "<rootDir>/libs/notifications/src",
+      "@backend/geocoder/(.*)": "<rootDir>/libs/geocoder/src/$1",
+      "@backend/geocoder": "<rootDir>/libs/geocoder/src"
     }
   }
 }
