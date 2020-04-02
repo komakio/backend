@@ -16,6 +16,7 @@
     "start:prod": "node dist/apps/api/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
+    "test:ci": "MONGO_PORT=27017 jest --ci --coverage",
     "tsc": "tsc",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -113,7 +114,9 @@
       "@backend/requests/(.*)": "<rootDir>/libs/requests/src/$1",
       "@backend/requests": "<rootDir>/libs/requests/src",
       "@backend/notifications/(.*)": "<rootDir>/libs/notifications/src/$1",
-      "@backend/notifications": "<rootDir>/libs/notifications/src"
+      "@backend/notifications": "<rootDir>/libs/notifications/src",
+      "@backend/geocoder/(.*)": "<rootDir>/libs/geocoder/src/$1",
+      "@backend/geocoder": "<rootDir>/libs/geocoder/src"
     }
   }
 }

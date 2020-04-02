@@ -9,7 +9,7 @@ import { AuthGuard } from '@backend/users/auth/auth.guard';
 import { RequestsModule } from '@backend/requests/requests.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health-controller.controller';
-import { GeocoderModule } from 'libs/geocoder/src/geocoder.module';
+import { GeocoderModule } from '@backend/geocoder/geocoder.module';
 
 const modules = [
   MongoModule,
