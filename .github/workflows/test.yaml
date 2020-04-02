@@ -23,9 +23,7 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
 
     - run: npm install
-    - run: npm test -- --coverage
-      env:
-        CI: true
+    - run: npm run test:ci
 
 
     - uses: codecov/codecov-action@v1
