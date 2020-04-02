@@ -53,17 +53,17 @@ export class ExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const path = request.originalUrl;
+    const path = request.url;
 
     if (exception instanceof HttpException) {
-      const code = exception.getStatus();
-      response.code(code).send({
-        error: {
-          statusCode: code,
-          message: exception.getResponse(),
-        },
+      const status =
+        exception instanceof HttpException
+          ? exception.getStatus()
+          : HttpStatus.INTERNAL_SERVER_ERROR;
+      response.status(status).json({
+        statusCode: status,
         timestamp: new Date().toISOString(),
-        path,
+        path: request.url,
       });
       return;
     }

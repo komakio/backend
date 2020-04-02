@@ -10,6 +10,7 @@ import { RequestsModule } from '@backend/requests/requests.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health-controller.controller';
 import { GeocoderModule } from '@backend/geocoder/geocoder.module';
+import { ExceptionsModule } from '@backend/exceptions';
 
 const modules = [
   MongoModule,
@@ -19,6 +20,7 @@ const modules = [
   UsersModule,
   RequestsModule,
   GeocoderModule,
+  ExceptionsModule,
 ];
 @Module({
   controllers: [HealthController],

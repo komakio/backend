@@ -3,14 +3,15 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { RabbitMQService } from '@backend/rabbitmq';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ExceptionsService } from '@backend/exceptions';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  // process.on('uncaughtException', (err: Error) => {
-  //     app.get(ExceptionsService).report(err);
-  // });
+  process.on('uncaughtException', (err: Error) => {
+    app.get(ExceptionsService).report(err);
+  });
 
   app.get(RabbitMQService).connect();
   const options = new DocumentBuilder()
