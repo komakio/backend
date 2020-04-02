@@ -7,10 +7,10 @@ export const prePopulateUsers = async (moduleFixture: TestingModule) => {
   const usersService = usersModule.get(UsersService) as UsersService;
   //sign up users
   await Promise.all(
-    dummyUsers.map(({ user }) =>
+    dummyUsers.map(({ user, password }) =>
       usersService.passwordLogin({
         username: user.username,
-        password: user.password,
+        password: password,
       })
     )
   );

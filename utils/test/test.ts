@@ -18,7 +18,7 @@ import { dummyUsers } from './users';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
-// import { prePopulateUsers } from './prepopulate';
+import { prePopulateUsers } from './prepopulate';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -182,7 +182,7 @@ const prepareTestController = async (
     ),
   ]);
 
-  // await prePopulateUsers(moduleFixture);
+  await prePopulateUsers(moduleFixture);
 
   return {
     moduleFixture,
