@@ -37,15 +37,19 @@ export class Location {
 }
 
 export class Address {
+  @IsOptional()
   @IsString()
   @ApiProperty()
   public raw: string;
+  @IsOptional()
   @IsString()
   @ApiProperty()
   public extra: string;
+  @IsOptional()
   @IsString()
   @ApiProperty()
   public postalCode: string;
+  @IsOptional()
   @IsString()
   @ApiProperty()
   public city: string;
