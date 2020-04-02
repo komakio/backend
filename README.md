@@ -1,5 +1,8 @@
 # Welcome to Komak’s open-source repository 🙏
 
+[![codecov](https://codecov.io/gh/komakio/backend/branch/master/graph/badge.svg)](https://codecov.io/gh/komakio/backend)
+[![slackin](https://slack.komak.io/badge.svg)](https://slack.komak.io)
+
 ## What is Komak?
 
 Komak is an app born out of necessity in the wake of the COVID-19 events. There are people in our community more susceptible or already exposed to the effects of the virus than others. The goal of Komak is to provide a digital platform for healthy volunteers to help out those most in need. 
