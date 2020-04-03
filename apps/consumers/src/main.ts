@@ -67,6 +67,12 @@ async function bootstrap() {
       queueName: profilesRabbitMQ.subscribeNewHelperRequestQueueName,
       prefetchCount: 30,
     }),
+    bootstrapQueue({
+      module: ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
+      queueName: requestsRabbitMQ.notificationsRequestQueueName,
+      prefetchCount: 30,
+      withDelayedExchange: true,
+    }),
   ]);
 }
 bootstrap();

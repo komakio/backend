@@ -1,0 +1,71 @@
+import { Injectable } from '@nestjs/common';
+import { MongoService } from '@backend/mongo';
+import { LoggerService } from '@backend/logger';
+import { RMQHelper } from '@backend/rabbitmq';
+import { waitForSomeMin } from '@utils/time';
+import { UsersService } from '@backend/users';
+import { NotificationsRequestQueue } from '../requests.model';
+import { NotificationsService } from '@backend/notifications';
+import { ObjectID } from 'mongodb';
+import { RequestsService } from '../requests.service';
+import { ProfilesService } from '@backend/profiles';
+import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
+
+@Injectable()
+export class NotificationConsumer {
+  constructor(
+    private mongo: MongoService,
+    private logger: LoggerService,
+    private notifications: NotificationsService,
+    private users: UsersService,
+    private requests: RequestsService,
+    private profiles: ProfilesService,
+    private requestsRabbitMQ: RequestsRabbitMQService
+  ) {}
+
+  public async consume({ message, ack }: RMQHelper<NotificationsRequestQueue>) {
+    const { requestId, data } = message;
+    const sentProfileIds = message.sentProfileIds || [];
+
+    try {
+      await this.mongo.waitReady();
+      const request = await this.requests.findOneById(new ObjectID(requestId));
+
+      if (request.status !== 'pending') {
+        return ack();
+      }
+
+      if (sentProfileIds?.length) {
+        await waitForSomeMin(10);
+      }
+
+      const profileId = request.candidates.find(
+        c => !sentProfileIds.includes(c.profileId.toString())
+      )?.profileId;
+
+      if (!profileId) {
+        return ack();
+      }
+
+      const profile = await this.profiles.findOneById(new ObjectID(profileId));
+      const user = await this.users.findOneById(new ObjectID(profile.userId));
+      const registrationTokens = Object.values(user.uuidRegTokenPair || {});
+
+      await this.notifications.send({ ...data, registrationTokens });
+
+      this.requestsRabbitMQ.sendToNotifications({
+        requestId,
+        data,
+        sentProfileIds: [...sentProfileIds, profileId.toString()],
+      });
+
+      ack();
+    } catch (err) {
+      this.logger.verbose({
+        route: 'notifications-request-queue',
+        error: err?.message,
+      });
+      ack('failed');
+    }
+  }
+}

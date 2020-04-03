@@ -1,6 +1,7 @@
 import { ObjectID } from 'mongodb';
 import { Location } from '@backend/profiles/profile.model';
 import { ApiProperty } from '@nestjs/swagger';
+import { SendNotificationData } from '@backend/notifications/notifications.model';
 
 export const HelpRequestStatusEnum = [
   'pending',
@@ -57,4 +58,10 @@ export class DispatchRequestQueue {
 export class SubscribeNewHelperRequestQueue {
   public profileId: ObjectID;
   public registrationTokens: string[];
+}
+
+export interface NotificationsRequestQueue {
+  requestId: ObjectID;
+  data: SendNotificationData;
+  sentProfileIds?: string[];
 }

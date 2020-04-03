@@ -18,8 +18,12 @@ export class RequestsService {
     private users: UsersService,
     private notifications: NotificationsService,
     private config: ConfigService,
+<<<<<<< HEAD
     private requestsRabbitMQ: RequestsRabbitMQService,
     private email: EmailService
+=======
+    private requestsRabbitMQ: RequestsRabbitMQService
+>>>>>>> feat: batchwise notifications Closes #75
   ) {}
 
   public async createOne(profileId: ObjectID) {
@@ -145,15 +149,6 @@ export class RequestsService {
       new ObjectID(args.profileId)
     );
 
-    const users = await this.users.findManyByIds(
-      profilesWithDistance.map(p => new ObjectID(p.userId))
-    );
-
-    const registrationTokens = users?.reduce((total, u) => {
-      const tokens = Object.values(u.uuidRegTokenPair || {});
-      return [...total, ...tokens];
-    }, []);
-
     await this.patchOne({
       id: new ObjectID(args.requestId),
       data: {
@@ -166,15 +161,17 @@ export class RequestsService {
 
     const request = await this.findOneById(args.requestId);
 
-    await this.notifications.send({
-      registrationTokens,
-      message: {
-        title: 'KOMAK',
-        body: 'Someone is in need of your help.',
-        icon: '',
-      },
-      payload: {
-        request: JSON.stringify(request),
+    await this.requestsRabbitMQ.sendToNotifications({
+      requestId: args.requestId,
+      data: {
+        message: {
+          title: 'KOMAK',
+          body: 'Someone is in need of your help.',
+          icon: '',
+        },
+        payload: {
+          request: JSON.stringify(request),
+        },
       },
     });
   }

@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
 import { RabbitMQService } from '@backend/rabbitmq';
-import { DispatchRequestQueue } from '../requests.model';
+import {
+  NotificationsRequestQueue,
+  DispatchRequestQueue,
+} from '../requests.model';
 
 @Injectable()
 export class RequestsRabbitMQService {
   public dispatchRequestQueueName = `${this.config.rabbitmq.prefix}dispatchRequestQueue`;
+  public notificationsRequestQueueName = `${this.config.rabbitmq.prefix}notificationsRequestQueue`;
 
   constructor(
     private config: ConfigService,
@@ -17,5 +21,9 @@ export class RequestsRabbitMQService {
       queueName: this.dispatchRequestQueueName,
       message,
     });
+  }
+
+  public async sendToNotifications(props: NotificationsRequestQueue) {
+    await this.rabbitMQ.sendToQueue(this.notificationsRequestQueueName, props);
   }
 }
