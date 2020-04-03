@@ -7,7 +7,7 @@ import {
 import { AppModule } from '@apps/api/src/app.module';
 import { LoginResult } from '../users.controller';
 
-describe('User/Pass user', () => {
+describe('Users controller', () => {
   let app: TestApplicationController['app'];
 
   const username = `${new Date()}@komak.io`;
@@ -24,7 +24,7 @@ describe('User/Pass user', () => {
 
   afterAll(() => stopTest(app));
 
-  it('/v1/users/login succeeded', async () => {
+  it('login with a new username and password => register a new user (/v1/users/login)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/users/login')
       .send({ username, password });
@@ -37,7 +37,15 @@ describe('User/Pass user', () => {
     expect(res.body.accessToken.hasOwnProperty('expiration')).toBeTruthy();
   });
 
-  it('/v1/users/current succeeded', async () => {
+  it('login using invalid password => error 403 (/v1/users/login)', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/v1/users/login')
+      .send({ username, password: 'somerandometext' });
+
+    expect(res.status).toBe(403);
+  });
+
+  it('get current user using valid access token => success (/v1/users/current)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/users/current')
       .set({ Authorization: `Bearer ${accessToken}` });
@@ -47,7 +55,15 @@ describe('User/Pass user', () => {
     expect(res.body.username).toBe(username);
   });
 
-  it('/v1/users/registration-token succeeded', async () => {
+  it('get current user using invalid access token => error 403 (/v1/users/current)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/v1/users/current')
+      .set({ Authorization: `Bearer somerandometext` });
+
+    expect(res.status).toBe(403);
+  });
+
+  it('set registration token => success (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
       .set({ Authorization: `Bearer ${accessToken}` })
@@ -58,23 +74,7 @@ describe('User/Pass user', () => {
     expect(res.status).toBe(200);
   });
 
-  it('/v1/users/login unauthorized', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/v1/users/login')
-      .send({ username, password: 'somerandometext' });
-
-    expect(res.status).toBe(403);
-  });
-
-  it('/v1/users/current unauthorized', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/v1/users/current')
-      .set({ Authorization: `Bearer somerandometext` });
-
-    expect(res.status).toBe(403);
-  });
-
-  it('/v1/users/registration-token unauthorized', async () => {
+  it('set registration token using invalid access token => error 403 (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
       .set({ Authorization: `Bearer somerandometext` })
@@ -85,7 +85,7 @@ describe('User/Pass user', () => {
     expect(res.status).toBe(403);
   });
 
-  it('/v1/users/registration-token bad request', async () => {
+  it('set registration token with body that lacks uuid => error 400 (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
       .set({ Authorization: `Bearer ${accessToken}` })
@@ -95,7 +95,7 @@ describe('User/Pass user', () => {
     expect(res.status).toBe(400);
   });
 
-  it('/v1/users/registration-token bad request', async () => {
+  it('set registration token with body that lacks registration token => error 400  (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
       .set({ Authorization: `Bearer ${accessToken}` })

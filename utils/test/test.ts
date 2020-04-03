@@ -19,6 +19,10 @@ import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mo
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
 import { prePopulateUsers } from './prepopulate';
+import { AppleService } from '@backend/users/auth/services/apple.service';
+import { MockAppleService } from '@backend/users/mock/apple-service.mock';
+import { GoogleService } from '@backend/users/auth/services/google.service';
+import { MockGoogleService } from '@backend/users/mock/google-service.mock';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -126,6 +130,8 @@ export interface InternalTestModuleFixture {
   services: {
     notifications: MockNotificationsService;
     rabbitMQ: MockRabbitMQService;
+    appleService: MockAppleService;
+    googleService: MockGoogleService;
   };
 }
 
@@ -153,6 +159,8 @@ const prepareTestController = async (
 
   const notifications = new MockNotificationsService();
   const rabbitMQ = new MockRabbitMQService();
+  const appleService = new MockAppleService();
+  const googleService = new MockGoogleService();
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [Module, UsersModule],
@@ -165,6 +173,10 @@ const prepareTestController = async (
     .useValue(notifications)
     .overrideProvider(RabbitMQService)
     .useValue(rabbitMQ)
+    .overrideProvider(AppleService)
+    .useValue(appleService)
+    .overrideProvider(GoogleService)
+    .useValue(googleService)
     .compile();
 
   await clean(moduleFixture);
@@ -193,6 +205,8 @@ const prepareTestController = async (
     services: {
       notifications,
       rabbitMQ,
+      appleService,
+      googleService,
     },
   };
 };
