@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { ConsumerModule } from '@backend/rabbitmq/consumer/consumer.module';
 import { LoggerService } from '@backend/logger';
-// import { ExceptionsService } from 'libs/exceptions/src';
 import { AppConsumerModule } from '@apps/api/src/app.module';
 import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from '@backend/requests/services/requests-rabbitmq.service';
 import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
 import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 import { ProfilesRabbitMQService } from '@backend/profiles/services/profiles-rabbitmq.service';
+import { ExceptionsService } from '@backend/exceptions';
 
 const logger = new LoggerService();
 
@@ -45,9 +45,9 @@ async function bootstrap() {
   });
   app.get(RabbitMQService).connect();
 
-  // process.on('uncaughtException', (err: Error) => {
-  //     app.get(ExceptionsService).report(err);
-  // });
+  process.on('uncaughtException', (err: Error) => {
+    app.get(ExceptionsService).report(err);
+  });
 
   const requestsRabbitMQ = app.get(RequestsRabbitMQService);
   const profilesRabbitMQ = app.get(ProfilesRabbitMQService);
