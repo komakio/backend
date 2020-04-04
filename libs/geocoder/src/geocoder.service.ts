@@ -71,6 +71,8 @@ export class GeocoderService {
       latitude: feature.geometry.coordinates[1],
       label: feature.properties.label,
       layer: feature.properties.layer,
+      countryIsoCode: feature.properties.country_a,
+      city: feature.properties.locality,
     }));
   }
 }
