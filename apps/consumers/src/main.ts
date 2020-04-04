@@ -48,7 +48,8 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppConsumerModule, {
     logger,
   });
-  app.get(RabbitMQService).connect();
+  await app.get(RabbitMQService).connect();
+  console.log('connected');
 
   process.on('uncaughtException', (err: Error) => {
     app.get(ExceptionsService).report(err);
@@ -70,7 +71,7 @@ async function bootstrap() {
     }),
     bootstrapQueue({
       module: ConsumerModule.register(app.get(BatchwiseNotificationsConsumer)),
-      queueName: requestsRabbitMQ.notificationsRequestQueueName,
+      queueName: requestsRabbitMQ.BatchwiseNotificationsQueueName,
       prefetchCount: 30,
       withDelayedExchange: true,
     }),

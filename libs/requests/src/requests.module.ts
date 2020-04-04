@@ -14,6 +14,7 @@ import { UsersModule } from '@backend/users';
 import { ProfilesRequestsController } from './controllers/profiles-requests.controller';
 import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.consumer';
 import { EmailModule } from '@backend/email';
+import { BatchwiseNotificationsConsumer } from './consumers/notifications.consumer';
 
 @Module({
   controllers: [RequestsController, ProfilesRequestsController],
@@ -23,6 +24,7 @@ import { EmailModule } from '@backend/email';
     RequestsRabbitMQService,
     DispatchRequestsConsumer,
     SubscribeNewHelperConsumer,
+    BatchwiseNotificationsConsumer,
   ],
   imports: [
     MongoModule,

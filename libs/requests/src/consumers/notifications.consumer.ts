@@ -3,7 +3,7 @@ import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
 import { UsersService } from '@backend/users';
-import { NotificationsRequestQueue } from '../requests.model';
+import { BatchwiseNotificationsQueue } from '../requests.model';
 import { NotificationsService } from '@backend/notifications';
 import { ObjectID } from 'mongodb';
 import { RequestsService } from '../requests.service';
@@ -22,7 +22,7 @@ export class BatchwiseNotificationsConsumer {
     private requestsRabbitMQ: RequestsRabbitMQService
   ) {}
 
-  public async consume({ message, ack }: RMQHelper<NotificationsRequestQueue>) {
+  public async consume({ message, ack }: RMQHelper<BatchwiseNotificationsQueue>) {
     const { requestId, data } = message;
     const sentProfileIds = message.sentProfileIds || [];
 

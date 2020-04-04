@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
 import { RabbitMQService } from '@backend/rabbitmq';
 import {
-  NotificationsRequestQueue,
+  BatchwiseNotificationsQueue,
   DispatchRequestQueue,
 } from '../requests.model';
 
 @Injectable()
 export class RequestsRabbitMQService {
   public dispatchRequestQueueName = `${this.config.rabbitmq.prefix}dispatchRequestQueue`;
-  public notificationsRequestQueueName = `${this.config.rabbitmq.prefix}notificationsRequestQueue`;
+  public BatchwiseNotificationsQueueName = `${this.config.rabbitmq.prefix}BatchwiseNotificationsQueue`;
 
   constructor(
     private config: ConfigService,
@@ -24,10 +24,10 @@ export class RequestsRabbitMQService {
   }
 
   public async sendToBatchwiseNotifications(
-    message: NotificationsRequestQueue
+    message: BatchwiseNotificationsQueue
   ) {
     await this.rabbitMQ.sendToQueueWithDelay({
-      queueName: this.notificationsRequestQueueName,
+      queueName: this.BatchwiseNotificationsQueueName,
       message,
       delayTimeMs: !message?.sentProfileIds?.length ? 1 : 10 * 60 * 1000,
     });

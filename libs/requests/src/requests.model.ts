@@ -60,7 +60,7 @@ export class SubscribeNewHelperRequestQueue {
   public registrationTokens: string[];
 }
 
-export interface NotificationsRequestQueue {
+export interface BatchwiseNotificationsQueue {
   requestId: ObjectID;
   data: SendNotificationData;
   sentProfileIds?: string[];

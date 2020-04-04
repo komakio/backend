@@ -14,7 +14,7 @@ async function bootstrap() {
     app.get(ExceptionsService).report(err);
   });
 
-  app.get(RabbitMQService).connect();
+  await app.get(RabbitMQService).connect();
   const options = new DocumentBuilder()
     .setTitle('Komak')
     .setDescription('The Komak API description')

@@ -25,7 +25,7 @@ export class RabbitMQService implements RabbitMQServiceInterface {
 
   constructor(private config: ConfigService, private logger: LoggerService) {}
 
-  public connect() {
+  public async connect() {
     if (this.channel) {
       return;
     }
@@ -35,8 +35,13 @@ export class RabbitMQService implements RabbitMQServiceInterface {
     this.channel = connection.createChannel({
       json: true,
     });
-    this.channel.addListener('connect', () => {
-      this.logger.debug('RabbitMQ connected');
+    return new Promise(resolve => {
+      this.channel.addListener('connect', () => {
+        console.log({ channel: this.channel });
+
+        this.logger.debug('RabbitMQ connected');
+        resolve();
+      });
     });
   }
 
