@@ -161,7 +161,7 @@ export class RequestsService {
 
     const request = await this.findOneById(args.requestId);
 
-    await this.requestsRabbitMQ.sendToNotifications({
+    await this.requestsRabbitMQ.sendToBatchwiseNotifications({
       requestId: args.requestId,
       data: {
         message: {

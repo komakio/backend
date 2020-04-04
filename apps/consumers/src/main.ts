@@ -9,7 +9,7 @@ import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-r
 import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 import { ProfilesRabbitMQService } from '@backend/profiles/services/profiles-rabbitmq.service';
 import { ExceptionsService } from '@backend/exceptions';
-import { NotificationConsumer } from '@backend/requests/consumers/notifications.consumer';
+import { BatchwiseNotificationsConsumer } from '@backend/requests/consumers/notifications.consumer';
 
 const logger = new LoggerService();
 
@@ -69,7 +69,7 @@ async function bootstrap() {
       prefetchCount: 30,
     }),
     bootstrapQueue({
-      module: ConsumerModule.register(app.get(NotificationConsumer)),
+      module: ConsumerModule.register(app.get(BatchwiseNotificationsConsumer)),
       queueName: requestsRabbitMQ.notificationsRequestQueueName,
       prefetchCount: 30,
       withDelayedExchange: true,

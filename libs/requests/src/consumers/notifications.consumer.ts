@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
 import { LoggerService } from '@backend/logger';
 import { RMQHelper } from '@backend/rabbitmq';
-import { waitForSomeMin } from '@utils/time';
 import { UsersService } from '@backend/users';
 import { NotificationsRequestQueue } from '../requests.model';
 import { NotificationsService } from '@backend/notifications';
@@ -12,7 +11,7 @@ import { ProfilesService } from '@backend/profiles';
 import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
 
 @Injectable()
-export class NotificationConsumer {
+export class BatchwiseNotificationsConsumer {
   constructor(
     private mongo: MongoService,
     private logger: LoggerService,
@@ -35,10 +34,6 @@ export class NotificationConsumer {
         return ack();
       }
 
-      if (sentProfileIds?.length) {
-        await waitForSomeMin(10);
-      }
-
       const profileId = request.candidates.find(
         c => !sentProfileIds.includes(c.profileId.toString())
       )?.profileId;
@@ -53,7 +48,7 @@ export class NotificationConsumer {
 
       await this.notifications.send({ ...data, registrationTokens });
 
-      this.requestsRabbitMQ.sendToNotifications({
+      this.requestsRabbitMQ.sendToBatchwiseNotifications({
         requestId,
         data,
         sentProfileIds: [...sentProfileIds, profileId.toString()],
@@ -62,7 +57,7 @@ export class NotificationConsumer {
       ack();
     } catch (err) {
       this.logger.verbose({
-        route: 'notifications-request-queue',
+        route: 'batchwise-notifications-request-queue',
         error: err?.message,
       });
       ack('failed');

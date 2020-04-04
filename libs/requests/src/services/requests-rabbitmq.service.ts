@@ -23,7 +23,13 @@ export class RequestsRabbitMQService {
     });
   }
 
-  public async sendToNotifications(props: NotificationsRequestQueue) {
-    await this.rabbitMQ.sendToQueue(this.notificationsRequestQueueName, props);
+  public async sendToBatchwiseNotifications(
+    message: NotificationsRequestQueue
+  ) {
+    await this.rabbitMQ.sendToQueueWithDelay({
+      queueName: this.notificationsRequestQueueName,
+      message,
+      delayTimeMs: !message?.sentProfileIds?.length ? 1 : 10 * 60 * 1000,
+    });
   }
 }
