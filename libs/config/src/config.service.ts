@@ -52,4 +52,10 @@ export class ConfigService {
       'du:<9tv:B{P^X/s~Lv4+MsT7.>%w%!A$zU%_C~Pj3[,]+~c2LB;;fLBE5E@NKFg',
     accessTokenExpiration: 60 * 60 * 24 * 365,
   };
+
+  public mailgun = {
+    apiKey: process.env.EMAIN_API_KEY,
+    domain: process.env.EMAIN_DOMAIN,
+    from: process.env.EMAIN_ADDRESS,
+  };
 }
