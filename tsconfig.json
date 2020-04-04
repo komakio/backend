@@ -77,6 +77,12 @@
       ],
       "@backend/geocoder/*": [
         "libs/geocoder/src/*"
+      ],
+      "@backend/email": [
+        "libs/email/src"
+      ],
+      "@backend/email/*": [
+        "libs/email/src/*"
       ]
     }
   },

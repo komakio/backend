@@ -117,7 +117,9 @@
       "@backend/notifications/(.*)": "<rootDir>/libs/notifications/src/$1",
       "@backend/notifications": "<rootDir>/libs/notifications/src",
       "@backend/geocoder/(.*)": "<rootDir>/libs/geocoder/src/$1",
-      "@backend/geocoder": "<rootDir>/libs/geocoder/src"
+      "@backend/geocoder": "<rootDir>/libs/geocoder/src",
+      "@backend/email/(.*)": "<rootDir>/libs/email/src/$1",
+      "@backend/email": "<rootDir>/libs/email/src"
     }
   }
 }
