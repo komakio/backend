@@ -7,6 +7,7 @@ import { NotificationsService } from '@backend/notifications';
 import { UsersService } from '@backend/users';
 import { ConfigService } from '@backend/config';
 import { getDistance } from '@utils/distance';
+import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 
 @Injectable()
 export class RequestsService {
@@ -15,11 +16,24 @@ export class RequestsService {
     private profiles: ProfilesService,
     private users: UsersService,
     private notifications: NotificationsService,
-    private config: ConfigService
+    private config: ConfigService,
+    private requestsRabbitMQ: RequestsRabbitMQService
   ) {}
 
-  public async createOne(request: Partial<HelpRequest>) {
-    return this.requestsMongo.createOne(request);
+  public async createOne(profileId: ObjectID) {
+    const profile = await this.profiles.findOneById(new ObjectID(profileId));
+    const request = await this.requestsMongo.createOne({
+      requesterShortName: profile.firstName,
+      location: profile?.address?.location,
+      status: 'pending',
+      requesterProfileId: new ObjectID(profileId),
+      type: 'misc',
+    });
+    await this.requestsRabbitMQ.sendToDispatchRequests({
+      profileId: new ObjectID(profileId),
+      requestId: new ObjectID(request._id),
+    });
+    return request;
   }
 
   public async findOneById(id: ObjectID) {
@@ -76,11 +90,18 @@ export class RequestsService {
     const requesterProfile = await this.profiles.findOneById(
       new ObjectID(request.requesterProfileId)
     );
+
+    if (requesterProfile.isWebForm) {
+      //send email to the email address
+      return;
+    }
+
     const user = await this.users.findOneById(
       new ObjectID(requesterProfile.userId)
     );
     const registrationTokens = Object.values(user.uuidRegTokenPair || {});
 
+    //todo: webform
     await this.notifications.send({
       registrationTokens,
       message: {

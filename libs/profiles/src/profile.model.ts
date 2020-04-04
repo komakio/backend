@@ -105,4 +105,8 @@ export class Profile {
     description: `in meters`,
   })
   public coverage: number;
+  @ApiProperty()
+  public isWebForm: boolean;
+  @ApiProperty()
+  public email: string;
 }
