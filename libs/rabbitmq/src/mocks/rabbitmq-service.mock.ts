@@ -5,5 +5,6 @@ export class MockRabbitMQService implements RabbitMQServiceInterface {
 
   public connect = jest.fn();
   public sendToQueue = jest.fn();
+  public sendToQueueWithDelay = jest.fn();
   public publishToExchange = jest.fn();
 }
