@@ -16,7 +16,7 @@ async function bootstrapQueue(args: {
   module: any;
   queueName: string;
   prefetchCount: number;
-  withDelyedExchange?: boolean;
+  withDelayedExchange?: boolean;
 }) {
   const appConfigContext = await NestFactory.createApplicationContext(
     RabbitmqModule,
@@ -36,7 +36,7 @@ async function bootstrapQueue(args: {
     logger,
   });
   app.listen(() => {
-    if (args.withDelyedExchange) {
+    if (args.withDelayedExchange) {
       rabbitMQ.initDelayedExchange(args.queueName);
     }
     // logger.log(`Listening to ${queueName}, prefetch ${prefetchCount}`);
