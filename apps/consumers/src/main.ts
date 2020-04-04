@@ -12,29 +12,33 @@ import { ExceptionsService } from '@backend/exceptions';
 
 const logger = new LoggerService();
 
-async function bootstrapQueue(
-  Module: any,
-  queueName: string,
-  prefetchCount: number
-) {
+async function bootstrapQueue(args: {
+  module: any;
+  queueName: string;
+  prefetchCount: number;
+  withDelayedExchange?: boolean;
+}) {
   const appConfigContext = await NestFactory.createApplicationContext(
     RabbitmqModule,
     { logger }
   );
   const rabbitMQ = appConfigContext.get(RabbitMQService);
 
-  const app = await NestFactory.createMicroservice(Module, {
+  const app = await NestFactory.createMicroservice(args.module, {
     transport: Transport.RMQ,
     options: {
       urls: [rabbitMQ.url],
-      queue: queueName,
-      prefetchCount,
+      queue: args.queueName,
+      prefetchCount: args.prefetchCount,
       queueOptions: { durable: true },
       noAck: false,
     },
     logger,
   });
   app.listen(() => {
+    if (args.withDelayedExchange) {
+      rabbitMQ.initDelayedExchange(args.queueName);
+    }
     // logger.log(`Listening to ${queueName}, prefetch ${prefetchCount}`);
   });
 }
@@ -53,16 +57,16 @@ async function bootstrap() {
   const profilesRabbitMQ = app.get(ProfilesRabbitMQService);
 
   await Promise.all([
-    bootstrapQueue(
-      ConsumerModule.register(app.get(DispatchRequestsConsumer)),
-      requestsRabbitMQ.dispatchRequestQueueName,
-      30
-    ),
-    bootstrapQueue(
-      ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
-      profilesRabbitMQ.subscribeNewHelperRequestQueueName,
-      30
-    ),
+    bootstrapQueue({
+      module: ConsumerModule.register(app.get(DispatchRequestsConsumer)),
+      queueName: requestsRabbitMQ.dispatchRequestQueueName,
+      prefetchCount: 30,
+    }),
+    bootstrapQueue({
+      module: ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
+      queueName: profilesRabbitMQ.subscribeNewHelperRequestQueueName,
+      prefetchCount: 30,
+    }),
   ]);
 }
 bootstrap();

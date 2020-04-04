@@ -6,8 +6,13 @@ import { LoggerService } from '@backend/logger';
 export interface RabbitMQServiceInterface {
   url: string;
   connect: () => void;
-  sendToQueue: (queueName: string, value: any) => void;
-  publishToExchange: (exchangeName: string, value: any) => void;
+  sendToQueue: (args: { queueName: string; message: any }) => void;
+  sendToQueueWithDelay: (args: {
+    queueName: string;
+    message: any;
+    delayTimeMs: number;
+  }) => void;
+  publishToExchange: (args: { exchangeName: string; message: any }) => void;
 }
 
 @Injectable()
@@ -35,14 +40,41 @@ export class RabbitMQService implements RabbitMQServiceInterface {
     });
   }
 
-  public async sendToQueue(queueName: string, value: any) {
-    await this.channel.sendToQueue(queueName, value, {
+  public initDelayedExchange(queueName: string) {
+    this.channel.addSetup(ch => {
+      ch.assertExchange(`delayed-exchange-${queueName}`, 'x-delayed-message', {
+        arguments: { 'x-delayed-type': 'direct' },
+        durable: true,
+      });
+      ch.bindQueue(queueName, `delayed-exchange-${queueName}`, '');
+    });
+  }
+
+  public async sendToQueue(args: { queueName: string; message: any }) {
+    await this.channel.sendToQueue(args.queueName, args.message, {
       persistent: true,
     });
   }
 
-  public async publishToExchange(exchangeName: string, value: any) {
-    await this.channel.publish(exchangeName, '', value, {
+  public async sendToQueueWithDelay(args: {
+    queueName: string;
+    message: any;
+    delayTimeMs: number;
+  }) {
+    await this.publishToExchange({
+      exchangeName: `delayed-exchange-${args.queueName}`,
+      message: args.message,
+      headers: { 'x-delay': args.delayTimeMs },
+    });
+  }
+
+  public async publishToExchange(args: {
+    exchangeName: string;
+    message: any;
+    headers: object;
+  }) {
+    await this.channel.publish(args.exchangeName, '', args.message, {
+      headers: args.headers,
       persistent: true,
     });
   }

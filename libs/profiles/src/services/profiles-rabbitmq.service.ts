@@ -13,11 +13,11 @@ export class ProfilesRabbitMQService {
   ) {}
 
   public async sendToSubscribeNewHelperRequests(
-    props: SubscribeNewHelperRequestQueue
+    message: SubscribeNewHelperRequestQueue
   ) {
-    await this.rabbitMQ.sendToQueue(
-      this.subscribeNewHelperRequestQueueName,
-      props
-    );
+    await this.rabbitMQ.sendToQueue({
+      queueName: this.subscribeNewHelperRequestQueueName,
+      message,
+    });
   }
 }
