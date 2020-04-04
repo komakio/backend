@@ -12,7 +12,10 @@ export class RequestsRabbitMQService {
     private rabbitMQ: RabbitMQService
   ) {}
 
-  public async sendToDispatchRequests(props: DispatchRequestQueue) {
-    await this.rabbitMQ.sendToQueue(this.dispatchRequestQueueName, props);
+  public async sendToDispatchRequests(message: DispatchRequestQueue) {
+    await this.rabbitMQ.sendToQueue({
+      queueName: this.dispatchRequestQueueName,
+      message,
+    });
   }
 }
