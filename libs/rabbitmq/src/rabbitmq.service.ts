@@ -10,7 +10,7 @@ export interface RabbitMQServiceInterface {
   sendToQueueWithDelay: (args: {
     queueName: string;
     message: any;
-    delayTime: number;
+    delayTimeMs: number;
   }) => void;
   publishToExchange: (args: { exchangeName: string; message: any }) => void;
 }
@@ -34,15 +34,19 @@ export class RabbitMQService implements RabbitMQServiceInterface {
 
     this.channel = connection.createChannel({
       json: true,
-      setup: channel => {
-        channel.assertExchange('delayed-exchange', 'x-delayed-message', {
-          arguments: { 'x-delayed-type': 'direct' },
-          durable: false,
-        });
-      },
     });
     this.channel.addListener('connect', () => {
       this.logger.debug('RabbitMQ connected');
+    });
+  }
+
+  public initDelayedExchange(queueName: string) {
+    this.channel.addSetup(ch => {
+      ch.assertExchange(`delayed-exchange-${queueName}`, 'x-delayed-message', {
+        arguments: { 'x-delayed-type': 'direct' },
+        durable: false,
+      });
+      ch.bindQueue(queueName, `delayed-exchange-${queueName}`, '');
     });
   }
 
@@ -55,13 +59,13 @@ export class RabbitMQService implements RabbitMQServiceInterface {
   public async sendToQueueWithDelay(args: {
     queueName: string;
     message: any;
-    delayTime: number;
+    delayTimeMs: number;
   }) {
     await this.channel.addSetup(channel => {
       return channel.bindQueue(args.queueName, 'delayed-exchange', '');
     });
     await this.channel.publish('delayed-exchange', '', args.message, {
-      headers: { 'x-delay': args.delayTime },
+      headers: { 'x-delay': args.delayTimeMs },
     });
   }
 
