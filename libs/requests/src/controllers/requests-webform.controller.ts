@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
-import { IsString, ValidateNested } from 'class-validator';
+import { IsString, ValidateNested, IsNotEmpty } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { ApiTags, ApiProperty, ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -16,10 +16,12 @@ class WebFormRequestBodyDto {
   @IsString()
   @ApiProperty()
   public lastName: string;
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => Address)
   @ApiProperty({ type: Address })
   public address: Address;
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => Phone)
   @ApiProperty({ type: Phone })
