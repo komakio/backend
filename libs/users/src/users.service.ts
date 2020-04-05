@@ -5,13 +5,15 @@ import { User, SocialAuthType } from './users.model';
 import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
 import { compareHash, hashString } from '@utils/hash';
+import { RecaptchaService } from './auth/services/captcha.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private usersMongo: UsersMongoService,
     private apple: AppleService,
-    private google: GoogleService
+    private google: GoogleService,
+    private recaptcha: RecaptchaService
   ) {}
 
   public async patch(args: {
@@ -28,12 +30,29 @@ export class UsersService {
 
   public async appleLogin(identityToken: string) {
     const socialAuthId = await this.apple.getAppleId(identityToken);
-    return this.getUser({ socialAuthId, socialAuthType: 'apple' });
+    return this.getSocialUser({ socialAuthId, socialAuthType: 'apple' });
   }
 
   public async googleLogin(identityToken: string) {
     const socialAuthId = await this.google.getTicket(identityToken);
-    return this.getUser({ socialAuthId, socialAuthType: 'google' });
+    return this.getSocialUser({ socialAuthId, socialAuthType: 'google' });
+  }
+
+  public async recaptchaLogin(response: string) {
+    const isValid = await this.recaptcha.validate(response);
+    if (!isValid) {
+      throw new HttpException('INVALID_RECAPTCHA', HttpStatus.FORBIDDEN);
+    }
+    const user = await this.usersMongo.findOneBy({
+      isAnonymous: { $exists: true },
+    });
+    if (user) {
+      return user;
+    }
+
+    return this.usersMongo.createOne({
+      isAnonymous: true,
+    });
   }
 
   public async passwordLogin(args: { username: string; password: string }) {
@@ -59,7 +78,7 @@ export class UsersService {
     return this.usersMongo.findManyByIds(ids);
   }
 
-  private async getUser(args: {
+  private async getSocialUser(args: {
     socialAuthId: string;
     socialAuthType: SocialAuthType;
   }) {

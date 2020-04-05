@@ -7,6 +7,7 @@ import { HelpRequest } from '../requests.model';
 import { ApiTags, ApiProperty, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Phone, Address } from '@backend/profiles/profile.model';
 import { Type } from 'class-transformer';
+import { Auth } from '@utils/decorators';
 
 class WebFormRequestBodyDto {
   @IsString()
@@ -26,9 +27,6 @@ class WebFormRequestBodyDto {
   @IsString()
   @ApiProperty()
   public email: string;
-  @IsString()
-  @ApiProperty()
-  public captcha: string;
 }
 
 @Controller('v1/requests')
@@ -39,6 +37,7 @@ export class RequestsWebFormController {
     private profiles: ProfilesService
   ) {}
 
+  @Auth('anonymous')
   @Post('webform')
   @ApiBody({ type: WebFormRequestBodyDto })
   @ApiResponse({
@@ -49,9 +48,6 @@ export class RequestsWebFormController {
   public async create(
     @Body() body: WebFormRequestBodyDto
   ): Promise<HelpRequest> {
-    //validate the token
-
-    //create a profile
     const profile = await this.profiles.create({
       firstName: body.firstName,
       lastName: body.lastName,
@@ -64,7 +60,6 @@ export class RequestsWebFormController {
       email: body.email,
       isWebForm: true,
     });
-    //create the request
     const request = await this.requests.createOne(new ObjectID(profile._id));
 
     return request;

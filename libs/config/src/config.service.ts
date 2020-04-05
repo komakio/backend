@@ -6,7 +6,11 @@ export const env = process.env.ENV || 'develop';
 export class ConfigService {
   public env = env;
   public isProduction = process.env.NODE_ENV === 'production';
-  public host = process.env.HOST;
+  public host = this.isProduction
+    ? process.env.HOST
+    : this.env === 'develop'
+    ? 'localhost'
+    : 'staging.komak.io';
   public sentryDsn = process.env.SENTRY_BACKEND;
   public tag = process.env.TAG;
   public packageNames = process.env.PACKAGES_NAMES?.split(',') || [
@@ -57,5 +61,11 @@ export class ConfigService {
     apiKey: process.env.EMAIN_API_KEY,
     domain: process.env.EMAIN_DOMAIN,
     from: process.env.EMAIN_ADDRESS,
+  };
+
+  public recaptcha = {
+    secret:
+      process.env.RECAPTCHA_SECRET ||
+      '6Lc2ReUUAAAAAM-UBGGFTLOELBlVRme90hR-F1AM',
   };
 }
