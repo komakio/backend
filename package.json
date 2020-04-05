@@ -41,6 +41,8 @@
     "geolib": "^3.2.1",
     "google-auth-library": "^5.10.1",
     "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
+    "mjml": "^4.6.2",
     "mongodb": "^3.5.5",
     "node-gcm": "^1.0.2",
     "reflect-metadata": "^0.1.13",
@@ -58,6 +60,8 @@
     "@types/amqplib": "^0.5.13",
     "@types/express": "^4.17.3",
     "@types/jest": "25.1.4",
+    "@types/mailgun-js": "^0.22.4",
+    "@types/mjml": "^4.0.4",
     "@types/mongodb": "^3.5.2",
     "@types/node": "^13.9.1",
     "@types/node-gcm": "^1.0.0",
@@ -117,7 +121,9 @@
       "@backend/notifications/(.*)": "<rootDir>/libs/notifications/src/$1",
       "@backend/notifications": "<rootDir>/libs/notifications/src",
       "@backend/geocoder/(.*)": "<rootDir>/libs/geocoder/src/$1",
-      "@backend/geocoder": "<rootDir>/libs/geocoder/src"
+      "@backend/geocoder": "<rootDir>/libs/geocoder/src",
+      "@backend/email/(.*)": "<rootDir>/libs/email/src/$1",
+      "@backend/email": "<rootDir>/libs/email/src"
     }
   }
 }
