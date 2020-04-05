@@ -13,6 +13,7 @@ import { NotificationsModule } from '@backend/notifications';
 import { UsersModule } from '@backend/users';
 import { ProfilesRequestsController } from './controllers/profiles-requests.controller';
 import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.consumer';
+import { EmailModule } from '@backend/email';
 
 @Module({
   controllers: [RequestsController, ProfilesRequestsController],
@@ -31,6 +32,7 @@ import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.con
     ProfilesModule,
     NotificationsModule,
     UsersModule,
+    EmailModule,
   ],
   exports: [RequestsService],
 })
