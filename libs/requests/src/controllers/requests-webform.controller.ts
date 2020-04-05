@@ -58,7 +58,7 @@ export class RequestsWebFormController {
       },
       address: body.address,
       email: body.email,
-      isWebForm: true,
+      communicateBy: 'email',
     });
     const request = await this.requests.createOne(new ObjectID(profile._id));
 

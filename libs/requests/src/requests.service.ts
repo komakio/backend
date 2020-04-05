@@ -91,9 +91,8 @@ export class RequestsService {
       new ObjectID(request.requesterProfileId)
     );
 
-    if (requesterProfile.isWebForm) {
-      //send email to the email address
-      return;
+    if (requesterProfile.communicateBy === 'email') {
+      this.return;
     }
 
     const user = await this.users.findOneById(
