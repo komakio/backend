@@ -58,7 +58,7 @@ export class ConfigService {
   };
 
   public mailgun = {
-    apiKey: process.env.EMAIN_API_KEY,
+    apiKey: process.env.EMAIN_API_KEY || 'something',
     domain: process.env.EMAIN_DOMAIN,
     from: process.env.EMAIN_ADDRESS,
   };
