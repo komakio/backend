@@ -93,7 +93,7 @@ export class RequestsService {
       new ObjectID(request.requesterProfileId)
     );
 
-    if (requesterProfile.communicateBy === 'email') {
+    if (requesterProfile.communicateBy?.includes('email')) {
       await this.email.send(
         requesterProfile.email,
         'Someone accepted your request (KOMAK.IO)',

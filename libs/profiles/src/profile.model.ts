@@ -110,6 +110,6 @@ export class Profile {
   public coverage: number;
   @ApiProperty()
   public email: string;
-  @ApiProperty({ enum: CommunicateByEnum })
-  public communicateBy: CommunicateByType;
+  @ApiProperty({ enum: CommunicateByEnum, isArray: true })
+  public communicateBy: CommunicateByType[];
 }
