@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate {
 
     if (
       !roles?.length ||
-      (!roles.includes('anonymous') && !req.user.isAnonymous)
+      (!roles.includes('anonymous') && req.user.isAnonymous)
     ) {
       return false;
     }

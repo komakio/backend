@@ -106,7 +106,6 @@ export class RequestsService {
     );
     const registrationTokens = Object.values(user.uuidRegTokenPair || {});
 
-    //todo: webform
     await this.notifications.send({
       registrationTokens,
       message: {
