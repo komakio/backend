@@ -66,6 +66,7 @@
     "@types/node": "^13.9.1",
     "@types/node-gcm": "^1.0.0",
     "@types/node-pushnotifications": "^1.0.3",
+    "@types/qs": "^6.9.1",
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",

@@ -3,6 +3,7 @@ import { ConfigService } from '@backend/config';
 import Axios from 'axios';
 import { LoggerService } from '@backend/logger';
 import { ExceptionsService } from '@backend/exceptions';
+import qs from 'qs';
 
 @Injectable()
 export class RecaptchaService {
@@ -13,19 +14,13 @@ export class RecaptchaService {
   ) {}
 
   public async validate(response: string): Promise<boolean> {
-    const data = new FormData();
-    data.append('secret', this.config.recaptcha.secret);
-    data.append('response', response);
-
     try {
       const res = await Axios.post(
         'https://www.google.com/recaptcha/api/siteverify',
-        data,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
+        qs.stringify({
+          secret: this.config.recaptcha.secret,
+          response,
+        })
       );
 
       const { success, score, host } = res.data;
@@ -36,7 +31,7 @@ export class RecaptchaService {
 
       return score > 0.5;
     } catch (e) {
-      this.logger.error({ route: 'google-recaptcha', error: e.message });
+      this.logger.error({ route: 'google-recaptcha', error: e });
       this.exceptions.report(e);
     }
   }
