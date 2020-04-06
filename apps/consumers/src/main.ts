@@ -18,14 +18,8 @@ async function bootstrapQueue(args: {
   queueName: string;
   prefetchCount: number;
   withDelayedExchange?: boolean;
-  rabbitmq: any;
+  rabbitmq: RabbitMQService;
 }) {
-  // const appConfigContext = await NestFactory.createApplicationContext(
-  //   RabbitmqModule,
-  //   { logger }
-  // );
-  // const rabbitMQ = appConfigContext.get(RabbitMQService);
-
   const app = await NestFactory.createMicroservice(args.module, {
     transport: Transport.RMQ,
     options: {
@@ -41,7 +35,6 @@ async function bootstrapQueue(args: {
     if (args.withDelayedExchange) {
       args.rabbitmq.initDelayedExchange(args.queueName);
     }
-    // logger.log(`Listening to ${queueName}, prefetch ${prefetchCount}`);
   });
 }
 
