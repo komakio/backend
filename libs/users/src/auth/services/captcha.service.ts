@@ -26,7 +26,10 @@ export class RecaptchaService {
 
       const { success, score, hostname } = res.data;
 
-      if (!success || this.config.host !== hostname) {
+      if (
+        !success ||
+        !this.config.recaptchaAllowedHostnames.includes(hostname)
+      ) {
         return;
       }
 
