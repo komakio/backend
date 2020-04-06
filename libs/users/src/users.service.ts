@@ -49,8 +49,6 @@ export class UsersService {
       isAnonymous: { $exists: true },
     });
 
-    console.log({ user });
-
     if (user) {
       return user;
     }
