@@ -28,7 +28,7 @@ export class BatchwiseNotificationsConsumer {
   }: RMQHelper<BatchwiseNotificationsQueue>) {
     const { requestId, data } = message;
     const sentProfileIds = message.sentProfileIds || [];
-    console.log({ requestId, data, sentProfileIds, time: new Date() });
+    console.log({ requestId, data });
 
     try {
       await this.mongo.waitReady();

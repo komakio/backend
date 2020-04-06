@@ -3,9 +3,8 @@ import { Transport } from '@nestjs/microservices';
 import { ConsumerModule } from '@backend/rabbitmq/consumer/consumer.module';
 import { LoggerService } from '@backend/logger';
 import { AppConsumerModule } from '@apps/api/src/app.module';
-import { RabbitmqModule, RabbitMQService } from '@backend/rabbitmq';
+import { RabbitMQService } from '@backend/rabbitmq';
 import { RequestsRabbitMQService } from '@backend/requests/services/requests-rabbitmq.service';
-import { DispatchRequestsConsumer } from '@backend/requests/consumers/dispatch-requests.consumer';
 import { SubscribeNewHelperConsumer } from '@backend/requests/consumers/subscribe-new-helper.consumer';
 import { ProfilesRabbitMQService } from '@backend/profiles/services/profiles-rabbitmq.service';
 import { ExceptionsService } from '@backend/exceptions';
@@ -53,12 +52,6 @@ async function bootstrap() {
   const profilesRabbitMQ = app.get(ProfilesRabbitMQService);
 
   await Promise.all([
-    bootstrapQueue({
-      module: ConsumerModule.register(app.get(DispatchRequestsConsumer)),
-      queueName: requestsRabbitMQ.dispatchRequestQueueName,
-      prefetchCount: 30,
-      rabbitmq,
-    }),
     bootstrapQueue({
       module: ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
       queueName: profilesRabbitMQ.subscribeNewHelperRequestQueueName,

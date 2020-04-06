@@ -5,7 +5,6 @@ import { RabbitmqModule } from '@backend/rabbitmq';
 import { ConfigModule } from '@backend/config';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { RequestsMongoService } from './services/requests-mongo.service';
-import { DispatchRequestsConsumer } from './consumers/dispatch-requests.consumer';
 import { LoggerModule } from '@backend/logger';
 import { ProfilesModule } from '@backend/profiles';
 import { RequestsController } from './controllers/requests.controller';
@@ -22,7 +21,6 @@ import { BatchwiseNotificationsConsumer } from './consumers/notifications.consum
     RequestsService,
     RequestsMongoService,
     RequestsRabbitMQService,
-    DispatchRequestsConsumer,
     SubscribeNewHelperConsumer,
     BatchwiseNotificationsConsumer,
   ],
