@@ -66,6 +66,6 @@ export class ConfigService {
   public recaptcha = {
     secret:
       process.env.RECAPTCHA_SECRET ||
-      '6Lc2ReUUAAAAAM-UBGGFTLOELBlVRme90hR-F1AM',
+      '6Lc2ReUUAAAAAO-oGA0nnHTNBf90r1w0FzGPViMU',
   };
 }
