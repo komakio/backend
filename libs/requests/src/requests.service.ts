@@ -18,12 +18,8 @@ export class RequestsService {
     private users: UsersService,
     private notifications: NotificationsService,
     private config: ConfigService,
-<<<<<<< HEAD
     private requestsRabbitMQ: RequestsRabbitMQService,
     private email: EmailService
-=======
-    private requestsRabbitMQ: RequestsRabbitMQService
->>>>>>> feat: batchwise notifications Closes #75
   ) {}
 
   public async createOne(profileId: ObjectID) {
