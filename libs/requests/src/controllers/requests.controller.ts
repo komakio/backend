@@ -1,7 +1,6 @@
 import { Controller, Post, Param, Body, Get } from '@nestjs/common';
 import { UserReq, Auth } from '@utils/decorators';
 import { User } from '@backend/users/users.model';
-import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
 import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { IsString } from 'class-validator';
@@ -20,7 +19,6 @@ class RequestBodyDto {
 @ApiTags('requests')
 export class RequestsController {
   constructor(
-    private requestsRabbitMQ: RequestsRabbitMQService,
     private requests: RequestsService,
     private profiles: ProfilesService
   ) {}

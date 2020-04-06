@@ -6,7 +6,7 @@ services:
         ports:
             - 27017:27017
     rabbitmq:
-        image: theomathieu/rabbitmq-delayed:3.8.2-r1
+        image: theomathieu/rabbitmq-management-delayed:3.8.3-r1
         container_name: "rabbitmq-komak"
         ports:
             - 5672:5672

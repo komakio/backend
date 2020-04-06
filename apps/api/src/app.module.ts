@@ -11,6 +11,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health-controller.controller';
 import { GeocoderModule } from '@backend/geocoder/geocoder.module';
 import { ExceptionsModule } from '@backend/exceptions';
+import { RabbitmqModule } from '@backend/rabbitmq';
 
 const modules = [
   MongoModule,
@@ -21,6 +22,7 @@ const modules = [
   RequestsModule,
   GeocoderModule,
   ExceptionsModule,
+  RabbitmqModule,
 ];
 @Module({
   controllers: [HealthController],

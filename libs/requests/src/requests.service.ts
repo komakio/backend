@@ -31,8 +31,31 @@ export class RequestsService {
       requesterProfileId: new ObjectID(profileId),
       type: 'misc',
     });
-    await this.requestsRabbitMQ.sendToDispatchRequests({
-      profileId: new ObjectID(profileId),
+    const profilesWithDistance = await this.profiles.findNearHelpersWithDistanceById(
+      new ObjectID(profileId)
+    );
+
+    await this.patchOne({
+      id: new ObjectID(request._id),
+      data: {
+        candidates: profilesWithDistance?.map(p => ({
+          profileId: p._id,
+          distance: p.distance,
+        })),
+      },
+    });
+
+    await this.requestsRabbitMQ.sendToBatchwiseNotifications({
+      data: {
+        message: {
+          title: 'KOMAK',
+          body: 'Someone is in need of your help.',
+          icon: '',
+        },
+        payload: {
+          request: JSON.stringify(request),
+        },
+      },
       requestId: new ObjectID(request._id),
     });
     return request;
@@ -134,48 +157,6 @@ export class RequestsService {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: args.data,
-    });
-  }
-
-  public async dispatchRequest(args: {
-    requestId: ObjectID;
-    profileId: ObjectID;
-  }) {
-    const profilesWithDistance = await this.profiles.findNearHelpersWithDistanceById(
-      new ObjectID(args.profileId)
-    );
-
-    const users = await this.users.findManyByIds(
-      profilesWithDistance.map(p => new ObjectID(p.userId))
-    );
-
-    const registrationTokens = users?.reduce((total, u) => {
-      const tokens = Object.values(u.uuidRegTokenPair || {});
-      return [...total, ...tokens];
-    }, []);
-
-    await this.patchOne({
-      id: new ObjectID(args.requestId),
-      data: {
-        candidates: profilesWithDistance?.map(p => ({
-          profileId: p._id,
-          distance: p.distance,
-        })),
-      },
-    });
-
-    const request = await this.findOneById(args.requestId);
-
-    await this.notifications.send({
-      registrationTokens,
-      message: {
-        title: 'KOMAK',
-        body: 'Someone is in need of your help.',
-        icon: '',
-      },
-      payload: {
-        request: JSON.stringify(request),
-      },
     });
   }
 
