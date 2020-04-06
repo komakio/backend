@@ -40,12 +40,17 @@ export class UsersService {
 
   public async recaptchaLogin(response: string) {
     const isValid = await this.recaptcha.validate(response);
+    console.log({ isValid });
+
     if (!isValid) {
       throw new HttpException('INVALID_RECAPTCHA', HttpStatus.FORBIDDEN);
     }
     const user = await this.usersMongo.findOneBy({
       isAnonymous: { $exists: true },
     });
+
+    console.log({ user });
+
     if (user) {
       return user;
     }

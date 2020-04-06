@@ -58,7 +58,7 @@ export class UsersController {
   constructor(private users: UsersService, private auth: AuthService) {}
 
   @Auth()
-  @Get('/current')
+  @Get('current')
   @ApiResponse({
     description: 'Successfully returned the current user.',
     type: User,
