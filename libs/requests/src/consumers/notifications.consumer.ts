@@ -22,9 +22,13 @@ export class BatchwiseNotificationsConsumer {
     private requestsRabbitMQ: RequestsRabbitMQService
   ) {}
 
-  public async consume({ message, ack }: RMQHelper<BatchwiseNotificationsQueue>) {
+  public async consume({
+    message,
+    ack,
+  }: RMQHelper<BatchwiseNotificationsQueue>) {
     const { requestId, data } = message;
     const sentProfileIds = message.sentProfileIds || [];
+    console.log({ requestId, data, sentProfileIds, time: new Date() });
 
     try {
       await this.mongo.waitReady();
