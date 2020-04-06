@@ -44,7 +44,6 @@ async function bootstrap() {
   });
   const rabbitmq = app.get(RabbitMQService);
   await rabbitmq.connect();
-  console.log('connected');
 
   process.on('uncaughtException', (err: Error) => {
     app.get(ExceptionsService).report(err);
