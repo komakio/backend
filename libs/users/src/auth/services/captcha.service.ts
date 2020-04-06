@@ -31,7 +31,7 @@ export class RecaptchaService {
 
       return score > 0.5;
     } catch (e) {
-      this.logger.error({ route: 'google-recaptcha', error: e });
+      this.logger.error({ route: 'google-recaptcha', error: e.message });
       this.exceptions.report(e);
     }
   }
