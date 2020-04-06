@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { RabbitMQService } from '@backend/rabbitmq';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionsService } from '@backend/exceptions';
+import { ConfigService } from '@backend/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +23,12 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
+
+  const config = app.get(ConfigService);
+
+  if (config.env !== 'production') {
+    app.enableCors();
+  }
 
   await app.listen(3100);
 }
