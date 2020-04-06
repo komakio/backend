@@ -1,10 +1,10 @@
 import { SetMetadata, applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
-export type Role = 'admin' | 'super-admin';
+export type Role = 'admin' | 'super-admin' | 'anonymous';
 
-export function Auth(roles?: Role | Role[], desactivate = false) {
-  if (desactivate) {
+export function Auth(roles?: Role | Role[], deactivate = false) {
+  if (deactivate) {
     return applyDecorators();
   }
   const decorators: (ClassDecorator | MethodDecorator)[] = [

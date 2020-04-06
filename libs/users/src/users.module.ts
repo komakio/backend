@@ -7,6 +7,9 @@ import { MongoModule } from '@backend/mongo';
 import { ConfigModule } from '@backend/config';
 import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
+import { RecaptchaService } from './auth/services/captcha.service';
+import { LoggerModule } from '@backend/logger';
+import { ExceptionsModule } from '@backend/exceptions';
 
 @Module({
   providers: [
@@ -15,9 +18,10 @@ import { GoogleService } from './auth/services/google.service';
     AuthService,
     AppleService,
     GoogleService,
+    RecaptchaService,
   ],
   controllers: [UsersController],
-  imports: [MongoModule, ConfigModule],
+  imports: [MongoModule, ConfigModule, LoggerModule, ExceptionsModule],
   exports: [UsersService, AuthService],
 })
 export class UsersModule {}

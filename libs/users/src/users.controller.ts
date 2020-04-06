@@ -17,6 +17,12 @@ class UserPassLoginDto {
   public password: string;
 }
 
+class CaptchaLoginDto {
+  @IsString()
+  @ApiProperty()
+  public captcha: string;
+}
+
 class IdentityTokenLoginDto {
   @IsString()
   @ApiProperty()
@@ -60,6 +66,23 @@ export class UsersController {
   public async getCurrent(@UserReq() userReq: User): Promise<User> {
     const user = await this.users.findOneById(new ObjectID(userReq._id));
     return user?.serialize();
+  }
+
+  @Post('captcha')
+  @ApiBody({ type: UserPassLoginDto })
+  @ApiResponse({
+    description: 'Successfully logged in using recaptcha',
+    type: LoginResult,
+  })
+  public async captchaLogin(
+    @Body() body: CaptchaLoginDto
+  ): Promise<LoginResult> {
+    const user = await this.users.recaptchaLogin(body.captcha);
+    const accessToken = await this.auth.generateAccessToken(
+      user,
+      10 * 60 * 1000
+    );
+    return { user: user?.serialize(), accessToken };
   }
 
   @Post('login')

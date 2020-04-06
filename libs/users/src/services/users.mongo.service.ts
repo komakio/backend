@@ -35,6 +35,10 @@ export class UsersMongoService {
       .toArray();
   }
 
+  public async findOneBy(filters: any): Promise<User> {
+    return this.mongo.db.collection(collection).findOne(filters);
+  }
+
   public async patchOneById(args: {
     id: ObjectID;
     set: Partial<User>;

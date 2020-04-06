@@ -41,21 +41,7 @@ export class RequestsController {
       id: new ObjectID(body.profileId),
       userId: new ObjectID(user._id),
     });
-    const profile = await this.profiles.findOneById(
-      new ObjectID(body.profileId)
-    );
-    const request = await this.requests.createOne({
-      requesterShortName: profile.firstName,
-      location: profile?.address?.location,
-      status: 'pending',
-      requesterProfileId: new ObjectID(body.profileId),
-      type: 'misc',
-    });
-    await this.requestsRabbitMQ.sendToDispatchRequests({
-      profileId: new ObjectID(body.profileId),
-      requestId: new ObjectID(request._id),
-    });
-
+    const request = await this.requests.createOne(new ObjectID(body.profileId));
     return request;
   }
 

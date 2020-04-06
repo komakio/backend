@@ -25,6 +25,8 @@ export class User {
   @ApiProperty()
   public isAdmin?: boolean;
   @ApiProperty()
+  public isAnonymous?: boolean;
+  @ApiProperty()
   public uuidRegTokenPair?: UuidRegTokenPair;
   @ApiProperty()
   public username?: string;

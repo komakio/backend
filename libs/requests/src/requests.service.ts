@@ -7,6 +7,8 @@ import { NotificationsService } from '@backend/notifications';
 import { UsersService } from '@backend/users';
 import { ConfigService } from '@backend/config';
 import { getDistance } from '@utils/distance';
+import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
+import { EmailService } from '@backend/email';
 
 @Injectable()
 export class RequestsService {
@@ -15,11 +17,25 @@ export class RequestsService {
     private profiles: ProfilesService,
     private users: UsersService,
     private notifications: NotificationsService,
-    private config: ConfigService
+    private config: ConfigService,
+    private requestsRabbitMQ: RequestsRabbitMQService,
+    private email: EmailService
   ) {}
 
-  public async createOne(request: Partial<HelpRequest>) {
-    return this.requestsMongo.createOne(request);
+  public async createOne(profileId: ObjectID) {
+    const profile = await this.profiles.findOneById(new ObjectID(profileId));
+    const request = await this.requestsMongo.createOne({
+      requesterShortName: profile.firstName,
+      location: profile?.address?.location,
+      status: 'pending',
+      requesterProfileId: new ObjectID(profileId),
+      type: 'misc',
+    });
+    await this.requestsRabbitMQ.sendToDispatchRequests({
+      profileId: new ObjectID(profileId),
+      requestId: new ObjectID(request._id),
+    });
+    return request;
   }
 
   public async findOneById(id: ObjectID) {
@@ -76,6 +92,15 @@ export class RequestsService {
     const requesterProfile = await this.profiles.findOneById(
       new ObjectID(request.requesterProfileId)
     );
+
+    if (requesterProfile.communicateBy?.includes('email')) {
+      await this.email.send(
+        requesterProfile.email,
+        'Someone accepted your request (KOMAK.IO)',
+        `${profile.firstName} ${profile.lastName} has accepted to help you. this is the volunteer's phone number: ${profile.phone}.`
+      );
+    }
+
     const user = await this.users.findOneById(
       new ObjectID(requesterProfile.userId)
     );

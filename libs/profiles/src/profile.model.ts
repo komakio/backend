@@ -17,6 +17,9 @@ export type CoordinateType = typeof CoordinateTypeEnum[number];
 export const ProfileRoleEnum = ['helper', 'needer'] as const;
 export type ProfileRoleType = typeof ProfileRoleEnum[number];
 
+export const CommunicateByEnum = ['email'] as const;
+export type CommunicateByType = typeof CommunicateByEnum[number];
+
 export class Location {
   @IsIn(CoordinateTypeEnum)
   @ApiProperty({ enum: CoordinateTypeEnum })
@@ -105,4 +108,8 @@ export class Profile {
     description: `in meters`,
   })
   public coverage: number;
+  @ApiProperty()
+  public email: string;
+  @ApiProperty({ enum: CommunicateByEnum, isArray: true })
+  public communicateBy: CommunicateByType[];
 }
