@@ -36,7 +36,8 @@ export class UsersMongoService {
   }
 
   public async findOneBy(filters: any): Promise<User> {
-    return this.mongo.db.collection(collection).findOne(filters);
+    const user = await this.mongo.db.collection(collection).findOne(filters);
+    return user ? new User(user) : null;
   }
 
   public async patchOneById(args: {
