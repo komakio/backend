@@ -11,6 +11,10 @@ export class ConfigService {
     : this.env === 'develop'
     ? 'localhost'
     : 'staging.komak.io';
+
+  public recaptchaAllowedHostnames = process.env.RECAPTCHA_ALLOWED_HOSTNAMES?.split(
+    ','
+  ) || ['localhost', 'staging.komak.io'];
   public sentryDsn = process.env.SENTRY_BACKEND;
   public tag = process.env.TAG;
   public packageNames = process.env.PACKAGES_NAMES?.split(',') || [
