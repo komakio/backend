@@ -37,8 +37,6 @@ export class RabbitMQService implements RabbitMQServiceInterface {
     });
     return new Promise(resolve => {
       this.channel.addListener('connect', () => {
-        console.log({ channel: this.channel });
-
         this.logger.debug('RabbitMQ connected');
         resolve();
       });

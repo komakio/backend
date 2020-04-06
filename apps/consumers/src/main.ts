@@ -18,17 +18,18 @@ async function bootstrapQueue(args: {
   queueName: string;
   prefetchCount: number;
   withDelayedExchange?: boolean;
+  rabbitmq: any;
 }) {
-  const appConfigContext = await NestFactory.createApplicationContext(
-    RabbitmqModule,
-    { logger }
-  );
-  const rabbitMQ = appConfigContext.get(RabbitMQService);
+  // const appConfigContext = await NestFactory.createApplicationContext(
+  //   RabbitmqModule,
+  //   { logger }
+  // );
+  // const rabbitMQ = appConfigContext.get(RabbitMQService);
 
   const app = await NestFactory.createMicroservice(args.module, {
     transport: Transport.RMQ,
     options: {
-      urls: [rabbitMQ.url],
+      urls: [args.rabbitmq.url],
       queue: args.queueName,
       prefetchCount: args.prefetchCount,
       queueOptions: { durable: true },
@@ -38,7 +39,7 @@ async function bootstrapQueue(args: {
   });
   app.listen(() => {
     if (args.withDelayedExchange) {
-      rabbitMQ.initDelayedExchange(args.queueName);
+      args.rabbitmq.initDelayedExchange(args.queueName);
     }
     // logger.log(`Listening to ${queueName}, prefetch ${prefetchCount}`);
   });
@@ -48,7 +49,8 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppConsumerModule, {
     logger,
   });
-  await app.get(RabbitMQService).connect();
+  const rabbitmq = app.get(RabbitMQService);
+  await rabbitmq.connect();
   console.log('connected');
 
   process.on('uncaughtException', (err: Error) => {
@@ -63,17 +65,20 @@ async function bootstrap() {
       module: ConsumerModule.register(app.get(DispatchRequestsConsumer)),
       queueName: requestsRabbitMQ.dispatchRequestQueueName,
       prefetchCount: 30,
+      rabbitmq,
     }),
     bootstrapQueue({
       module: ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
       queueName: profilesRabbitMQ.subscribeNewHelperRequestQueueName,
       prefetchCount: 30,
+      rabbitmq,
     }),
     bootstrapQueue({
       module: ConsumerModule.register(app.get(BatchwiseNotificationsConsumer)),
       queueName: requestsRabbitMQ.BatchwiseNotificationsQueueName,
       prefetchCount: 30,
       withDelayedExchange: true,
+      rabbitmq,
     }),
   ]);
 }
