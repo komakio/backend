@@ -83,6 +83,12 @@
       ],
       "@backend/email/*": [
         "libs/email/src/*"
+      ],
+      "@backend/redis": [
+        "libs/redis/src"
+      ],
+      "@backend/redis/*": [
+        "libs/redis/src/*"
       ]
     }
   },
