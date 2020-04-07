@@ -11,7 +11,7 @@ class AskDto {
   public email?: string;
   @IsString()
   @ApiProperty()
-  public subject?: string;
+  public name?: string;
   @IsString()
   @ApiProperty()
   public content?: string;
@@ -28,10 +28,10 @@ export class PublicController {
     description: 'Successfully sent email.',
   })
   public async ask(@Body() body: AskDto): Promise<void> {
-    const { email, subject, content } = body;
+    const { email, name, content } = body;
     await this.email.send(
       this.config.emails.publicRelations,
-      subject,
+      `From Komak: ${name}`,
       `from: ${email}\n${content}`
     );
   }
