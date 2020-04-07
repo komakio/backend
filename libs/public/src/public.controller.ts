@@ -1,4 +1,4 @@
-import { Controller, Body } from '@nestjs/common';
+import { Controller, Body, Post } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { Auth } from '@utils/decorators';
 import { ApiProperty, ApiTags, ApiResponse } from '@nestjs/swagger';
@@ -22,7 +22,7 @@ export class PublicController {
   constructor(private email: EmailService) {}
 
   @Auth('anonymous')
-  @Get('ask')
+  @Post('ask')
   @ApiResponse({
     description: 'Successfully sent email.',
   })
