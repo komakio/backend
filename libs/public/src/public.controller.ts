@@ -3,6 +3,7 @@ import { IsString } from 'class-validator';
 import { Auth } from '@utils/decorators';
 import { ApiProperty, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { EmailService } from '@backend/email';
+import { ConfigService } from '@backend/config';
 
 class AskDto {
   @IsString()
@@ -19,7 +20,7 @@ class AskDto {
 @Controller('v1/public')
 @ApiTags('public')
 export class PublicController {
-  constructor(private email: EmailService) {}
+  constructor(private email: EmailService, private config: ConfigService) {}
 
   @Auth('anonymous')
   @Post('ask')
@@ -28,6 +29,10 @@ export class PublicController {
   })
   public async ask(@Body() body: AskDto): Promise<void> {
     const { email, subject, content } = body;
-    await this.email.send(email, subject, content);
+    await this.email.send(
+      this.config.emails.publicRelations,
+      subject,
+      `from: ${email}\n${content}`
+    );
   }
 }
