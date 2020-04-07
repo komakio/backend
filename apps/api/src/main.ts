@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { RabbitMQService } from '@backend/rabbitmq';
@@ -7,28 +8,35 @@ import { ExceptionsService } from '@backend/exceptions';
 import { ConfigService } from '@backend/config';
 import RedisStore from 'rate-limit-redis';
 import RateLimit from 'express-rate-limit';
+import { RedisService } from '@backend/redis';
+import { Request } from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.set('trust proxy');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   process.on('uncaughtException', (err: Error) => {
     app.get(ExceptionsService).report(err);
   });
 
-  app.get();
+  const redis = app.get(RedisService);
+  await redis.waitReady();
 
   await app.get(RabbitMQService).connect();
-  const limiter = new RateLimit({
-    store: new RedisStore({
-      client: client,
-    }),
-    max: 100, // limit each IP to 100 requests per windowMs
-    delayMs: 0, // disable delaying - full speed until the max limit is reached
-  });
+  app.use(
+    new RateLimit({
+      store: new RedisStore({
+        client: redis.db,
+        prefix: `${redis.prefix}:ratelimit:`,
+      }),
+      max: 100,
+      delayMs: 0, // disable delaying - full speed until the max limit is reached
+      keyGenerator: (req: Request) => req.headers.authorization || req.ip,
+    })
+  );
 
-  //  apply to all requests
-  app.use(limiter);
   const options = new DocumentBuilder()
     .setTitle('Komak')
     .setDescription('The Komak API description')
