@@ -6,6 +6,10 @@ export const env = process.env.ENV || 'develop';
 export class ConfigService {
   public env = env;
   public isProduction = process.env.NODE_ENV === 'production';
+  public emails = {
+    publicRelations: process.env.PUBLIC_RELATIONS_EMAIL || 'test@komak.io',
+  };
+
   public host = this.isProduction
     ? process.env.HOST
     : this.env === 'develop'

@@ -127,7 +127,9 @@
       "@backend/email/(.*)": "<rootDir>/libs/email/src/$1",
       "@backend/email": "<rootDir>/libs/email/src",
       "@backend/redis/(.*)": "<rootDir>/libs/redis/src/$1",
-      "@backend/redis": "<rootDir>/libs/redis/src"
+      "@backend/redis": "<rootDir>/libs/redis/src",
+      "@backend/public/(.*)": "<rootDir>/libs/public/src/$1",
+      "@backend/public": "<rootDir>/libs/public/src"
     }
   }
 }
