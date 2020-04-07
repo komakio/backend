@@ -26,13 +26,12 @@ async function bootstrap() {
   await redis.waitReady();
 
   app.use(
-    new RateLimit({
+    RateLimit({
       store: new RedisStore({
         client: redis.db,
         prefix: `${redis.prefix}:ratelimit:`,
       }),
       max: 100,
-      delayMs: 0, // disable delaying - full speed until the max limit is reached
       keyGenerator: (req: Request) => req.headers.authorization || req.ip,
     })
   );
