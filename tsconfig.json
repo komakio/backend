@@ -89,6 +89,12 @@
       ],
       "@backend/redis/*": [
         "libs/redis/src/*"
+      ],
+      "@backend/public": [
+        "libs/public/src"
+      ],
+      "@backend/public/*": [
+        "libs/public/src/*"
       ]
     }
   },
