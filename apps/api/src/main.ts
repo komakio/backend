@@ -22,9 +22,9 @@ async function bootstrap() {
   });
 
   const redis = app.get(RedisService);
+  await app.get(RabbitMQService).connect();
   await redis.waitReady();
 
-  await app.get(RabbitMQService).connect();
   app.use(
     new RateLimit({
       store: new RedisStore({
