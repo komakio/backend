@@ -50,6 +50,20 @@ export class ConfigService {
     prefix: process.env.RABBITMQ_PREFIX || 'default',
   };
 
+  public redis = {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+    database: parseInt(process.env.REDIS_DB, 10) || 0,
+    password: process.env.REDIS_PASSWORD,
+    isAws: process.env.REDIS_AWS === 'true',
+    prefix: process.env.REDIS_PREFIX || 'default',
+    sentinelMask: process.env.SENTINEL_MASK, // redis-{instance}.namespace
+    sentinelCount: process.env.SENTINEL_COUNT
+      ? parseInt(process.env.SENTINEL_COUNT, 10)
+      : null,
+    sentinelName: process.env.SENTINEL_NAME,
+  };
+
   public fcm = {
     serverKey: process.env.FCM_SERVER_KEY,
   };

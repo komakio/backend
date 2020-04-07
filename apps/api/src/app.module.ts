@@ -12,6 +12,9 @@ import { HealthController } from './health-controller.controller';
 import { GeocoderModule } from '@backend/geocoder/geocoder.module';
 import { ExceptionsModule } from '@backend/exceptions';
 import { RabbitmqModule } from '@backend/rabbitmq';
+import { RedisHealthIndicator } from '@backend/redis/health';
+import { MongoHealthIndicator } from '@backend/mongo/health';
+import { RedisModule } from '@backend/redis';
 
 const modules = [
   MongoModule,
@@ -23,6 +26,7 @@ const modules = [
   GeocoderModule,
   ExceptionsModule,
   RabbitmqModule,
+  RedisModule,
 ];
 @Module({
   controllers: [HealthController],
@@ -31,6 +35,8 @@ const modules = [
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    RedisHealthIndicator,
+    MongoHealthIndicator,
   ],
   imports: [TerminusModule, ...modules],
 })
