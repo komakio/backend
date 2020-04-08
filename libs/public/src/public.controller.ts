@@ -22,7 +22,7 @@ class AskDto {
 export class PublicController {
   constructor(private email: EmailService, private config: ConfigService) {}
 
-  @Auth('anonymous')
+  // @Auth('anonymous')
   @Post('ask')
   @ApiResponse({
     description: 'Successfully sent email.',
@@ -32,7 +32,7 @@ export class PublicController {
     await this.email.send(
       this.config.emails.publicRelations,
       `${name} has a question in Komak`,
-      `from: ${email}\n${content}`
+      `from: ${email} ${content}`
     );
   }
 }

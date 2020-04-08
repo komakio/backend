@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import mjml2html from 'mjml';
+// import mjml2html from 'mjml';
 import Mailgun from 'mailgun-js';
 import { ConfigService } from '@backend/config';
 
@@ -26,9 +26,10 @@ export class EmailService implements EmailServiceInterface {
   ): Promise<void> {
     const parameters: Mailgun.messages.SendData = {
       from: `${from} <${this.config.mailgun.from}>`,
-      html: mjml2html(content, {
-        keepComments: false,
-      }).html,
+      // html: mjml2html(content, {
+      //   keepComments: false,
+      // }).html,
+      text: content,
       subject,
       to: email,
     };
