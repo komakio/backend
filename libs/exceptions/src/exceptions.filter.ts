@@ -63,7 +63,7 @@ export class ExceptionsFilter implements ExceptionFilter {
       response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
-        path: request.url,
+        path,
       });
       return;
     }
@@ -100,11 +100,8 @@ export class ExceptionsFilter implements ExceptionFilter {
       this.exceptions.report(exception, baseInfo);
     }
 
-    response.code(HttpStatus.INTERNAL_SERVER_ERROR).send({
-      error: {
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Internal server error',
-      },
+    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       timestamp: new Date().toISOString(),
       path,
     });
