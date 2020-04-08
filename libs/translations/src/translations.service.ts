@@ -7,10 +7,19 @@ import Axios from 'axios';
 export class TranslationsService {
   constructor(private config: ConfigService, private logger: LoggerService) {}
 
-  public get() {
-    const {apiKey, projectId} = this.config.crowdin;
-    Axios.get(`https://api.crowdin.com/api/project/${projectId}/export?key=${apiKey}`;
+  public async get() {
+    const { apiKey, projectId } = this.config.crowdin;
 
-    Axios.get(`https://api.crowdin.com/api/project/${projectId}/download/all.zip?key=${apiKey})`;
+    const file = await Axios.get(
+      `https://api.crowdin.com/api/project/${projectId}/download/all.zip?key=${apiKey}`
+    );
+  }
+
+  private async makeZip() {
+    const { apiKey, projectId } = this.config.crowdin;
+
+    const res = await Axios.get(
+      `https://api.crowdin.com/api/project/${projectId}/export?key=${apiKey}`
+    );
   }
 }
