@@ -32,7 +32,7 @@ export class PublicController {
     await this.email.send(
       this.config.emails.publicRelations,
       `${name} has a question in Komak`,
-      `from: ${email}\n${content}`
+      `from: ${email} ${content}`
     );
   }
 }
