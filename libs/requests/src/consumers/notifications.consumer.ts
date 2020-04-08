@@ -9,6 +9,7 @@ import { ObjectID } from 'mongodb';
 import { RequestsService } from '../requests.service';
 import { ProfilesService } from '@backend/profiles';
 import { RequestsRabbitMQService } from '../services/requests-rabbitmq.service';
+import { TranslationsService } from '@backend/translations';
 
 @Injectable()
 export class BatchwiseNotificationsConsumer {
@@ -19,16 +20,16 @@ export class BatchwiseNotificationsConsumer {
     private users: UsersService,
     private requests: RequestsService,
     private profiles: ProfilesService,
-    private requestsRabbitMQ: RequestsRabbitMQService
+    private requestsRabbitMQ: RequestsRabbitMQService,
+    private translations: TranslationsService
   ) {}
 
   public async consume({
     message,
     ack,
   }: RMQHelper<BatchwiseNotificationsQueue>) {
-    const { requestId, data } = message;
+    const { requestId } = message;
     const sentProfileIds = message.sentProfileIds || [];
-    console.log({ requestId, data });
 
     try {
       await this.mongo.waitReady();
@@ -49,12 +50,24 @@ export class BatchwiseNotificationsConsumer {
       const profile = await this.profiles.findOneById(new ObjectID(profileId));
       const user = await this.users.findOneById(new ObjectID(profile.userId));
       const registrationTokens = Object.values(user.uuidRegTokenPair || {});
+      const translations = await this.translations.getTranslation(
+        user.language
+      );
 
-      await this.notifications.send({ ...data, registrationTokens });
+      await this.notifications.send({
+        registrationTokens,
+        message: {
+          title: 'KOMAK',
+          body: translations.BACKEND_NOTIFICATION_REQUEST_STARTED_V1,
+          icon: '',
+        },
+        payload: {
+          request: JSON.stringify(request),
+        },
+      });
 
       this.requestsRabbitMQ.sendToBatchwiseNotifications({
         requestId,
-        data,
         sentProfileIds: [...sentProfileIds, profileId.toString()],
       });
 

@@ -57,11 +57,9 @@ export class DispatchRequestQueue {
 
 export class SubscribeNewHelperRequestQueue {
   public profileId: ObjectID;
-  public registrationTokens: string[];
 }
 
 export interface BatchwiseNotificationsQueue {
   requestId: ObjectID;
-  data: SendNotificationData;
   sentProfileIds?: string[];
 }

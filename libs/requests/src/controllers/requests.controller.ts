@@ -8,6 +8,7 @@ import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { Profile } from '@backend/profiles/profile.model';
 import { ApiTags, ApiProperty, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { TranslationsService } from '@backend/translations';
 
 class RequestBodyDto {
   @IsString()
@@ -20,8 +21,17 @@ class RequestBodyDto {
 export class RequestsController {
   constructor(
     private requests: RequestsService,
-    private profiles: ProfilesService
+    private profiles: ProfilesService,
+    private translations: TranslationsService
   ) {}
+
+  @Get()
+  public async test(): Promise<void> {
+    console.log('entered');
+
+    const t = await this.translations.getTranslation('en');
+    console.log({ t });
+  }
 
   @Auth()
   @Post()

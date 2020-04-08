@@ -16,6 +16,7 @@ import { RedisHealthIndicator } from '@backend/redis/health';
 import { MongoHealthIndicator } from '@backend/mongo/health';
 import { RedisModule } from '@backend/redis';
 import { PublicModule } from '@backend/public';
+import { TranslationsModule } from '@backend/translations';
 
 const modules = [
   MongoModule,
@@ -29,6 +30,7 @@ const modules = [
   RabbitmqModule,
   RedisModule,
   PublicModule,
+  TranslationsModule,
 ];
 @Module({
   controllers: [HealthController],
