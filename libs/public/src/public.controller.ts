@@ -22,7 +22,7 @@ class AskDto {
 export class PublicController {
   constructor(private email: EmailService, private config: ConfigService) {}
 
-  // @Auth('anonymous')
+  @Auth('anonymous')
   @Post('ask')
   @ApiResponse({
     description: 'Successfully sent email.',
