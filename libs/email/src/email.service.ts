@@ -22,7 +22,7 @@ export class EmailService implements EmailServiceInterface {
     subject: string,
     content: string,
     tag?: string,
-    from = 'Ocean.io'
+    from = 'Komak.io'
   ): Promise<void> {
     const parameters: Mailgun.messages.SendData = {
       from: `${from} <${this.config.mailgun.from}>`,
