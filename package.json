@@ -129,7 +129,9 @@
       "@backend/redis/(.*)": "<rootDir>/libs/redis/src/$1",
       "@backend/redis": "<rootDir>/libs/redis/src",
       "@backend/public/(.*)": "<rootDir>/libs/public/src/$1",
-      "@backend/public": "<rootDir>/libs/public/src"
+      "@backend/public": "<rootDir>/libs/public/src",
+      "@backend/translations/(.*)": "<rootDir>/libs/translations/src/$1",
+      "@backend/translations": "<rootDir>/libs/translations/src"
     }
   }
 }

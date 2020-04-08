@@ -90,4 +90,9 @@ export class ConfigService {
       process.env.RECAPTCHA_SECRET ||
       '6Lc2ReUUAAAAAO-oGA0nnHTNBf90r1w0FzGPViMU',
   };
+
+  public crowdin = {
+    apiKey: process.env.CROWDIN_API_KEY,
+    projectId: process.env.CROWDIN_PROJECT_ID,
+  };
 }
