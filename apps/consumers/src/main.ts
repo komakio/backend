@@ -16,8 +16,8 @@ async function bootstrapQueue(args: {
   module: any;
   queueName: string;
   prefetchCount: number;
-  withDelayedExchange?: boolean;
   rabbitmq: RabbitMQService;
+  withDelayedExchange?: boolean;
 }) {
   const app = await NestFactory.createMicroservice(args.module, {
     transport: Transport.RMQ,
@@ -31,9 +31,7 @@ async function bootstrapQueue(args: {
     logger,
   });
   app.listen(() => {
-    if (args.withDelayedExchange) {
-      args.rabbitmq.initDelayedExchange(args.queueName);
-    }
+    //log sth
   });
 }
 
@@ -51,20 +49,26 @@ async function bootstrap() {
   const requestsRabbitMQ = app.get(RequestsRabbitMQService);
   const profilesRabbitMQ = app.get(ProfilesRabbitMQService);
 
-  await Promise.all([
-    bootstrapQueue({
+  const queues = [
+    {
       module: ConsumerModule.register(app.get(SubscribeNewHelperConsumer)),
       queueName: profilesRabbitMQ.subscribeNewHelperRequestQueueName,
       prefetchCount: 30,
       rabbitmq,
-    }),
-    bootstrapQueue({
+    },
+    {
       module: ConsumerModule.register(app.get(BatchwiseNotificationsConsumer)),
       queueName: requestsRabbitMQ.BatchwiseNotificationsQueueName,
       prefetchCount: 30,
       withDelayedExchange: true,
       rabbitmq,
-    }),
-  ]);
+    },
+  ];
+
+  queues
+    .filter(q => q.withDelayedExchange)
+    .map(q => rabbitmq.initDelayedExchange(q.queueName));
+
+  await Promise.all(queues);
 }
 bootstrap();
