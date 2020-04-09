@@ -14,6 +14,7 @@ import { ProfilesRequestsController } from './controllers/profiles-requests.cont
 import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.consumer';
 import { EmailModule } from '@backend/email';
 import { BatchwiseNotificationsConsumer } from './consumers/notifications.consumer';
+import { TranslationsModule } from '@backend/translations';
 
 @Module({
   controllers: [RequestsController, ProfilesRequestsController],
@@ -33,6 +34,7 @@ import { BatchwiseNotificationsConsumer } from './consumers/notifications.consum
     NotificationsModule,
     UsersModule,
     EmailModule,
+    TranslationsModule,
   ],
   exports: [RequestsService],
 })

@@ -3,7 +3,7 @@ import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
 import Axios from 'axios';
 import AdmZip from 'adm-zip';
-import { CrowdinLanguage, CrowdinTranslation } from './translations-model';
+import { CrowdinLanguage, Translation } from './translations-model';
 import { TranslationsRedisService } from './services/translations-redis.service';
 
 @Injectable()
@@ -16,27 +16,43 @@ export class TranslationsService {
 
   public async getTranslation(languageCode: string) {
     let translations = await this.translationsRedis.getTranslations();
+    console.log({ fromCache: translations });
+
     if (!translations) {
       translations = await this.getFromCrowdin();
+      console.log({ returnedAfterCache: translations });
     }
-    translations.find(t => t.languageCodes.includes(languageCode));
+    return translations.find(t => t.languageCodes.includes(languageCode));
   }
 
   public async getFromCrowdin() {
     const languages = await this.getCrowdinSupportedLanguages();
-    await this.buildZips();
+    const success = await this.buildZips();
+    console.log({ success });
+
     const zipFile = await this.downloadZip();
+    console.log({ zipFile });
+
     const zipInstance = new AdmZip(zipFile);
 
     const translations = languages.reduce((allTranslations, lang) => {
-      const translation: CrowdinTranslation = JSON.parse(
+      console.log({ lang });
+
+      const translation: Translation = JSON.parse(
         zipInstance.readAsText(
           `/master/backend-i18n/languages/${lang.crowdin_code}.json`
         )
       );
+      console.log({ translation });
+
       translation['languageCodes'] = Object.values(lang);
       return [...allTranslations, translation];
     }, []);
+
+    console.log({ translationsProcessed: translations });
+
+    await this.translationsRedis.saveTranslations(translations);
+    return translations;
   }
 
   private async getCrowdinSupportedLanguages(): Promise<CrowdinLanguage[]> {

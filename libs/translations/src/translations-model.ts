@@ -10,13 +10,8 @@ export interface CrowdinLanguage {
   osx_locale: string;
 }
 
-export interface CrowdinTranslation {
-  BACKEND_NOTIFICATION_REQUEST_STARTED_V1: string;
-  BACKEND_NOTIFICATION_REQUEST_ACCEPT_V1: string;
-}
-
 export interface Translation {
   languageCodes: string[];
-  notificationRequestStarted: string;
-  notificationRequestAccepted: string;
+  BACKEND_NOTIFICATION_REQUEST_STARTED_V1: string;
+  BACKEND_NOTIFICATION_REQUEST_ACCEPT_V1: string;
 }
