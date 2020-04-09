@@ -69,6 +69,6 @@ async function bootstrap() {
     .filter(q => q.withDelayedExchange)
     .map(q => rabbitmq.initDelayedExchange(q.queueName));
 
-  await Promise.all(queues);
+  await Promise.all(queues.map(q => bootstrapQueue(q)));
 }
 bootstrap();
