@@ -25,6 +25,8 @@ export class RabbitMQService implements RabbitMQServiceInterface {
 
   constructor(private config: ConfigService, private logger: LoggerService) {}
 
+  private delayedExchangeNames = [];
+
   public async connect() {
     if (this.channel) {
       return;
@@ -39,18 +41,26 @@ export class RabbitMQService implements RabbitMQServiceInterface {
       this.channel.addListener('connect', () => {
         this.logger.debug('RabbitMQ connected');
         resolve();
+
+        this.channel.addSetup(ch => {
+          this.delayedExchangeNames.forEach(queueName => {
+            ch.assertExchange(
+              `delayed-exchange-${queueName}`,
+              'x-delayed-message',
+              {
+                arguments: { 'x-delayed-type': 'direct' },
+                durable: true,
+              }
+            );
+            ch.bindQueue(queueName, `delayed-exchange-${queueName}`, '');
+          });
+        });
       });
     });
   }
 
   public initDelayedExchange(queueName: string) {
-    this.channel.addSetup(ch => {
-      ch.assertExchange(`delayed-exchange-${queueName}`, 'x-delayed-message', {
-        arguments: { 'x-delayed-type': 'direct' },
-        durable: true,
-      });
-      ch.bindQueue(queueName, `delayed-exchange-${queueName}`, '');
-    });
+    this.delayedExchangeNames.push(queueName);
   }
 
   public async sendToQueue(args: { queueName: string; message: any }) {
