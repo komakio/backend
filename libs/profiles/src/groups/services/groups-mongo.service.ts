@@ -9,8 +9,8 @@ export class GroupsMongoService {
   constructor(private mongo: MongoService, private config: ConfigService) {}
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { managerUserId: 1 });
-    this.mongo.addIndex(collection, { managerUserId: 1 });
+    this.mongo.addIndex(collection, { managersUserIds: 1 });
+    this.mongo.addIndex(collection, { secret: 1 });
   }
 
   public async createOne(group: Partial<Group>): Promise<Group> {
