@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: Build&Push image
 
@@ -32,3 +33,8 @@ steps:
       from_secret: GITHUB_USERNAME
     githubPassword:
       from_secret: GITHUB_PASSWORD
+---
+kind: signature
+hmac: a7bc3cb1eacc093fb5d35ab156eaf14bf3e8b3dbb6b4c8a3968c14e220636420
+
+...
