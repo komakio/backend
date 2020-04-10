@@ -29,7 +29,7 @@ export class RequestsController {
   public async test(): Promise<void> {
     console.log('entered');
 
-    const t = await this.translations.getTranslation('en');
+    const t = await this.translations.get('en');
     console.log({ t });
   }
 

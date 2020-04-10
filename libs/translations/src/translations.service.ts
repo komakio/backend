@@ -15,16 +15,22 @@ export class TranslationsService {
     private translationsRedis: TranslationsRedisService
   ) {}
 
-  public async getTranslation(languageCode: string) {
+  public async get(languageCode: string) {
     let translations = await this.translationsRedis.getTranslations();
     if (!translations) {
       translations = await this.getFromCrowdin();
       await this.translationsRedis.saveTranslations(translations);
     }
-    return translations.find(t => t.languageCodes.includes(languageCode));
+    const translation = translations.find(t =>
+      t.languageCodes.includes(languageCode)
+    );
+    if (!translation) {
+      return translations.find(t => t.languageCodes.includes('en'));
+    }
+    return translation;
   }
 
-  public async getFromCrowdin() {
+  private async getFromCrowdin() {
     await this.buildZips();
     await this.downloadZip();
     const translations = await this.getNormalizedJson();

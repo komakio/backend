@@ -93,7 +93,7 @@ export class RequestsService {
       new ObjectID(requesterProfile.userId)
     );
     const registrationTokens = Object.values(user.uuidRegTokenPair || {});
-    const translations = await this.translations.getTranslation(user.language);
+    const translations = await this.translations.get(user.language);
 
     await this.notifications.send({
       registrationTokens,
@@ -151,7 +151,7 @@ export class RequestsService {
 
       const user = await this.users.findOneById(args.profileId);
       const registrationTokens = Object.values(user.uuidRegTokenPair || {});
-      const translations = await this.translations.getTranslation(
+      const translations = await this.translations.get(
         user.language
       );
 
