@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
-import Axios from 'axios';
-import AdmZip from 'adm-zip';
-import { LanguageCode } from './translations-model';
+import { LanguageCode, Translation } from './translations-model';
 import { TranslationsRedisService } from './services/translations-redis.service';
+import { crowdinSourceStrings } from './data/source';
+import AdmZip from 'adm-zip';
+import Axios from 'axios';
 import fs from 'fs';
 
 @Injectable()
@@ -15,26 +16,62 @@ export class TranslationsService {
     private translationsRedis: TranslationsRedisService
   ) {}
 
-  public async get(languageCode: string) {
-    let translations = await this.translationsRedis.getTranslations();
+  public async get(args: {
+    languageCode: string;
+    variables: {
+      name: string;
+    };
+  }) {
+    if (!args.languageCode) {
+      return crowdinSourceStrings;
+    }
+
+    let translations = await this.translationsRedis.getWithExpire();
+
     if (!translations) {
       translations = await this.getFromCrowdin();
-      await this.translationsRedis.saveTranslations(translations);
+      await this.cache(translations);
     }
-    const translation = translations.find(t =>
-      t.languageCodes.includes(languageCode)
+
+    let translation = translations.find(t =>
+      t.languageCodes.includes(args.languageCode)
     );
+
     if (!translation) {
-      return translations.find(t => t.languageCodes.includes('en'));
+      translation = crowdinSourceStrings;
+    }
+
+    //replace variables with real data (eg. {{name}} => Ali)
+    for (const tKey in translation) {
+      if (translation.hasOwnProperty(tKey) && tKey !== 'languageCodes') {
+        for (const vKey in args.variables) {
+          if (args.variables.hasOwnProperty(vKey)) {
+            translation[tKey] = translation[tKey].replace(
+              `{{${vKey}}}`,
+              `${args.variables[vKey]}`
+            );
+          }
+        }
+      }
     }
     return translation;
   }
 
   private async getFromCrowdin() {
-    await this.buildZips();
-    await this.downloadZip();
-    const translations = await this.getNormalizedJson();
-    await this.deleteZip();
+    let translations: Translation[];
+    try {
+      await this.buildZips();
+      await this.downloadZip();
+      translations = await this.getNormalizedJson();
+      await this.deleteZip();
+    } catch (err) {
+      translations = await this.translationsRedis.getWithoutExpire();
+      this.logger.verbose({
+        route: 'get-translations-from-crowdin',
+        error: err?.message,
+      });
+    }
+
     return translations;
   }
 
@@ -93,5 +130,13 @@ export class TranslationsService {
     }, []);
 
     return translations;
+  }
+
+  private async cache(translations: Translation[]) {
+    if (!translations) {
+      return;
+    }
+    await this.translationsRedis.saveWithExpire(translations);
+    await this.translationsRedis.saveWithoutExpire(translations);
   }
 }

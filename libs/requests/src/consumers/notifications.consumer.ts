@@ -50,7 +50,10 @@ export class BatchwiseNotificationsConsumer {
       const profile = await this.profiles.findOneById(new ObjectID(profileId));
       const user = await this.users.findOneById(new ObjectID(profile.userId));
       const registrationTokens = Object.values(user.uuidRegTokenPair || {});
-      const translations = await this.translations.get(user.language);
+      const translations = await this.translations.get({
+        languageCode: user.language,
+        variables: { name: request.requesterShortName },
+      });
 
       await this.notifications.send({
         registrationTokens,
