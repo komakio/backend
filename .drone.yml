@@ -34,7 +34,40 @@ steps:
     githubPassword:
       from_secret: GITHUB_PASSWORD
 ---
+kind: pipeline
+name: Build&Push production
+
+trigger:
+  event:
+  - tag
+
+steps:
+- name: docker  
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    repo: komakio/backend
+    tags: ${DRONE_TAG}
+
+- name: git deploy
+  image: bitnami/git
+  commands:
+  - git clone "https://$(echo $githubUsername):$(echo $githubPassword)@github.com/wikibusiness/komak-k8s.git"
+  - cd komak-k8s
+  - rm -f src/backend-production0version.yaml
+  - "echo 'imageTag: ${DRONE_TAG}' > src/backend-version.yaml"
+  - "git add . && git commit -a -m 'Updated production backend to tag ${DRONE_TAG}' && git push"
+
+  environment:
+    githubUsername:
+      from_secret: GITHUB_USERNAME
+    githubPassword:
+      from_secret: GITHUB_PASSWORD
+---
 kind: signature
-hmac: a7bc3cb1eacc093fb5d35ab156eaf14bf3e8b3dbb6b4c8a3968c14e220636420
+hmac: 5c0620541ea37393ef894a717a420601f26c68bd32b28a518bf4e0bc30c55242
 
 ...
