@@ -69,7 +69,7 @@ export class Phone {
   public number: string;
 }
 
-export class EditableProfile {
+export class PatchableProfile {
   @ApiProperty()
   public self?: boolean;
   @ApiProperty()

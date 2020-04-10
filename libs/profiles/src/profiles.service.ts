@@ -4,12 +4,14 @@ import { Profile } from './profile.model';
 import { ObjectID } from 'mongodb';
 import { getDistance } from '@utils/distance';
 import { ConfigService } from '@backend/config';
+import { GroupsService } from './groups/groups.service';
 
 @Injectable()
 export class ProfilesService {
   constructor(
     private profilesMongo: ProfilesMongoService,
-    private config: ConfigService
+    private config: ConfigService,
+    private groups: GroupsService
   ) {}
 
   public async create(profile: Partial<Profile>) {
@@ -81,5 +83,20 @@ export class ProfilesService {
         }),
       }))
       .filter(p => p.distance <= (p.coverage || this.config.maxDistance));
+  }
+
+  public async addOneToGroup(args: {
+    profileId: ObjectID;
+    groupSecret: string;
+  }) {
+    const group = await this.groups.findGroupBySecret(args.groupSecret);
+    if (!group) {
+      throw new HttpException('INVALID_SECRET', HttpStatus.FORBIDDEN);
+    }
+    await this.patchOneById({
+      id: new ObjectID(args.profileId),
+      data: { groupId: group._id },
+    });
+    return group;
   }
 }

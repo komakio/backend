@@ -19,11 +19,12 @@ export class GroupsMongoService {
     const req = await this.mongo.db
       .collection(collection)
       .insertOne({ ...group, createdAt: new Date() });
-    return req.ops[0];
+    return new Group(req.ops[0]);
   }
 
   public async findOneBy(filters: Partial<Group>): Promise<Group> {
     await this.mongo.waitReady();
-    return this.mongo.db.collection(collection).findOne(filters);
+    const res = await this.mongo.db.collection(collection).findOne(filters);
+    return res ? new Group(res) : null;
   }
 }

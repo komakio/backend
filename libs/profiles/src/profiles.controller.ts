@@ -78,6 +78,10 @@ export class ProfilesController {
       id: new ObjectID(profileId),
       userId: new ObjectID(user._id),
     });
-    await this.profiles.patchOneById({ id: new ObjectID(id), data });
+    const group = await this.profiles.addOneToGroup({
+      profileId: new ObjectID(profileId),
+      groupSecret: data.secret,
+    });
+    return { group: group?.serialize() };
   }
 }
