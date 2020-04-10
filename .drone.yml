@@ -3,8 +3,7 @@ name: Build&Push image
 
 trigger:
   branch:
-  - drone
-  - develop
+  - master
   event:
   - push
 
