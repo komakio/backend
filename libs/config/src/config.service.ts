@@ -92,7 +92,7 @@ export class ConfigService {
   };
 
   public crowdin = {
-    apiKey: process.env.CROWDIN_API_KEY || '0b9cc2db7af4695d1ff064feea88dff2',
-    projectId: process.env.CROWDIN_PROJECT_ID || 'komak',
+    apiKey: process.env.CROWDIN_API_KEY || '',
+    projectId: process.env.CROWDIN_PROJECT_ID || '',
   };
 }
