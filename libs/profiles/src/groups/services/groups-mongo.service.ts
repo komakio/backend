@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
-import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 import { ConfigService } from '@backend/config';
 import { Group } from '../groups.model';
 
