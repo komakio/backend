@@ -1,7 +1,6 @@
 import { ObjectID } from 'mongodb';
 import { Location } from '@backend/profiles/profile.model';
 import { ApiProperty } from '@nestjs/swagger';
-import { SendNotificationData } from '@backend/notifications/notifications.model';
 
 export const HelpRequestStatusEnum = [
   'pending',
