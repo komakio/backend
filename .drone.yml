@@ -57,8 +57,8 @@ steps:
   commands:
   - git clone "https://$(echo $githubUsername):$(echo $githubPassword)@github.com/wikibusiness/komak-k8s.git"
   - cd komak-k8s
-  - rm -f src/backend-production0version.yaml
-  - "echo 'imageTag: ${DRONE_TAG}' > src/backend-version.yaml"
+  - rm -f src/backend-production-version.yaml
+  - "echo 'imageTag: \"${DRONE_TAG}\"' > src/backend-production-version.yaml"
   - "git add . && git commit -a -m 'Updated production backend to tag ${DRONE_TAG}' && git push"
 
   environment:
