@@ -95,6 +95,12 @@
       ],
       "@backend/public/*": [
         "libs/public/src/*"
+      ],
+      "@backend/translations": [
+        "libs/translations/src"
+      ],
+      "@backend/translations/*": [
+        "libs/translations/src/*"
       ]
     }
   },

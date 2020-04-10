@@ -133,6 +133,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/public/tsconfig.lib.json"
       }
+    },
+    "translations": {
+      "type": "library",
+      "root": "libs/translations",
+      "entryFile": "index",
+      "sourceRoot": "libs/translations/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/translations/tsconfig.lib.json"
+      }
     }
   }
 }

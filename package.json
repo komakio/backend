@@ -32,6 +32,7 @@
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/terminus": "^7.0.0-pre.2",
     "@sentry/node": "^5.15.0",
+    "adm-zip": "^0.4.14",
     "amqp-connection-manager": "^3.2.0",
     "amqplib": "^0.5.5",
     "apple-signin-auth": "^1.0.4",
@@ -59,6 +60,7 @@
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
+    "@types/adm-zip": "^0.4.32",
     "@types/amqp-connection-manager": "^2.0.9",
     "@types/amqplib": "^0.5.13",
     "@types/express": "^4.17.3",
@@ -133,7 +135,9 @@
       "@backend/redis/(.*)": "<rootDir>/libs/redis/src/$1",
       "@backend/redis": "<rootDir>/libs/redis/src",
       "@backend/public/(.*)": "<rootDir>/libs/public/src/$1",
-      "@backend/public": "<rootDir>/libs/public/src"
+      "@backend/public": "<rootDir>/libs/public/src",
+      "@backend/translations/(.*)": "<rootDir>/libs/translations/src/$1",
+      "@backend/translations": "<rootDir>/libs/translations/src"
     }
   }
 }

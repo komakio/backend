@@ -9,6 +9,7 @@ import { ConfigService } from '@backend/config';
 import { getDistance } from '@utils/distance';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { EmailService } from '@backend/email';
+import { TranslationsService } from '@backend/translations';
 
 @Injectable()
 export class RequestsService {
@@ -19,7 +20,8 @@ export class RequestsService {
     private notifications: NotificationsService,
     private config: ConfigService,
     private requestsRabbitMQ: RequestsRabbitMQService,
-    private email: EmailService
+    private email: EmailService,
+    private translations: TranslationsService
   ) {}
 
   public async createOne(profileId: ObjectID) {
@@ -46,46 +48,9 @@ export class RequestsService {
     });
 
     await this.requestsRabbitMQ.sendToBatchwiseNotifications({
-      data: {
-        message: {
-          title: 'KOMAK',
-          body: 'Someone is in need of your help.',
-          icon: '',
-        },
-        payload: {
-          request: JSON.stringify(request),
-        },
-      },
       requestId: new ObjectID(request._id),
     });
     return request;
-  }
-
-  public async findOneById(id: ObjectID) {
-    return this.requestsMongo.findOneById(new ObjectID(id));
-  }
-
-  public async findAllNewestByProfileId(args: {
-    profileId: ObjectID;
-    skip?: number;
-    limit?: number;
-  }) {
-    return this.requestsMongo.findManyBy({
-      filters: {
-        $or: [
-          {
-            candidates: {
-              $elemMatch: { profileId: new ObjectID(args.profileId) },
-            },
-          },
-          { acceptorProfileId: new ObjectID(args.profileId) },
-          { requesterProfileId: new ObjectID(args.profileId) },
-        ],
-      },
-      orderBy: { _id: -1 },
-      skip: args.skip,
-      limit: args.limit,
-    });
   }
 
   public async cancelOne(id: ObjectID) {
@@ -128,12 +93,16 @@ export class RequestsService {
       new ObjectID(requesterProfile.userId)
     );
     const registrationTokens = Object.values(user.uuidRegTokenPair || {});
+    const translations = await this.translations.get({
+      languageCode: user.language,
+      variables: { name: request.requesterShortName },
+    });
 
     await this.notifications.send({
       registrationTokens,
       message: {
         title: 'KOMAK',
-        body: 'Someone accepted you request.',
+        body: translations.BACKEND_NOTIFICATION_REQUEST_ACCEPT_V1,
         icon: '',
       },
     });
@@ -160,10 +129,7 @@ export class RequestsService {
     });
   }
 
-  public async subscribeToRequests(args: {
-    profileId: ObjectID;
-    registrationTokens: string[];
-  }) {
+  public async subscribeToRequests(args: { profileId: ObjectID }) {
     const profile = await this.profiles.findOneById(
       new ObjectID(args.profileId)
     );
@@ -185,11 +151,19 @@ export class RequestsService {
         distance,
         id: new ObjectID(r._id),
       });
+
+      const user = await this.users.findOneById(args.profileId);
+      const registrationTokens = Object.values(user.uuidRegTokenPair || {});
+      const translations = await this.translations.get({
+        languageCode: user.language,
+        variables: { name: r.requesterShortName },
+      });
+
       await this.notifications.send({
-        registrationTokens: args.registrationTokens,
+        registrationTokens,
         message: {
           title: 'KOMAK',
-          body: 'Someone is in need of your help.',
+          body: translations.BACKEND_NOTIFICATION_REQUEST_STARTED_V1,
           icon: '',
         },
         payload: {
@@ -249,5 +223,32 @@ export class RequestsService {
       ids: [request.acceptorProfileId, request.requesterProfileId],
     });
     return profiles;
+  }
+
+  public async findOneById(id: ObjectID) {
+    return this.requestsMongo.findOneById(new ObjectID(id));
+  }
+
+  public async findAllNewestByProfileId(args: {
+    profileId: ObjectID;
+    skip?: number;
+    limit?: number;
+  }) {
+    return this.requestsMongo.findManyBy({
+      filters: {
+        $or: [
+          {
+            candidates: {
+              $elemMatch: { profileId: new ObjectID(args.profileId) },
+            },
+          },
+          { acceptorProfileId: new ObjectID(args.profileId) },
+          { requesterProfileId: new ObjectID(args.profileId) },
+        ],
+      },
+      orderBy: { _id: -1 },
+      skip: args.skip,
+      limit: args.limit,
+    });
   }
 }
