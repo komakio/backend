@@ -8,6 +8,11 @@ import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
 
+class AddToGroupDto {
+  @IsString()
+  public secret: string;
+}
+
 @ApiTags('profiles')
 @Controller('v1/profiles')
 export class ProfilesController {
@@ -52,6 +57,25 @@ export class ProfilesController {
   ) {
     await this.profiles.validateProfileUserMatch({
       id: new ObjectID(id),
+      userId: new ObjectID(user._id),
+    });
+    await this.profiles.patchOneById({ id: new ObjectID(id), data });
+  }
+
+  @Auth()
+  @Patch(':id')
+  @ApiBody({ type: AddToGroupDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully added to the group.',
+  })
+  public async addToGroup(
+    @Param('id') profileId: string,
+    @UserReq() user: User,
+    @Body() data: AddToGroupDto
+  ) {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(profileId),
       userId: new ObjectID(user._id),
     });
     await this.profiles.patchOneById({ id: new ObjectID(id), data });

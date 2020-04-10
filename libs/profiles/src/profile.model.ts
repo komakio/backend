@@ -69,8 +69,27 @@ export class Phone {
   public number: string;
 }
 
-export class Profile {
-  @ApiProperty({ type: String })
+export class EditableProfile {
+  @ApiProperty()
+  public self?: boolean;
+  @ApiProperty()
+  public firstName: string;
+  @ApiProperty()
+  public lastName: string;
+  @ApiProperty({ type: Address })
+  public address?: Address;
+  @ApiProperty()
+  public disabled?: boolean;
+  @ApiProperty({ enum: ProfileRoleEnum })
+  public role: ProfileRoleType;
+  @ApiProperty({ type: Phone })
+  public phone: Phone;
+  @ApiProperty()
+  public coverage: number;
+}
+
+export class Profile implements EditableProfile {
+  @ApiProperty()
   public _id: ObjectID;
   @ApiProperty({ type: String })
   public userId: ObjectID;

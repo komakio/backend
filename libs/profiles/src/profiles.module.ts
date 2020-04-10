@@ -7,16 +7,10 @@ import { ConfigModule } from '@backend/config';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { RabbitmqModule } from '@backend/rabbitmq';
 import { UsersModule } from '@backend/users';
-import { ProfilesGroupsMongoService } from './services/profiles-groups-mongo.service';
 
 @Module({
   controllers: [ProfilesController],
-  providers: [
-    ProfilesService,
-    ProfilesMongoService,
-    ProfilesRabbitMQService,
-    ProfilesGroupsMongoService,
-  ],
+  providers: [ProfilesService, ProfilesMongoService, ProfilesRabbitMQService],
   imports: [MongoModule, ConfigModule, RabbitmqModule, UsersModule],
   exports: [ProfilesService],
 })
