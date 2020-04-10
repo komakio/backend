@@ -113,7 +113,7 @@ export class ProfilesController {
     return this.profiles.findAllByUserId(new ObjectID(user._id));
   }
 
-  @Auth()
+  @Auth('anonymous')
   @Post()
   @ApiBody({ type: CreateProfilesDto })
   @ApiResponse({
