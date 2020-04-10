@@ -105,10 +105,7 @@ export class TranslationsService {
   private async deleteZip() {
     fs.unlink('all.zip', err => {
       if (err) {
-        this.logger.verbose({
-          route: 'delete-translations-zip-file',
-          error: err?.message,
-        });
+        throw err;
       }
     });
   }
