@@ -16,6 +16,8 @@ export class TranslationsService {
     private translationsRedis: TranslationsRedisService
   ) {}
 
+  private fileName = 'all.zip';
+
   public async get(args: {
     languageCode: string;
     variables: {
@@ -63,7 +65,6 @@ export class TranslationsService {
       await this.buildZips();
       await this.downloadZip();
       translations = await this.getNormalizedJson();
-      await this.deleteZip();
     } catch (err) {
       translations = await this.translationsRedis.getWithoutExpire();
       this.logger.verbose({
@@ -72,6 +73,7 @@ export class TranslationsService {
       });
     }
 
+    this.deleteZip();
     return translations;
   }
 
@@ -97,15 +99,15 @@ export class TranslationsService {
       { responseType: 'stream' }
     );
 
-    res.data.pipe(fs.createWriteStream('all.zip'));
+    res.data.pipe(fs.createWriteStream(this.fileName));
 
     return res.data;
   }
 
-  private async deleteZip() {
-    fs.unlink('all.zip', err => {
+  private deleteZip() {
+    fs.unlink(this.fileName, err => {
       if (err) {
-        throw err;
+        //skip
       }
     });
   }
