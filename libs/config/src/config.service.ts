@@ -9,6 +9,8 @@ export class ConfigService {
   public emails = {
     publicRelations: process.env.PUBLIC_RELATIONS_EMAIL || 'test@komak.io',
   };
+  public delayNotificationTime =
+    parseInt(process.env.DELAY_NOTIFICATION_TIME) || 3 * 60 * 1000;
 
   public host = this.isProduction
     ? process.env.HOST
@@ -89,5 +91,10 @@ export class ConfigService {
     secret:
       process.env.RECAPTCHA_SECRET ||
       '6Lc2ReUUAAAAAO-oGA0nnHTNBf90r1w0FzGPViMU',
+  };
+
+  public crowdin = {
+    apiKey: process.env.CROWDIN_API_KEY || '',
+    projectId: process.env.CROWDIN_PROJECT_ID || '',
   };
 }

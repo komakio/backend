@@ -18,7 +18,9 @@ export class RequestsRabbitMQService {
     await this.rabbitMQ.sendToQueueWithDelay({
       queueName: this.BatchwiseNotificationsQueueName,
       message,
-      delayTimeMs: !message?.sentProfileIds?.length ? 1 : 10 * 60 * 1000,
+      delayTimeMs: !message?.sentProfileIds?.length
+        ? 1
+        : this.config.delayNotificationTime,
     });
   }
 }
