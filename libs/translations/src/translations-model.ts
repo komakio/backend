@@ -1,4 +1,4 @@
-export interface CrowdinLanguage {
+export interface LanguageCode {
   name: string;
   crowdin_code: string;
   editor_code: string;

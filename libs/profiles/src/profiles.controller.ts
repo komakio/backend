@@ -129,13 +129,10 @@ export class ProfilesController {
       ...body,
       userId: new ObjectID(userReq._id),
     });
-    const user = await this.users.findOneById(new ObjectID(userReq._id));
-    const registrationTokens = Object.values(user.uuidRegTokenPair || {});
 
     if (body.self && body.role === 'helper') {
       await this.profileRabbitMQ.sendToSubscribeNewHelperRequests({
         profileId: profile._id,
-        registrationTokens,
       });
     }
     return profile;

@@ -17,12 +17,11 @@ export class SubscribeNewHelperConsumer {
     message,
     ack,
   }: RMQHelper<SubscribeNewHelperRequestQueue>) {
-    const { profileId, registrationTokens } = message;
+    const { profileId } = message;
     try {
       await this.mongo.waitReady();
       await this.requests.subscribeToRequests({
         profileId,
-        registrationTokens,
       });
       ack();
     } catch (err) {
