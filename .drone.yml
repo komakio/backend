@@ -1,0 +1,34 @@
+kind: pipeline
+name: Build&Push image
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
+
+steps:
+- name: docker  
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    repo: komakio/backend
+    tags: ${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER}
+
+- name: git deploy
+  image: bitnami/git
+  commands:
+  - git clone "https://$(echo $githubUsername):$(echo $githubPassword)@github.com/wikibusiness/komak-k8s.git"
+  - cd komak-k8s
+  - rm -f src/backend-version.yaml
+  - "echo 'imageTag: ${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER}' > src/backend-version.yaml"
+  - "git add . && git commit -a -m 'Updated backend to tag ${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER}' && git push"
+
+  environment:
+    githubUsername:
+      from_secret: GITHUB_USERNAME
+    githubPassword:
+      from_secret: GITHUB_PASSWORD
