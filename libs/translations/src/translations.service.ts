@@ -7,12 +7,14 @@ import { crowdinSourceStrings } from './data/source';
 import AdmZip from 'adm-zip';
 import Axios from 'axios';
 import fs from 'fs';
+import { ExceptionsService } from '@backend/exceptions';
 
 @Injectable()
 export class TranslationsService {
   constructor(
     private config: ConfigService,
     private logger: LoggerService,
+    private exceptions: ExceptionsService,
     private translationsRedis: TranslationsRedisService
   ) {}
 
@@ -60,20 +62,21 @@ export class TranslationsService {
   }
 
   private async getFromCrowdin() {
-    let translations: Translation[];
     try {
       await this.buildZips();
-      await this.downloadZip();
-      translations = await this.getNormalizedJson();
     } catch (err) {
-      translations = await this.translationsRedis.getWithoutExpire();
       this.logger.verbose({
         route: 'get-translations-from-crowdin',
         error: err?.message,
       });
+      this.exceptions.report(err);
+      return this.translationsRedis.getWithoutExpire();
     }
 
+    await this.downloadZip();
+    const translations = await this.getNormalizedJson();
     this.deleteZip();
+
     return translations;
   }
 
@@ -89,7 +92,10 @@ export class TranslationsService {
     const res = await Axios.get(
       `https://api.crowdin.com/api/project/${projectId}/export?key=${apiKey}`
     );
-    return ['skipped', 'built'].includes(res?.data?.success?.status);
+    const success = ['skipped', 'built'].includes(res?.data?.success?.status);
+    if (!success) {
+      throw { message: 'zip build failed!' };
+    }
   }
 
   private async downloadZip() {
