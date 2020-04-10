@@ -33,7 +33,19 @@ steps:
       from_secret: GITHUB_USERNAME
     githubPassword:
       from_secret: GITHUB_PASSWORD
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: SLACK_WEBHOOK
+    channel: errors
+  when:
+    status: [ failure ]
 ---
+#####################
+# PROD DEPLOYMENT
+#####################
 kind: pipeline
 name: Build&Push production
 
@@ -66,8 +78,20 @@ steps:
       from_secret: GITHUB_USERNAME
     githubPassword:
       from_secret: GITHUB_PASSWORD
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: SLACK_WEBHOOK
+    template: >
+      {{#success build.status}}
+        Production deployment (backend) {{build.tag}} succeeded.
+      {{else}}
+        Backend production build {{build.number}} failed. Fix me please.
+      {{/success}}
 ---
 kind: signature
-hmac: ba486fcd1faaab7e900192c0021d85427ba08ce919f007a766207774ef8aded6
+hmac: c89430878e75266d2831ebd26ed298dedc7d85128707b9652f3192c4afadd137
 
 ...
