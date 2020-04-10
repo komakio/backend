@@ -50,7 +50,6 @@ export class TranslationsService {
       translation = crowdinSourceStrings;
     }
 
-    //replace variables with real data (eg. {{name}} => Ali)
     this.replaceVariables({ translation, variables: args.variables });
     return translation;
   }
