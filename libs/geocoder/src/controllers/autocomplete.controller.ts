@@ -31,7 +31,7 @@ export class AutocompleteController {
     status: 200,
     type: AutocompleteResults,
   })
-  @Auth()
+  @Auth('anonymous')
   public async autocomplete(
     @Body() params: AutocompleteParams
   ): Promise<AutocompleteResults> {
