@@ -1,3 +1,5 @@
+const head = `<mj-head><mj-font name="Sen" href="https://fonts.googleapis.com/css?family=Sen" /></mj-head>`;
+
 export const getRequestAcceptedTemplate = (args: {
   requesterName: string;
   acceptorName: string;
@@ -5,9 +7,7 @@ export const getRequestAcceptedTemplate = (args: {
 }) => {
   return `
   <mjml>
-        <mj-head>
-            <mj-font name="Sen" href="https://fonts.googleapis.com/css?family=Sen" />
-        </mj-head>
+        ${head}
         <mj-body>
             <mj-section>
             <mj-column>
