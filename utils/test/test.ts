@@ -23,6 +23,7 @@ import { AppleService } from '@backend/users/auth/services/apple.service';
 import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { GoogleService } from '@backend/users/auth/services/google.service';
 import { MockGoogleService } from '@backend/users/mock/google-service.mock';
+import { RedisService } from '@backend/redis';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -61,7 +62,7 @@ export const prepareHttpTestController = async (
     uniqueId
   );
 
-  const app = moduleFixture.createNestApplication(); //fastify adapter
+  const app = moduleFixture.createNestApplication();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.init();
 
@@ -150,6 +151,7 @@ const prepareTestController = async (
   const config = new ConfigService();
   const key = getKey(uniqueId);
   config.mongo.database = key;
+  config.redis.prefix = key;
 
   // Remove debug logs
   const logger = new LoggerService();
@@ -179,7 +181,7 @@ const prepareTestController = async (
     .useValue(googleService)
     .compile();
 
-  await clean(moduleFixture);
+  await clean(moduleFixture, uniqueId);
 
   const authService = moduleFixture.get(AuthService);
 
@@ -211,13 +213,21 @@ const prepareTestController = async (
   };
 };
 
-const clean = async (moduleFixture: TestingModule): Promise<void> => {
+const clean = async (
+  moduleFixture: TestingModule,
+  uniqueId: string
+): Promise<void> => {
   const mongoService = moduleFixture.get(MongoService);
-  await mongoService.waitReady();
-  await mongoService.db.dropDatabase();
+  const redisService = moduleFixture.get(RedisService);
+  await Promise.all([mongoService.waitReady(), redisService.waitReady()]);
+  await Promise.all([
+    mongoService.db.dropDatabase(),
+    redisService.clearRedisKeys(`${getKey(uniqueId)}:*`),
+  ]);
 };
 
 export const stopTest = async (app: INestApplication | INestMicroservice) => {
   await app.get(MongoService).close();
+  await app.get(RedisService).close();
   await app.close();
 };

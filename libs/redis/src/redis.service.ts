@@ -56,6 +56,10 @@ export class RedisService {
     });
   }
 
+  public async close() {
+    this.db.disconnect();
+  }
+
   public async waitReady() {
     if (this.isConnected) {
       return Promise.resolve();
