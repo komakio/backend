@@ -1,4 +1,4 @@
-const head = `<mj-head><mj-font name="Sen" href="https://fonts.googleapis.com/css?family=Sen" /></mj-head>`;
+const head = `<mj-head><mj-font name="Sen" href="https://fonts.googleapis.com/css2?family=Sen" /></mj-head>`;
 
 export const getRequestAcceptedTemplate = (args: {
   requesterName: string;
