@@ -4,7 +4,7 @@ name: Build&Push image
 
 trigger:
   branch:
-  - master
+  - "*"
   event:
   - push
 
@@ -92,6 +92,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: 822a42731bd4e3620507154eb58da01df2a4c95d85927fdb0c74d6549b31fb74
+hmac: 1573c998e04c701b4bdd88eec047a971aef0e82388d9e2dbda301a11a8b3d3b3
 
 ...
