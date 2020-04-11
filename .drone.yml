@@ -10,9 +10,10 @@ kind: pipeline
 name: Run CI stack
 
 trigger:
+  branch:
+  - "*"
   event:
-    include:
-    - pull_request
+  - push
 
 steps:
   - name: npm-install
@@ -158,6 +159,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: 8e7d998bacd9a806fd33b470c72d1a9708975e56c926a5f2c182f4acb3b33aa1
+hmac: a8805c5d03888f08ce08e51cfb3f4b5ed7e6d607f95ee17967fbe41fbf06484b
 
 ...
