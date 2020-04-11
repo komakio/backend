@@ -50,7 +50,13 @@ services:
 - name: mongo
   image: mongo
 
+  
 ---
+####
+####
+#### Build Staging
+####
+####
 kind: pipeline
 name: Build&Push image
 
@@ -144,6 +150,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: f3bd75857e648cfbc73b51d2c01b3cf623ff380de67ee122d51d6f74a403e4cf
+hmac: b16b5c6097181ae72cef5cf9c4cb646c2868e4336bac5d24ad92179d98d8c7d4
 
 ...
