@@ -7,7 +7,6 @@
 ####
 
 kind: pipeline
-type: kubernetes
 name: Run CI stack
 
 trigger:
@@ -50,7 +49,7 @@ services:
 - name: mongo
   image: mongo
 
-  
+
 ---
 ####
 ####
@@ -150,6 +149,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: b16b5c6097181ae72cef5cf9c4cb646c2868e4336bac5d24ad92179d98d8c7d4
+hmac: 1737b724f13148ccea9c66f4a9dd1cc7c95e8298de8f75187ea107687a6e0894
 
 ...
