@@ -15,9 +15,14 @@ import { SubscribeNewHelperConsumer } from './consumers/subscribe-new-helper.con
 import { EmailModule } from '@backend/email';
 import { BatchwiseNotificationsConsumer } from './consumers/notifications.consumer';
 import { TranslationsModule } from '@backend/translations';
+import { RequestsWebFormController } from './controllers/requests-webform.controller';
 
 @Module({
-  controllers: [RequestsController, ProfilesRequestsController],
+  controllers: [
+    RequestsController,
+    ProfilesRequestsController,
+    RequestsWebFormController,
+  ],
   providers: [
     RequestsService,
     RequestsMongoService,
