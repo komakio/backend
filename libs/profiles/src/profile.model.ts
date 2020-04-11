@@ -81,18 +81,20 @@ export class PatchableProfile {
   @ApiProperty()
   public disabled?: boolean;
   @ApiProperty({ enum: ProfileRoleEnum })
-  public role: ProfileRoleType;
+  public role: ProfileRoleEnum;
   @ApiProperty({ type: Phone })
   public phone: Phone;
   @ApiProperty()
   public coverage: number;
 }
 
-export class Profile implements EditableProfile {
+export class Profile {
   @ApiProperty()
   public _id: ObjectID;
   @ApiProperty({ type: String })
   public userId: ObjectID;
+  @ApiProperty({ type: String })
+  public groupId: ObjectID;
   public createdAt: Date;
   public updatedAt: Date;
   public lastActivityAt: Date;

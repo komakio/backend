@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, Get, Patch } from '@nestjs/common';
 import { UserReq, Auth } from '@utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
@@ -7,6 +7,7 @@ import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
+import { IsString } from 'class-validator';
 
 class AddToGroupDto {
   @IsString()

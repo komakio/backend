@@ -1,25 +1,19 @@
 import { ObjectID } from 'mongodb';
-import { BaseDbDocument } from '@backend/users/users.model';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { classToClass, Exclude } from 'class-transformer';
 
-export class Group implements BaseDbDocument {
-  @ApiProperty()
+export class Group {
+  @ApiProperty({ type: String })
   public _id: ObjectID;
-  @ApiProperty()
   public createdAt?: Date;
-  @ApiProperty()
   public updatedAt?: Date;
+  public name: string;
+  @ApiPropertyOptional()
+  public url: string;
   @Exclude()
-  @ApiProperty()
   public managersUserIds: ObjectID[];
   @Exclude()
-  @ApiProperty()
   public secret: string;
-  @ApiProperty()
-  public name: string;
-  @ApiProperty()
-  public url: string;
 
   constructor(partial: Partial<Group>) {
     Object.assign(this, partial);
