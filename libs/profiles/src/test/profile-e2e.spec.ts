@@ -5,7 +5,6 @@ import {
   stopTest,
 } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
-import { LoginResult } from '@backend/users/users.controller';
 
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];
@@ -14,7 +13,7 @@ describe('Profile controller', () => {
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
       AppModule,
-      'get_profiles'
+      'profiles'
     );
     app = testController.app;
     tokens = testController.tokens;
