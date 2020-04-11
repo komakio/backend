@@ -69,30 +69,48 @@ describe('Profile controller', () => {
     coverage: 200,
   };
 
+  let neederProfileId: string;
+
   it('Post new helper profile (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` })
       .send(newHelperProfile);
-
     expect(res.body).toEqual(expect.objectContaining(newHelperProfile));
   });
 
   it('Post new needer profile (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${tokens.needer}` })
       .send(newNeederProfile);
 
+    neederProfileId = res.body._id;
     expect(res.body).toEqual(expect.objectContaining(newNeederProfile));
   });
 
-  it('Get all profile (/v1/profiles)', async () => {
+  it('Get all helper profile (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` });
 
     expect(res.body[0]).toEqual(expect.objectContaining(newHelperProfile));
-    expect(res.body[1]).toEqual(expect.objectContaining(newNeederProfile));
+  });
+
+  it('Get all needer profiles (/v1/profiles)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/v1/profiles')
+      .set({ Authorization: `Bearer ${tokens.needer}` });
+
+    expect(res.body[0]).toEqual(expect.objectContaining(newNeederProfile));
+  });
+
+  it('Change profile from needer to helper (/v1/profiles/{id})', async () => {
+    const res = await request(app.getHttpServer())
+      .put(`/v1/profiles/${neederProfileId}`)
+      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .send({ ...newNeederProfile, role: 'helper' });
+
+    expect(res.status).toBe(200);
   });
 });
