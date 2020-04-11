@@ -3,13 +3,20 @@ name: Tests
 on: push
 
 jobs:
-  run-linters:
+  run-tests:
     name: npm run test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         mongodb-version: [4.2]
+
+    services:
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+        options: --entrypoint redis-server
 
     steps:
     - uses: actions/checkout@v2
@@ -24,6 +31,8 @@ jobs:
 
     - run: npm install
     - run: npm run test:ci
+      env:
+        REDIS_HOST: redis
 
 
     - uses: codecov/codecov-action@v1
