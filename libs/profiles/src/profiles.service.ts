@@ -89,7 +89,7 @@ export class ProfilesService {
     profileId: ObjectID;
     groupSecret: string;
   }) {
-    const group = await this.groups.findBySecret(args.groupSecret);
+    const group = await this.groups.findOneBySecret(args.groupSecret);
     if (!group) {
       throw new HttpException('INVALID_SECRET', HttpStatus.FORBIDDEN);
     }
