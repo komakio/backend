@@ -5,7 +5,7 @@ import { ObjectID } from 'mongodb';
 import { Profile } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
-import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
 
 @ApiTags('profiles')
@@ -18,11 +18,6 @@ export class ProfilesController {
 
   @Auth()
   @Get()
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully returned all the user`s profiles.',
-    type: [Profile],
-  })
   public async get(@UserReq() user: User): Promise<Profile[]> {
     return this.profiles.findAllByUserId(new ObjectID(user._id));
   }
@@ -30,11 +25,6 @@ export class ProfilesController {
   @Auth()
   @Post()
   @ApiBody({ type: CreateProfilesDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully created a new profile.',
-    type: Profile,
-  })
   public async create(
     @Body() body: CreateProfilesDto,
     @UserReq() userReq: User
@@ -55,10 +45,6 @@ export class ProfilesController {
   @Auth()
   @Put(':id')
   @ApiBody({ type: PatchProfilesDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully updated the profile.',
-  })
   public async patch(
     @Param('id') id: string,
     @UserReq() user: User,

@@ -3,7 +3,7 @@ import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
-import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
 import {
   CommunicateByTypeEnum,
   ProfileRoleEnum,
@@ -22,11 +22,6 @@ export class RequestsWebFormController {
   @Auth('anonymous')
   @Post('webform')
   @ApiBody({ type: WebFormRequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully created a request through web form.',
-    type: HelpRequest,
-  })
   public async create(
     @Body() body: WebFormRequestBodyDto
   ): Promise<HelpRequest> {

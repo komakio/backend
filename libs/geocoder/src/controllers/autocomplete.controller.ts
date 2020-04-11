@@ -1,5 +1,5 @@
 import { Controller, HttpCode, Post, Body } from '@nestjs/common';
-import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Auth } from '@utils/decorators';
 import { GeocoderService } from '../geocoder.service';
 import { AutocompleteResults, AutocompleteParams } from '../layer.model';
@@ -14,10 +14,6 @@ export class AutocompleteController {
     description: 'Autocomplete results',
   })
   @HttpCode(200)
-  @ApiResponse({
-    status: 200,
-    type: AutocompleteResults,
-  })
   @Auth('anonymous')
   public async autocomplete(
     @Body() params: AutocompleteParams
