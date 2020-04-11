@@ -56,7 +56,7 @@ export class Address {
   @IsOptional()
   @IsString()
   public country?: string;
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => Location)
   public location?: Location;
 }

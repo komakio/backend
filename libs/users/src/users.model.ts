@@ -8,6 +8,10 @@ export enum SocialAuthTypeEnum {
   Google = 'google',
 }
 
+export class UuidRegTokenPair {
+  [uuid: string]: string;
+}
+
 export class User {
   @ApiProperty({ type: String })
   public _id: ObjectID;
@@ -19,7 +23,7 @@ export class User {
   public lastLoginAt?: Date;
   public isAdmin?: boolean;
   public isAnonymous?: boolean;
-  public uuidRegTokenPair?: string;
+  public uuidRegTokenPair?: UuidRegTokenPair;
   public username?: string;
   public language?: string;
   @Exclude()
