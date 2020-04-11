@@ -4,7 +4,6 @@ import { Auth } from '@utils/decorators';
 import { ObjectID } from 'mongodb';
 import {
   ApiTags,
-  ApiResponse,
   ApiBody,
   ApiProperty,
   ApiPropertyOptional,
@@ -37,11 +36,6 @@ export class GroupsController {
   @Auth('admin')
   @Post()
   @ApiBody({ type: CreateGroupDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully created a new group.',
-    type: Group,
-  })
   public async create(@Body() body: CreateGroupDto): Promise<Group> {
     const group = await this.groups.create(body);
     return group?.serialize();

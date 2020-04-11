@@ -66,10 +66,6 @@ export class ProfilesController {
   @Auth()
   @Patch(':id/group')
   @ApiBody({ type: AddToGroupDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully added to the group.',
-  })
   public async addToGroup(
     @Param('id') profileId: string,
     @UserReq() user: User,
