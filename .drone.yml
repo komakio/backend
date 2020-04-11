@@ -92,6 +92,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: c89430878e75266d2831ebd26ed298dedc7d85128707b9652f3192c4afadd137
+hmac: 822a42731bd4e3620507154eb58da01df2a4c95d85927fdb0c74d6549b31fb74
 
 ...
