@@ -1,21 +1,10 @@
 import { Controller, Body, Post } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { Auth } from '@utils/decorators';
-import { ApiProperty, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { EmailService } from '@backend/email';
 import { ConfigService } from '@backend/config';
-
-class AskDto {
-  @IsString()
-  @ApiProperty()
-  public email?: string;
-  @IsString()
-  @ApiProperty()
-  public name?: string;
-  @IsString()
-  @ApiProperty()
-  public content?: string;
-}
+import { AskDto } from './public.dto';
 
 @Controller('v1/public')
 @ApiTags('public')

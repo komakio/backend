@@ -1,6 +1,5 @@
 import { IsNumber, IsString } from 'class-validator';
 import { User } from '../users.model';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class AccessToken {
   public user: User;
@@ -11,11 +10,9 @@ export class AccessToken {
 }
 
 export class AccessTokenResponse {
-  @ApiProperty()
   @IsString()
   public token: string;
   /** Timestamp of expiration in ms */
-  @ApiProperty()
   @IsNumber()
   public expiration: number;
 }

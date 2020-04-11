@@ -3,17 +3,11 @@ import { UserReq, Auth } from '@utils/decorators';
 import { User } from '@backend/users/users.model';
 import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
-import { IsString } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { Profile } from '@backend/profiles/profile.model';
-import { ApiTags, ApiProperty, ApiBody, ApiResponse } from '@nestjs/swagger';
-
-class RequestBodyDto {
-  @IsString()
-  @ApiProperty()
-  public profileId: string;
-}
+import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { RequestBodyDto } from '../requests.dto';
 
 @Controller('v1/requests')
 @ApiTags('requests')

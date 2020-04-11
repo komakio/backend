@@ -1,21 +1,8 @@
 import { Controller, HttpCode, Post, Body } from '@nestjs/common';
-import {
-  ApiResponse,
-  ApiOperation,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Auth } from '@utils/decorators';
-import {
-  AutocompleteParams,
-  GeocoderService,
-  AutocompleteResult,
-} from '../geocoder.service';
-
-class AutocompleteResults {
-  @ApiProperty({ type: AutocompleteResult, isArray: true })
-  public results: AutocompleteResult[];
-}
+import { GeocoderService } from '../geocoder.service';
+import { AutocompleteResults, AutocompleteParams } from '../layer.model';
 
 @ApiTags('geocoder')
 @Controller('v1/geocoder/autocomplete')

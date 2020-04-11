@@ -5,7 +5,7 @@ import {
   stopTest,
 } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
-import { LoginResult } from '../users.controller';
+import { LoginResult } from '../users.model';
 
 describe('Users controller', () => {
   let app: TestApplicationController['app'];
