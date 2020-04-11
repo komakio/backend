@@ -1,35 +1,15 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
-import { IsString, ValidateNested, IsNotEmpty } from 'class-validator';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
-import { ApiTags, ApiProperty, ApiBody, ApiResponse } from '@nestjs/swagger';
-import { Phone, Address } from '@backend/profiles/profile.model';
-import { Type } from 'class-transformer';
+import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  CommunicateByTypeEnum,
+  ProfileRoleEnum,
+} from '@backend/profiles/profile.model';
 import { Auth } from '@utils/decorators';
-
-class WebFormRequestBodyDto {
-  @IsString()
-  @ApiProperty()
-  public firstName: string;
-  @IsString()
-  @ApiProperty()
-  public lastName: string;
-  @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => Address)
-  @ApiProperty({ type: Address })
-  public address: Address;
-  @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => Phone)
-  @ApiProperty({ type: Phone })
-  public phone: Phone;
-  @IsString()
-  @ApiProperty()
-  public email: string;
-}
+import { WebFormRequestBodyDto } from '../requests.dto';
 
 @Controller('v1/requests')
 @ApiTags('requests')
@@ -53,14 +33,14 @@ export class RequestsWebFormController {
     const profile = await this.profiles.create({
       firstName: body.firstName,
       lastName: body.lastName,
-      role: 'needer',
+      role: ProfileRoleEnum.Needer,
       phone: {
         dialCode: body.phone.dialCode,
         number: body.phone.number,
       },
       address: body.address,
       email: body.email,
-      communicateBy: ['email'],
+      communicateBy: [CommunicateByTypeEnum.Email],
     });
     const request = await this.requests.createOne(new ObjectID(profile._id));
 

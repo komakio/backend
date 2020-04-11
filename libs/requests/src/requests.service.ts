@@ -1,6 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { RequestsMongoService } from './services/requests-mongo.service';
-import { HelpRequest } from './requests.model';
+import {
+  HelpRequest,
+  RequestTypeEnum,
+  HelpRequestStatusEnum,
+} from './requests.model';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { NotificationsService } from '@backend/notifications';
@@ -10,6 +14,7 @@ import { getDistance } from '@utils/distance';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { EmailService } from '@backend/email';
 import { TranslationsService } from '@backend/translations';
+import { CommunicateByTypeEnum } from '@backend/profiles/profile.model';
 
 @Injectable()
 export class RequestsService {
@@ -29,9 +34,9 @@ export class RequestsService {
     const request = await this.requestsMongo.createOne({
       requesterShortName: profile.firstName,
       location: profile?.address?.location,
-      status: 'pending',
+      status: HelpRequestStatusEnum.Pending,
       requesterProfileId: new ObjectID(profileId),
-      type: 'misc',
+      type: RequestTypeEnum.Misc,
     });
     const profilesWithDistance = await this.profiles.findNearHelpersWithDistanceById(
       new ObjectID(profileId)
@@ -56,7 +61,7 @@ export class RequestsService {
   public async cancelOne(id: ObjectID) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(id),
-      data: { status: 'canceled', candidates: [] },
+      data: { status: HelpRequestStatusEnum.Canceled, candidates: [] },
     });
   }
 
@@ -67,7 +72,7 @@ export class RequestsService {
     await this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
       data: {
-        status: 'accepted',
+        status: HelpRequestStatusEnum.Accepted,
         acceptorProfileId: new ObjectID(args.acceptorProfileId),
         acceptorDistance: request.candidates.find(c =>
           c.profileId.equals(args.acceptorProfileId)
@@ -81,7 +86,7 @@ export class RequestsService {
       new ObjectID(request.requesterProfileId)
     );
 
-    if (requesterProfile.communicateBy?.includes('email')) {
+    if (requesterProfile.communicateBy?.includes(CommunicateByTypeEnum.Email)) {
       await this.email.send(
         requesterProfile.email,
         'Someone accepted your request (KOMAK.IO)',
@@ -123,7 +128,7 @@ export class RequestsService {
   public async finishOne(args: { id: ObjectID; profileId: ObjectID }) {
     return this.requestsMongo.patchOneById({
       id: new ObjectID(args.id),
-      data: { status: 'used' },
+      data: { status: HelpRequestStatusEnum.Used },
     });
   }
 
@@ -186,7 +191,7 @@ export class RequestsService {
   }) {
     const request = await this.requestsMongo.findOneById(new ObjectID(args.id));
     if (
-      !request.candidates.find(({ profileId }) =>
+      !request.candidates?.find(({ profileId }) =>
         profileId.equals(args.responseProfileId)
       )
     ) {

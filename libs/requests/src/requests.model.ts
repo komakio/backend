@@ -2,59 +2,51 @@ import { ObjectID } from 'mongodb';
 import { Location } from '@backend/profiles/profile.model';
 import { ApiProperty } from '@nestjs/swagger';
 
-export const HelpRequestStatusEnum = [
-  'pending',
-  'canceled',
-  'accepted',
-  'used',
-] as const;
-export type HelpRequestStatus = typeof HelpRequestStatusEnum[number];
+export enum HelpRequestStatusEnum {
+  Pending = 'pending',
+  Canceled = 'canceled',
+  Accepted = 'accepted',
+  Used = 'used',
+}
 
-export const RequestTypeEnum = ['misc'] as const;
-export type HelpRequestType = typeof RequestTypeEnum[number];
+export enum RequestTypeEnum {
+  Misc = 'misc',
+}
 
 class Candidate {
   @ApiProperty({ type: String })
   public profileId: ObjectID;
-  @ApiProperty()
   public distance: number;
 }
 
 export class HelpRequest {
   @ApiProperty({ type: String })
   public _id: ObjectID;
-  @ApiProperty()
   public createdAt: Date;
-  @ApiProperty()
   public updatedAt: Date;
-  @ApiProperty({ enum: HelpRequestStatusEnum })
-  public status: HelpRequestStatus;
-  @ApiProperty({ type: Candidate, isArray: true })
+  public status: HelpRequestStatusEnum;
   public candidates: Candidate[];
-  @ApiProperty()
   public requesterShortName: string;
   @ApiProperty({ type: String })
   public requesterProfileId: ObjectID;
-  @ApiProperty()
   public acceptorShortName: string;
   @ApiProperty({ type: String })
   public acceptorProfileId: ObjectID;
-  @ApiProperty()
   public acceptorDistance: number;
-  @ApiProperty({ enum: RequestTypeEnum })
-  public type: HelpRequestType;
-  @ApiProperty()
+  public type: RequestTypeEnum;
   public comment: string;
-  @ApiProperty({ type: Location })
   public location: Location;
 }
 
 export class DispatchRequestQueue {
+  @ApiProperty({ type: String })
   public profileId: ObjectID;
+  @ApiProperty({ type: String })
   public requestId: ObjectID;
 }
 
 export class SubscribeNewHelperRequestQueue {
+  @ApiProperty({ type: String })
   public profileId: ObjectID;
 }
 

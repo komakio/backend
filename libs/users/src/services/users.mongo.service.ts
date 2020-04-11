@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User, SocialAuthType } from '../users.model';
+import { User, SocialAuthTypeEnum } from '../users.model';
 import { ObjectID } from 'mongodb';
 import { MongoService } from '@backend/mongo';
 
@@ -60,7 +60,7 @@ export class UsersMongoService {
 
   public async findOneBySocialAuth(args: {
     socialAuthId: string;
-    socialAuthType: SocialAuthType;
+    socialAuthType: SocialAuthTypeEnum;
   }): Promise<User> {
     await this.mongo.waitReady();
     const user = await this.mongo.db.collection(collection).findOne({

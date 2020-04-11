@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersMongoService } from './services/users.mongo.service';
 import { ObjectID } from 'mongodb';
-import { User, SocialAuthType } from './users.model';
+import { User, SocialAuthTypeEnum } from './users.model';
 import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
 import { compareHash, hashString } from '@utils/hash';
@@ -30,12 +30,18 @@ export class UsersService {
 
   public async appleLogin(identityToken: string) {
     const socialAuthId = await this.apple.getAppleId(identityToken);
-    return this.getSocialUser({ socialAuthId, socialAuthType: 'apple' });
+    return this.getSocialUser({
+      socialAuthId,
+      socialAuthType: SocialAuthTypeEnum.Apple,
+    });
   }
 
   public async googleLogin(identityToken: string) {
     const socialAuthId = await this.google.getTicket(identityToken);
-    return this.getSocialUser({ socialAuthId, socialAuthType: 'google' });
+    return this.getSocialUser({
+      socialAuthId,
+      socialAuthType: SocialAuthTypeEnum.Google,
+    });
   }
 
   public async recaptchaLogin(response: string) {
@@ -83,7 +89,7 @@ export class UsersService {
 
   private async getSocialUser(args: {
     socialAuthId: string;
-    socialAuthType: SocialAuthType;
+    socialAuthType: SocialAuthTypeEnum;
   }) {
     if (!args.socialAuthId) {
       throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
