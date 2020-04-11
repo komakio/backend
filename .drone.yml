@@ -1,4 +1,70 @@
 ---
+
+####
+####
+#### Run on PR
+####
+####
+
+kind: pipeline
+name: Run CI stack
+
+trigger:
+  event:
+    include:
+    - pull_request
+
+steps:
+  - name: npm-install
+    image: node:12
+    depends_on: [ clone ] 
+    commands:
+      - npm install
+
+  - name: Lint Typescript
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      - npm run lint
+
+  - name: Type checking
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      - npm run tsc
+
+
+  - name: Units Tests
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      - MONGO_HOST=mongo REDIS_HOST=redis npm run test:ci
+
+  - name: coverage
+    depends_on: [ Units Tests ] 
+    image: plugins/codecov
+    settings:
+      token:
+        from_secret: CODECOV_TOKEN
+      files:
+      - ./coverage/clover.xml
+      flags:
+      - unit
+
+
+services:
+- name: redis
+  image: redis
+- name: mongo
+  image: mongo
+
+
+---
+####
+####
+#### Build Staging
+####
+####
 kind: pipeline
 name: Build&Push image
 
@@ -92,6 +158,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: 1573c998e04c701b4bdd88eec047a971aef0e82388d9e2dbda301a11a8b3d3b3
+hmac: 8e7d998bacd9a806fd33b470c72d1a9708975e56c926a5f2c182f4acb3b33aa1
 
 ...
