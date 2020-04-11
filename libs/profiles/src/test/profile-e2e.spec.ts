@@ -78,7 +78,7 @@ describe('Profile controller', () => {
     expect(res.body).toEqual(expect.objectContaining(newHelperProfile));
   });
 
-  it('Post new helper profile (/v1/profiles)', async () => {
+  it('Post new needer profile (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` })
@@ -93,8 +93,6 @@ describe('Profile controller', () => {
       .set({ Authorization: `Bearer ${tokens.helper}` });
 
     expect(res.body[0]).toEqual(expect.objectContaining(newHelperProfile));
-    expect(res.body[0].role).toBe('helper');
     expect(res.body[1]).toEqual(expect.objectContaining(newNeederProfile));
-    expect(res.body[1].role).toBe('needer');
   });
 });
