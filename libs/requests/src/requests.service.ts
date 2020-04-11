@@ -15,6 +15,7 @@ import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { EmailService } from '@backend/email';
 import { TranslationsService } from '@backend/translations';
 import { CommunicateByTypeEnum } from '@backend/profiles/profile.model';
+import { getRequestAcceptedTemplate } from '@utils/templates';
 
 @Injectable()
 export class RequestsService {
@@ -89,12 +90,14 @@ export class RequestsService {
     if (requesterProfile.communicateBy?.includes(CommunicateByTypeEnum.Email)) {
       await this.email.send(
         requesterProfile.email,
-        'Someone accepted your request (KOMAK.IO)',
-        `${profile.firstName} ${
-          profile.lastName
-        } has accepted to help you. This is the volunteer's phone number: ${
-          profile.phone.dialCode ? profile.phone.dialCode : ''
-        }${profile.phone.number}.`
+        `Good news, ${profile.firstName} has agreed to help you out!`,
+        getRequestAcceptedTemplate({
+          requesterName: requesterProfile.firstName,
+          acceptorName: `${profile.firstName} ${profile.lastName}`,
+          acceptorPhone: `${
+            profile.phone.dialCode ? profile.phone.dialCode : ''
+          }${profile.phone.number}`,
+        })
       );
       return;
     }
