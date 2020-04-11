@@ -1,5 +1,4 @@
 import { Controller, Body, Post } from '@nestjs/common';
-import { IsString } from 'class-validator';
 import { Auth } from '@utils/decorators';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { EmailService } from '@backend/email';

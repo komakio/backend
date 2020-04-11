@@ -5,7 +5,6 @@ import { ObjectID } from 'mongodb';
 import { Profile } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
-import { UsersService } from '@backend/users';
 import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
 
