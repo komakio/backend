@@ -4,7 +4,7 @@ import { Profile } from './profile.model';
 import { ObjectID } from 'mongodb';
 import { getDistance } from '@utils/distance';
 import { ConfigService } from '@backend/config';
-import { GroupsService } from './groups/groups.service';
+import { GroupsService } from '@backend/groups';
 
 @Injectable()
 export class ProfilesService {

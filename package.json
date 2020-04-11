@@ -137,7 +137,9 @@
       "@backend/public/(.*)": "<rootDir>/libs/public/src/$1",
       "@backend/public": "<rootDir>/libs/public/src",
       "@backend/translations/(.*)": "<rootDir>/libs/translations/src/$1",
-      "@backend/translations": "<rootDir>/libs/translations/src"
+      "@backend/translations": "<rootDir>/libs/translations/src",
+      "@backend/groups/(.*)": "<rootDir>/libs/groups/src/$1",
+      "@backend/groups": "<rootDir>/libs/groups/src"
     }
   }
 }

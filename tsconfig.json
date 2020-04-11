@@ -101,6 +101,12 @@
       ],
       "@backend/translations/*": [
         "libs/translations/src/*"
+      ],
+      "@backend/groups": [
+        "libs/groups/src"
+      ],
+      "@backend/groups/*": [
+        "libs/groups/src/*"
       ]
     }
   },
