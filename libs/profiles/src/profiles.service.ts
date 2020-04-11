@@ -95,7 +95,7 @@ export class ProfilesService {
     }
     await this.patchOneById({
       id: new ObjectID(args.profileId),
-      data: { groupId: group._id },
+      data: { groupId: new ObjectID(group._id) },
     });
     return group;
   }

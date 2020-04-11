@@ -69,25 +69,6 @@ export class Phone {
   public number: string;
 }
 
-export class PatchableProfile {
-  @ApiProperty()
-  public self?: boolean;
-  @ApiProperty()
-  public firstName: string;
-  @ApiProperty()
-  public lastName: string;
-  @ApiProperty({ type: Address })
-  public address?: Address;
-  @ApiProperty()
-  public disabled?: boolean;
-  @ApiProperty({ enum: ProfileRoleEnum })
-  public role: ProfileRoleEnum;
-  @ApiProperty({ type: Phone })
-  public phone: Phone;
-  @ApiProperty()
-  public coverage: number;
-}
-
 export class Profile {
   @ApiProperty()
   public _id: ObjectID;

@@ -64,7 +64,7 @@ export class ProfilesController {
   }
 
   @Auth()
-  @Patch(':id')
+  @Patch(':id/group')
   @ApiBody({ type: AddToGroupDto })
   @ApiResponse({
     status: 200,
