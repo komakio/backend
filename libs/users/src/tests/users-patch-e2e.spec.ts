@@ -29,7 +29,6 @@ describe('Users patch controllers', () => {
         uuid: 'fZIfOWUWeGQ',
         registrationToken: 'APA91bGh6bZEj6yRENLOJ9lc1yKLG3anUSksP4KMnmWoSabdpc',
       });
-
     expect(res.status).toBe(200);
   });
 
@@ -41,7 +40,6 @@ describe('Users patch controllers', () => {
         uuid: 'fZIfOWUWeGQ',
         registrationToken: 'APA91bGh6bZEj6yRENLOJ9lc1yKLG3anUSksP4KMnmWoSabdpc',
       });
-
     expect(res.status).toBe(403);
   });
 
