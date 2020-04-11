@@ -27,6 +27,11 @@ export class TranslationsService {
     };
   }) {
     if (!args.languageCode) {
+      this.replaceVariables({
+        translation: { ...crowdinSourceStrings },
+        variables: args.variables,
+      });
+
       return crowdinSourceStrings;
     }
 
@@ -45,12 +50,19 @@ export class TranslationsService {
       translation = crowdinSourceStrings;
     }
 
-    //replace variables with real data (eg. {{name}} => Ali)
-    for (const tKey in translation) {
-      if (translation.hasOwnProperty(tKey) && tKey !== 'languageCodes') {
+    this.replaceVariables({ translation, variables: args.variables });
+    return translation;
+  }
+
+  private replaceVariables(args: {
+    translation: Translation;
+    variables: object;
+  }) {
+    for (const tKey in args.translation) {
+      if (args.translation.hasOwnProperty(tKey) && tKey !== 'languageCodes') {
         for (const vKey in args.variables) {
           if (args.variables.hasOwnProperty(vKey)) {
-            translation[tKey] = translation[tKey].replace(
+            args.translation[tKey] = args.translation[tKey].replace(
               `{{${vKey}}}`,
               `${args.variables[vKey]}`
             );
@@ -58,7 +70,6 @@ export class TranslationsService {
         }
       }
     }
-    return translation;
   }
 
   private async getFromCrowdin() {

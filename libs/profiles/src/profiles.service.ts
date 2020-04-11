@@ -26,7 +26,7 @@ export class ProfilesService {
     }
   }
 
-  public async findOneById(id: ObjectID) {
+  public async findOneById(id: ObjectID): Promise<Profile> {
     return this.profilesMongo.findOneById(new ObjectID(id));
   }
 

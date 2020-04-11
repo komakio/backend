@@ -23,7 +23,7 @@ export class RequestsController {
     private profiles: ProfilesService
   ) {}
 
-  @Auth('anonymous')
+  @Auth()
   @Post()
   @ApiBody({ type: RequestBodyDto })
   @ApiResponse({
