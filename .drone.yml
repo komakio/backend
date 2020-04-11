@@ -38,14 +38,23 @@ steps:
     image: node:12
     depends_on: [ npm-install ] 
     commands:
-      # - MONGO_HOST=mongo REDIS_HOST=redis RABBITMQ_HOST=rabbitmq npm run test:ci
       - MONGO_HOST=mongo REDIS_HOST=redis npm run test:ci
+
+  - name: coverage
+    depends_on: [ Units Tests ] 
+    image: plugins/codecov
+    settings:
+      token:
+        from_secret: CODECOV_TOKEN
+      files:
+      - ./coverage/clover.xml
+      flags:
+      - unit
+
 
 services:
 - name: redis
   image: redis
-# - name: rabbitmq
-#   image: rabbitmq
 - name: mongo
   image: mongo
 
@@ -149,6 +158,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: 1737b724f13148ccea9c66f4a9dd1cc7c95e8298de8f75187ea107687a6e0894
+hmac: 8e7d998bacd9a806fd33b470c72d1a9708975e56c926a5f2c182f4acb3b33aa1
 
 ...
