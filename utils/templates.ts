@@ -6,7 +6,7 @@ export const getRequestAcceptedTemplate = (args: {
   acceptorPhone: string;
 }) => {
   return `
-  <mjml>
+    <mjml>
         ${head}
         <mj-body>
             <mj-section>
