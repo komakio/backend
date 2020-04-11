@@ -87,6 +87,7 @@ export class RequestsService {
         'Someone accepted your request (KOMAK.IO)',
         `${profile.firstName} ${profile.lastName} has accepted to help you. this is the volunteer's phone number: ${profile.phone}.`
       );
+      return;
     }
 
     const user = await this.users.findOneById(
