@@ -5,7 +5,7 @@ import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('v1')
 @ApiTags('profiles')
@@ -17,11 +17,6 @@ export class ProfilesRequestsController {
 
   @Auth()
   @Get('profiles/:id/requests')
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully returned the profile requests',
-    type: [HelpRequest],
-  })
   public async getProfileRequests(
     @UserReq() user: User,
     @Param('id') id: string

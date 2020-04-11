@@ -4,7 +4,7 @@ import { User, LoginResult } from './users.model';
 import { AuthService } from './auth/services/auth.service';
 import { UserReq, Auth } from '@utils/decorators';
 import { ObjectID } from 'mongodb';
-import { ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   UserPassLoginDto,
   CaptchaLoginDto,
@@ -20,10 +20,6 @@ export class UsersController {
 
   @Auth()
   @Get('current')
-  @ApiResponse({
-    description: 'Successfully returned the current user.',
-    type: User,
-  })
   public async getCurrent(@UserReq() userReq: User): Promise<User> {
     const user = await this.users.findOneById(new ObjectID(userReq._id));
     return user?.serialize();
@@ -31,10 +27,6 @@ export class UsersController {
 
   @Post('captcha')
   @ApiBody({ type: UserPassLoginDto })
-  @ApiResponse({
-    description: 'Successfully logged in using recaptcha',
-    type: LoginResult,
-  })
   public async captchaLogin(
     @Body() body: CaptchaLoginDto
   ): Promise<LoginResult> {
@@ -48,10 +40,6 @@ export class UsersController {
 
   @Post('login')
   @ApiBody({ type: UserPassLoginDto })
-  @ApiResponse({
-    description: 'Successfully logged in.',
-    type: LoginResult,
-  })
   public async login(@Body() body: UserPassLoginDto): Promise<LoginResult> {
     const user = await this.users.passwordLogin(body);
     const accessToken = await this.auth.generateAccessToken(user);
@@ -60,11 +48,6 @@ export class UsersController {
 
   @Post('login/apple')
   @ApiBody({ type: IdentityTokenLoginDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully logged in.',
-    type: LoginResult,
-  })
   public async appleLogin(
     @Body() body: IdentityTokenLoginDto
   ): Promise<LoginResult> {
@@ -75,11 +58,6 @@ export class UsersController {
 
   @Post('login/google')
   @ApiBody({ type: IdentityTokenLoginDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully logged in.',
-    type: LoginResult,
-  })
   public async googleLogin(
     @Body() body: IdentityTokenLoginDto
   ): Promise<LoginResult> {
@@ -91,10 +69,6 @@ export class UsersController {
   @Auth()
   @Patch('registration-token')
   @ApiBody({ type: RegistrationTokenDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully added the registration token.',
-  })
   public async patchRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
@@ -110,10 +84,6 @@ export class UsersController {
   @Auth()
   @Post('registration-token/unset')
   @ApiBody({ type: RegistrationTokenDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully removed the registration token.',
-  })
   public async deleteRegistrationToken(
     @UserReq() user: User,
     @Body() body: RegistrationTokenDto
@@ -129,10 +99,6 @@ export class UsersController {
   @Auth()
   @Patch()
   @ApiBody({ type: PatchUserDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully updated the user.',
-  })
   public async patch(@UserReq() user: User, @Body() data: PatchUserDto) {
     await this.users.patch({ id: new ObjectID(user._id), set: data });
   }

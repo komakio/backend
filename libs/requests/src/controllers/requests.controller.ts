@@ -6,7 +6,7 @@ import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { Profile } from '@backend/profiles/profile.model';
-import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { RequestBodyDto } from '../requests.dto';
 
 @Controller('v1/requests')
@@ -20,11 +20,6 @@ export class RequestsController {
   @Auth()
   @Post()
   @ApiBody({ type: RequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully created a request.',
-    type: HelpRequest,
-  })
   public async create(
     @UserReq() user: User,
     @Body() body: RequestBodyDto
@@ -40,10 +35,6 @@ export class RequestsController {
   @Auth()
   @Post(':id/cancel')
   @ApiBody({ type: RequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully cancelled the request.',
-  })
   public async cancel(
     @Param('id') id: string,
     @UserReq() user: User,
@@ -59,10 +50,6 @@ export class RequestsController {
   @Auth()
   @Post(':id/accept')
   @ApiBody({ type: RequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully accepted the request.',
-  })
   public async accept(
     @Param('id') id: string,
     @Body() body: RequestBodyDto
@@ -80,10 +67,6 @@ export class RequestsController {
   @Auth()
   @Post(':id/refuse')
   @ApiBody({ type: RequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully refused the request.',
-  })
   public async refuse(
     @Param('id') id: string,
     @Body() body: RequestBodyDto
@@ -101,10 +84,6 @@ export class RequestsController {
   @Auth()
   @Post(':id/finish')
   @ApiBody({ type: RequestBodyDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Successfully marked the request as finished.',
-  })
   public async finish(
     @Param('id') id: string,
     @Body() body: RequestBodyDto
@@ -122,12 +101,6 @@ export class RequestsController {
 
   @Auth()
   @Get(':id/profiles/:profileId')
-  @ApiResponse({
-    status: 200,
-    description:
-      'Successfully returned the requester and acceptor profile details',
-    type: [Profile],
-  })
   public async getProfileRequests(
     @Param('id') id: string,
     @Param('profileId') profileId: string

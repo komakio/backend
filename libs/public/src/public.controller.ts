@@ -1,6 +1,6 @@
 import { Controller, Body, Post } from '@nestjs/common';
 import { Auth } from '@utils/decorators';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { EmailService } from '@backend/email';
 import { ConfigService } from '@backend/config';
 import { AskDto } from './public.dto';
@@ -12,9 +12,6 @@ export class PublicController {
 
   @Auth('anonymous')
   @Post('ask')
-  @ApiResponse({
-    description: 'Successfully sent email.',
-  })
   public async ask(@Body() body: AskDto): Promise<void> {
     const { email, name, content } = body;
     await this.email.send(
