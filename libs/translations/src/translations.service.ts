@@ -27,12 +27,13 @@ export class TranslationsService {
     };
   }) {
     if (!args.languageCode) {
+      const translation = { ...crowdinSourceStrings };
       this.replaceVariables({
-        translation: { ...crowdinSourceStrings },
+        translation,
         variables: args.variables,
       });
 
-      return crowdinSourceStrings;
+      return translation;
     }
 
     let translations = await this.translationsRedis.getWithExpire();

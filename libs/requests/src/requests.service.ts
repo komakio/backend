@@ -85,7 +85,7 @@ export class RequestsService {
       await this.email.send(
         requesterProfile.email,
         'Someone accepted your request (KOMAK.IO)',
-        `${profile.firstName} ${profile.lastName} has accepted to help you. this is the volunteer's phone number: ${profile.phone}.`
+        `${profile.firstName} ${profile.lastName} has accepted to help you. This is the volunteer's phone number: ${profile.phone.dialCode}${profile.phone.number}.`
       );
       return;
     }
