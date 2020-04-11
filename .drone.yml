@@ -1,4 +1,56 @@
 ---
+
+####
+####
+#### Run CI stack
+####
+####
+
+kind: pipeline
+type: kubernetes
+name: Run CI stack
+
+trigger:
+  event:
+    include:
+    - pull_request
+
+steps:
+  - name: npm-install
+    image: node:12
+    depends_on: [ clone ] 
+    commands:
+      - npm install
+
+  - name: Lint Typescript
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      - npm run lint
+
+  - name: Type checking
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      - npm run tsc
+
+
+  - name: Units Tests
+    image: node:12
+    depends_on: [ npm-install ] 
+    commands:
+      # - MONGO_HOST=mongo REDIS_HOST=redis RABBITMQ_HOST=rabbitmq npm run test:ci
+      - MONGO_HOST=mongo REDIS_HOST=redis npm run test:ci
+
+services:
+- name: redis
+  image: redis
+# - name: rabbitmq
+#   image: rabbitmq
+- name: mongo
+  image: mongo
+
+---
 kind: pipeline
 name: Build&Push image
 
@@ -92,6 +144,6 @@ steps:
       {{/success}}
 ---
 kind: signature
-hmac: 1573c998e04c701b4bdd88eec047a971aef0e82388d9e2dbda301a11a8b3d3b3
+hmac: f3bd75857e648cfbc73b51d2c01b3cf623ff380de67ee122d51d6f74a403e4cf
 
 ...
