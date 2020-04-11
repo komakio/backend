@@ -6,11 +6,11 @@ import { GroupsMongoService } from './services/groups-mongo.service';
 export class GroupsService {
   constructor(private groupsMongo: GroupsMongoService) {}
 
-  public async findGroupBySecret(secret: string) {
+  public async findBySecret(secret: string) {
     return this.groupsMongo.findOneBy({ secret });
   }
 
-  public async createOneGroup(data: Partial<Group>) {
+  public async create(data: Partial<Group>) {
     return this.groupsMongo.createOne(data);
   }
 }
