@@ -88,7 +88,7 @@ export class ConfigService {
   };
 
   public recaptcha = {
-    score: process.env.RECAPTCHA_SCORE || 0.5,
+    score: parseInt(process.env.RECAPTCHA_SCORE) || 0.5,
     secret:
       process.env.RECAPTCHA_SECRET ||
       '6Lc2ReUUAAAAAO-oGA0nnHTNBf90r1w0FzGPViMU',
