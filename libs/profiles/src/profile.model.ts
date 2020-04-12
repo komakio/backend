@@ -70,7 +70,7 @@ export class Phone {
 }
 
 export class Profile {
-  @ApiProperty()
+  @ApiProperty({ type: String })
   public _id: ObjectID;
   @ApiProperty({ type: String })
   public userId: ObjectID;

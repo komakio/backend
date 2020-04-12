@@ -64,3 +64,8 @@ export class CreateProfilesDto {
   @IsNumber()
   public coverage: number;
 }
+
+export class AddToGroupDto {
+  @IsString()
+  public secret: string;
+}

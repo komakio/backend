@@ -6,13 +6,11 @@ import { Profile } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
-import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
-import { IsString } from 'class-validator';
-
-class AddToGroupDto {
-  @IsString()
-  public secret: string;
-}
+import {
+  PatchProfilesDto,
+  CreateProfilesDto,
+  AddToGroupDto,
+} from './profiles.dto';
 
 @ApiTags('profiles')
 @Controller('v1/profiles')
