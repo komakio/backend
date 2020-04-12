@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, Get, Patch } from '@nestjs/common';
 import { UserReq, Auth } from '@utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
@@ -6,7 +6,11 @@ import { Profile } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
-import { PatchProfilesDto, CreateProfilesDto } from './profiles.dto';
+import {
+  PatchProfilesDto,
+  CreateProfilesDto,
+  AddToGroupDto,
+} from './profiles.dto';
 
 @ApiTags('profiles')
 @Controller('v1/profiles')
@@ -55,5 +59,24 @@ export class ProfilesController {
       userId: new ObjectID(user._id),
     });
     await this.profiles.patchOneById({ id: new ObjectID(id), data });
+  }
+
+  @Auth()
+  @Patch(':id/group')
+  @ApiBody({ type: AddToGroupDto })
+  public async addToGroup(
+    @Param('id') profileId: string,
+    @UserReq() user: User,
+    @Body() data: AddToGroupDto
+  ) {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(profileId),
+      userId: new ObjectID(user._id),
+    });
+    const group = await this.profiles.addOneToGroup({
+      profileId: new ObjectID(profileId),
+      groupSecret: data.secret,
+    });
+    return { group: group?.serialize() };
   }
 }

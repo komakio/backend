@@ -5,12 +5,14 @@ import { AuthService } from './services/auth.service';
 import { User } from '../users.model';
 import { Request } from 'express';
 import { Role } from '@utils/decorators';
+import { ConfigService } from '@backend/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly auth: AuthService
+    private readonly auth: AuthService,
+    private readonly config: ConfigService
   ) {}
 
   public canActivate(
@@ -22,6 +24,12 @@ export class AuthGuard implements CanActivate {
     } = context.switchToHttp().getRequest();
 
     const auth = req.headers.authorization;
+    const isLoggedIn = this.reflector.get('isLoggedIn', context.getHandler());
+    const roles = this.reflector.get<Role[]>('roles', context.getHandler());
+
+    if (roles?.includes('admin')) {
+      return auth === this.config.adminApiToken;
+    }
 
     const accessToken =
       auth?.indexOf('Bearer ') === 0
@@ -35,14 +43,7 @@ export class AuthGuard implements CanActivate {
       }
     }
 
-    const isLoggedIn = this.reflector.get('isLoggedIn', context.getHandler());
-    const roles = this.reflector.get<Role[]>('roles', context.getHandler());
-
     if ((isLoggedIn || (roles && roles.length)) && !req.user) {
-      return false;
-    }
-
-    if (roles && roles.includes('admin') && !req.user.isAdmin) {
       return false;
     }
 

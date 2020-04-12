@@ -11,6 +11,7 @@ export class ConfigService {
   };
   public delayNotificationTime =
     parseInt(process.env.DELAY_NOTIFICATION_TIME) || 3 * 60 * 1000;
+  public adminApiToken = process.env.ADMIN_API_TOKEN || 'lorem';
 
   public host = this.isProduction
     ? process.env.HOST
@@ -82,7 +83,7 @@ export class ConfigService {
   };
 
   public mailgun = {
-    apiKey: process.env.EMAIL_API_KEY || 'something',
+    apiKey: process.env.EMAIL_API_KEY || 'lorem',
     domain: process.env.EMAIL_DOMAIN,
     from: process.env.EMAIL_ADDRESS,
   };
@@ -95,7 +96,7 @@ export class ConfigService {
   };
 
   public crowdin = {
-    apiKey: process.env.CROWDIN_API_KEY || '',
-    projectId: process.env.CROWDIN_PROJECT_ID || '',
+    apiKey: process.env.CROWDIN_API_KEY || 'lorem',
+    projectId: process.env.CROWDIN_PROJECT_ID || 'lorem',
   };
 }

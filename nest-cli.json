@@ -148,6 +148,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/translations/tsconfig.lib.json"
       }
+    },
+    "groups": {
+      "type": "library",
+      "root": "libs/groups",
+      "entryFile": "index",
+      "sourceRoot": "libs/groups/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/groups/tsconfig.lib.json"
+      }
     }
   }
 }

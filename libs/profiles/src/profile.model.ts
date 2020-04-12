@@ -74,6 +74,8 @@ export class Profile {
   public _id: ObjectID;
   @ApiProperty({ type: String })
   public userId: ObjectID;
+  @ApiProperty({ type: String })
+  public groupId: ObjectID;
   public createdAt: Date;
   public updatedAt: Date;
   public lastActivityAt: Date;
