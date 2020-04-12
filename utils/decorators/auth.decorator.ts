@@ -1,9 +1,9 @@
 import { SetMetadata, applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
-export type Role = 'admin' | 'super-admin' | 'anonymous';
+export type Role = 'admin' | 'anonymous';
 
-export function Auth(roles?: Role | Role[], deactivate = false) {
+export function Auth(roles?: Role, deactivate = false) {
   if (deactivate) {
     return applyDecorators();
   }
