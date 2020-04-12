@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     const isLoggedIn = this.reflector.get('isLoggedIn', context.getHandler());
     const roles = this.reflector.get<Role[]>('roles', context.getHandler());
 
-    if (roles.includes('admin')) {
+    if (roles?.includes('admin')) {
       return auth === this.config.adminApiToken;
     }
 
