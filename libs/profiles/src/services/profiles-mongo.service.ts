@@ -4,23 +4,23 @@ import { Profile } from '../profile.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 import { ConfigService } from '@backend/config';
 
-const collection = 'profiles';
 @Injectable()
 export class ProfilesMongoService {
   constructor(private mongo: MongoService, private config: ConfigService) {}
+  private collection = 'profiles';
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { userId: 1 });
-    this.mongo.addIndex(collection, { role: 1 });
-    this.mongo.addIndex(collection, { country: 1 });
-    this.mongo.addIndex(collection, { disabled: 1 });
-    this.mongo.addIndex(collection, { 'address.location': '2dsphere' });
+    this.mongo.addIndex(this.collection, { userId: 1 });
+    this.mongo.addIndex(this.collection, { role: 1 });
+    this.mongo.addIndex(this.collection, { country: 1 });
+    this.mongo.addIndex(this.collection, { disabled: 1 });
+    this.mongo.addIndex(this.collection, { 'address.location': '2dsphere' });
   }
 
   public async createOne(profile: Partial<Profile>): Promise<Profile> {
     await this.mongo.waitReady();
     const req = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .insertOne({ ...profile, createdAt: new Date() });
     return req.ops[0];
   }
@@ -31,7 +31,7 @@ export class ProfilesMongoService {
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .updateOne(
         { _id: new ObjectID(args.id) },
         { $set: { ...args.data, updatedAt: new Date() } }
@@ -41,14 +41,14 @@ export class ProfilesMongoService {
   public async findOneById(id: ObjectID): Promise<Profile> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .findOne({ _id: new ObjectID(id) });
   }
 
   public async findAllByUserId(userId: ObjectID): Promise<Profile[]> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find({ userId: new ObjectID(userId) })
       .toArray();
   }
@@ -60,7 +60,7 @@ export class ProfilesMongoService {
   }): Promise<Profile[]> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find({ _id: { $in: args.ids } })
       .skip(args.skip || 0)
       .limit(args.limit || 0)
@@ -77,7 +77,7 @@ export class ProfilesMongoService {
   }): Promise<Profile[]> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find({
         ...args.filters,
         'address.location': {

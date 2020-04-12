@@ -3,40 +3,42 @@ import { User, SocialAuthTypeEnum } from '../users.model';
 import { ObjectID } from 'mongodb';
 import { MongoService } from '@backend/mongo';
 
-const collection = 'users';
 @Injectable()
 export class UsersMongoService {
   constructor(private mongo: MongoService) {}
+  private collection = 'user';
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { SocialAuthType: 1 });
-    this.mongo.addIndex(collection, { authId: 1 });
+    this.mongo.addIndex(this.collection, { SocialAuthType: 1 });
+    this.mongo.addIndex(this.collection, { authId: 1 });
   }
 
   public async createOne(user: Partial<User>): Promise<User> {
     await this.mongo.waitReady();
     const req = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .insertOne({ ...user, createdAt: new Date() });
     return new User(req.ops[0]);
   }
 
   public async findOneById(id: ObjectID): Promise<User> {
     const user = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .findOne({ _id: new ObjectID(id) });
     return user ? new User(user) : null;
   }
 
   public async findManyByIds(ids: ObjectID[]): Promise<User[]> {
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find({ _id: { $in: ids } })
       .toArray();
   }
 
   public async findOneBy(filters: any): Promise<User> {
-    const user = await this.mongo.db.collection(collection).findOne(filters);
+    const user = await this.mongo.db
+      .collection(this.collection)
+      .findOne(filters);
     return user ? new User(user) : null;
   }
 
@@ -54,7 +56,7 @@ export class UsersMongoService {
       query.$unset = { ...args.unset, updatedAt: new Date() };
     }
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .updateOne({ _id: new ObjectID(args.id) }, { ...query });
   }
 
@@ -63,7 +65,7 @@ export class UsersMongoService {
     socialAuthType: SocialAuthTypeEnum;
   }): Promise<User> {
     await this.mongo.waitReady();
-    const user = await this.mongo.db.collection(collection).findOne({
+    const user = await this.mongo.db.collection(this.collection).findOne({
       socialAuthType: args.socialAuthType,
       socialAuthId: args.socialAuthId,
     });
@@ -73,7 +75,7 @@ export class UsersMongoService {
   public async findOneByUsername(username: string): Promise<User> {
     await this.mongo.waitReady();
     const user = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .findOne({ username });
     return user ? new User(user) : null;
   }
