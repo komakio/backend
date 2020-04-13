@@ -5,21 +5,21 @@ import { UpdateWriteOpResult, ObjectID } from 'mongodb';
 import { Location } from '@backend/profiles/profile.model';
 import { ConfigService } from '@backend/config';
 
-const collection = 'requests';
 @Injectable()
 export class RequestsMongoService {
   constructor(private mongo: MongoService, private config: ConfigService) {}
+  private collection = 'requests';
 
   public onApplicationBootstrap() {
-    this.mongo.addIndex(collection, { status: 1 });
-    this.mongo.addIndex(collection, { createdAt: 1 });
-    this.mongo.addIndex(collection, { location: '2dsphere' });
+    this.mongo.addIndex(this.collection, { status: 1 });
+    this.mongo.addIndex(this.collection, { createdAt: 1 });
+    this.mongo.addIndex(this.collection, { location: '2dsphere' });
   }
 
   public async createOne(request: Partial<HelpRequest>): Promise<HelpRequest> {
     await this.mongo.waitReady();
     const req = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .insertOne({ ...request, createdAt: new Date() });
     return req.ops[0];
   }
@@ -27,7 +27,7 @@ export class RequestsMongoService {
   public async findOneById(id: ObjectID): Promise<HelpRequest> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .findOne({ _id: new ObjectID(id) });
   }
 
@@ -41,7 +41,7 @@ export class RequestsMongoService {
   }): Promise<HelpRequest[]> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find({
         ...args.filters,
         location: {
@@ -65,7 +65,7 @@ export class RequestsMongoService {
   }): Promise<HelpRequest[]> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .find(args.filters)
       .sort(args.orderBy)
       .skip(args.skip || 0)
@@ -75,7 +75,7 @@ export class RequestsMongoService {
 
   public async findOneBy(filters: any): Promise<HelpRequest> {
     await this.mongo.waitReady();
-    return this.mongo.db.collection(collection).findOne(filters);
+    return this.mongo.db.collection(this.collection).findOne(filters);
   }
 
   public async patchOneById(args: {
@@ -85,7 +85,7 @@ export class RequestsMongoService {
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .updateOne(
         { _id: new ObjectID(args.id), ...args.filters },
         { $set: { ...args.data, updatedAt: new Date() } }
@@ -98,7 +98,7 @@ export class RequestsMongoService {
     distance: number;
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
-    return this.mongo.db.collection(collection).updateOne(
+    return this.mongo.db.collection(this.collection).updateOne(
       { _id: new ObjectID(args.id) },
       {
         $push: {
@@ -117,7 +117,7 @@ export class RequestsMongoService {
   }): Promise<UpdateWriteOpResult> {
     await this.mongo.waitReady();
     return this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .updateOne(
         { _id: new ObjectID(args.id) },
         { $pull: { candidates: { profileId: new ObjectID(args.profileId) } } }
