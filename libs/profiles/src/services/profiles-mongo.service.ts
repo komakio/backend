@@ -62,7 +62,7 @@ export class ProfilesMongoService {
           needers: [
             {
               $match: {
-                role: 'helper',
+                role: 'needer',
               },
             },
             {
@@ -72,7 +72,7 @@ export class ProfilesMongoService {
           helpers: [
             {
               $match: {
-                role: 'needer',
+                role: 'helper',
               },
             },
             {
