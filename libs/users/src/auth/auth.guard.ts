@@ -27,14 +27,14 @@ export class AuthGuard implements CanActivate {
     const isLoggedIn = this.reflector.get('isLoggedIn', context.getHandler());
     const roles = this.reflector.get<Role[]>('roles', context.getHandler());
 
-    if (roles?.includes('admin')) {
-      return auth === this.config.adminApiToken;
-    }
-
     const accessToken =
       auth?.indexOf('Bearer ') === 0
         ? auth.split('Bearer ')[1]
         : req?.cookies?.accessTokenKey;
+
+    if (roles?.includes('admin')) {
+      return accessToken === this.config.adminApiToken;
+    }
 
     if (accessToken) {
       const token = this.auth.validateAccessToken(accessToken);
