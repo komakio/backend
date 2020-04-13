@@ -87,6 +87,10 @@ export class UsersService {
     return this.usersMongo.findManyByIds(ids);
   }
 
+  public async getStats() {
+    return this.usersMongo.getStats();
+  }
+
   private async getSocialUser(args: {
     socialAuthId: string;
     socialAuthType: SocialAuthTypeEnum;

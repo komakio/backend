@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User, SocialAuthTypeEnum } from '../users.model';
+import { User, SocialAuthTypeEnum, UsersStatistics } from '../users.model';
 import { ObjectID } from 'mongodb';
 import { MongoService } from '@backend/mongo';
 
@@ -78,5 +78,65 @@ export class UsersMongoService {
       .collection(this.collection)
       .findOne({ username });
     return user ? new User(user) : null;
+  }
+
+  public async getStats(): Promise<UsersStatistics> {
+    await this.mongo.waitReady();
+
+    const pipelines: object[] = [
+      {
+        $facet: {
+          apple: [
+            {
+              $match: {
+                socialAuthType: SocialAuthTypeEnum.Apple,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          google: [
+            {
+              $match: {
+                socialAuthType: SocialAuthTypeEnum.Google,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          regular: [
+            {
+              $match: {
+                username: { $exists: true },
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          apple: {
+            $arrayElemAt: ['$apple.count', 0.0],
+          },
+          google: {
+            $arrayElemAt: ['$google.count', 0.0],
+          },
+          regular: {
+            $arrayElemAt: ['$regular.count', 0.0],
+          },
+        },
+      },
+    ];
+
+    const res = await this.mongo.db
+      .collection(collection)
+      .aggregate(pipelines)
+      .toArray();
+    return res?.[0];
   }
 }

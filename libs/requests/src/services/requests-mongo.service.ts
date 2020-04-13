@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
-import { HelpRequest } from '../requests.model';
+import {
+  HelpRequest,
+  RequestsStatistics,
+  HelpRequestStatusEnum,
+} from '../requests.model';
 import { UpdateWriteOpResult, ObjectID } from 'mongodb';
 import { Location } from '@backend/profiles/profile.model';
 import { ConfigService } from '@backend/config';
@@ -122,5 +126,78 @@ export class RequestsMongoService {
         { _id: new ObjectID(args.id) },
         { $pull: { candidates: { profileId: new ObjectID(args.profileId) } } }
       );
+  }
+
+  public async getStats(): Promise<RequestsStatistics> {
+    await this.mongo.waitReady();
+
+    const pipelines: object[] = [
+      {
+        $facet: {
+          pending: [
+            {
+              $match: {
+                status: HelpRequestStatusEnum.Pending,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          accepted: [
+            {
+              $match: {
+                status: HelpRequestStatusEnum.Accepted,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          canceled: [
+            {
+              $match: {
+                status: HelpRequestStatusEnum.Canceled,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          used: [
+            {
+              $match: {
+                status: HelpRequestStatusEnum.Used,
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          pending: {
+            $arrayElemAt: ['$pending.count', 0.0],
+          },
+          accepted: {
+            $arrayElemAt: ['$accepted.count', 0.0],
+          },
+          canceled: {
+            $arrayElemAt: ['$canceled.count', 0.0],
+          },
+          used: {
+            $arrayElemAt: ['$used.count', 0.0],
+          },
+        },
+      },
+    ];
+
+    const res = await this.mongo.db
+      .collection(collection)
+      .aggregate(pipelines)
+      .toArray();
+    return res?.[0];
   }
 }

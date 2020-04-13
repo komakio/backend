@@ -54,3 +54,10 @@ export interface BatchwiseNotificationsQueue {
   requestId: ObjectID;
   sentProfileIds?: string[];
 }
+
+export class RequestsStatistics {
+  public pending: number;
+  public accepted: number;
+  public canceled: number;
+  public used: number;
+}
