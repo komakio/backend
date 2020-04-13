@@ -8,6 +8,7 @@ import { ProfilesService } from '@backend/profiles';
 import { RequestsService } from '@backend/requests';
 import { UsersService } from '@backend/users';
 import { Statistics } from './public.model';
+import { getAskTemplate } from '@utils/templates';
 
 @Controller('v1/public')
 @ApiTags('public')
@@ -27,7 +28,7 @@ export class PublicController {
     await this.email.send(
       this.config.emails.publicRelations,
       `${name} has a question in Komak`,
-      `from: ${email} ${content}`
+      getAskTemplate({ name, email, content })
     );
   }
 
