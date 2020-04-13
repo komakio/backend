@@ -1,5 +1,3 @@
-const head = `<mj-head><mj-font name="Sen" href="https://fonts.googleapis.com/css2?family=Sen" /></mj-head>`;
-
 export const getRequestAcceptedTemplate = (args: {
   requesterName: string;
   acceptorName: string;
@@ -7,7 +5,6 @@ export const getRequestAcceptedTemplate = (args: {
 }) => {
   return `
     <mjml>
-        ${head}
         <mj-body>
             <mj-section>
                 <mj-column>
@@ -24,4 +21,24 @@ export const getRequestAcceptedTemplate = (args: {
             </mj-section>
         </mj-body>
     </mjml>`;
+};
+
+export const getAskTemplate = (args: {
+  name: string;
+  content: string;
+  email: string;
+}) => {
+  return `
+      <mjml>
+          <mj-body>
+              <mj-section>
+                  <mj-column>
+                      <mj-image src="https://images.prismic.io/komak/96514f1a-2c09-42f5-b1b1-9d06bd7bf6e1_%28Put+Here%29+Cover+%26+Profile+photo+%281%29.png?auto=compress,format"></mj-image>
+                      <mj-text font-size="16px" line-height="1.5">${args.content}</mj-text>
+                      <mj-text font-size="16px" line-height="0.5">My name: ${args.name}</mj-text>
+                      <mj-text font-size="16px" line-height="0.5">My Email: ${args.email}</mj-text>
+                  </mj-column>
+              </mj-section>
+          </mj-body>
+      </mjml>`;
 };
