@@ -33,6 +33,9 @@ export class AuthGuard implements CanActivate {
         : req?.cookies?.accessTokenKey;
 
     if (roles?.includes('admin')) {
+      if (this.config.isProduction && !process.env.API_TOKEN) {
+        throw new Error('Unauthorized admin access');
+      }
       return accessToken === this.config.adminApiToken;
     }
 
