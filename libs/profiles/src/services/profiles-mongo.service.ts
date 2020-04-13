@@ -94,7 +94,7 @@ export class ProfilesMongoService {
     ];
 
     const res = await this.mongo.db
-      .collection(collection)
+      .collection(this.collection)
       .aggregate(pipelines)
       .toArray();
     return res?.[0];
