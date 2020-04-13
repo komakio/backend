@@ -2,7 +2,7 @@ import { Controller, Post, Body, Put, Param, Get, Patch } from '@nestjs/common';
 import { UserReq, Auth } from '@utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
-import { Profile, ProfilesStatistics } from './profile.model';
+import { Profile } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
