@@ -79,4 +79,8 @@ export class ProfilesController {
     });
     return { group: group?.serialize() };
   }
+
+  @Auth('admin')
+  @Get('stats')
+  public async getStats() {}
 }

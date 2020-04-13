@@ -53,6 +53,20 @@ export class ProfilesMongoService {
       .toArray();
   }
 
+  public async countBy(): Promise<any> {
+    await this.mongo.waitReady();
+
+    const pipelines: object[] = [];
+    pipelines.push({
+      $addFields: {
+        totalHomework: { $sum: '$homework' },
+        totalQuiz: { $sum: '$quiz' },
+      },
+    });
+
+    return this.mongo.db.collection(collection).aggregate(pipelines);
+  }
+
   public async findManyById(args: {
     ids: ObjectID[];
     skip?: number;
