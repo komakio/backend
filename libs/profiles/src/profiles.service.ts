@@ -99,4 +99,8 @@ export class ProfilesService {
     });
     return group;
   }
+
+  public async getStatistics() {
+    return this.profilesMongo.getCounts();
+  }
 }

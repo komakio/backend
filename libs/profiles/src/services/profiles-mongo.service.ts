@@ -53,16 +53,45 @@ export class ProfilesMongoService {
       .toArray();
   }
 
-  public async countBy(): Promise<any> {
+  public async getCounts(): Promise<any> {
     await this.mongo.waitReady();
 
-    const pipelines: object[] = [];
-    pipelines.push({
-      $addFields: {
-        totalHomework: { $sum: '$homework' },
-        totalQuiz: { $sum: '$quiz' },
+    const pipelines: object[] = [
+      {
+        $facet: {
+          needers: [
+            {
+              $match: {
+                role: 'helper',
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+          helpers: [
+            {
+              $match: {
+                role: 'needer',
+              },
+            },
+            {
+              $count: 'count',
+            },
+          ],
+        },
       },
-    });
+      {
+        $project: {
+          needers: {
+            $arrayElemAt: ['$needers.count', 0.0],
+          },
+          helpers: {
+            $arrayElemAt: ['$helpers.count', 0.0],
+          },
+        },
+      },
+    ];
 
     return this.mongo.db.collection(collection).aggregate(pipelines);
   }

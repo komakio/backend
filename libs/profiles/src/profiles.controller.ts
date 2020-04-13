@@ -81,6 +81,8 @@ export class ProfilesController {
   }
 
   @Auth('admin')
-  @Get('stats')
-  public async getStats() {}
+  @Get('statistics')
+  public async getStats() {
+    return this.profiles.getStatistics();
+  }
 }
