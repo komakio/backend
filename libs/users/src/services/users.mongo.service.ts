@@ -6,7 +6,7 @@ import { MongoService } from '@backend/mongo';
 @Injectable()
 export class UsersMongoService {
   constructor(private mongo: MongoService) {}
-  private collection = 'user';
+  private collection = 'users';
 
   public onApplicationBootstrap() {
     this.mongo.addIndex(this.collection, { SocialAuthType: 1 });
