@@ -264,4 +264,8 @@ export class RequestsService {
       limit: args.limit,
     });
   }
+
+  public async getStats() {
+    return this.requestsMongo.getStats();
+  }
 }

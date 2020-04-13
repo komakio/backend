@@ -21,7 +21,6 @@ export class User {
   public createdAt?: Date;
   public updatedAt?: Date;
   public lastLoginAt?: Date;
-  public isAdmin?: boolean;
   public isAnonymous?: boolean;
   public uuidRegTokenPair?: UuidRegTokenPair;
   public username?: string;
@@ -51,4 +50,10 @@ export class User {
 export class LoginResult {
   public user: User;
   public accessToken: AccessTokenResponse;
+}
+
+export class UsersStatistics {
+  public google: number;
+  public apple: number;
+  public regular: number;
 }

@@ -96,7 +96,7 @@ export class Profile {
   public communicateBy: CommunicateByTypeEnum[];
 }
 
-export class ProfileStatistics {
+export class ProfilesStatistics {
   public helpers: number;
   public needers: number;
 }
