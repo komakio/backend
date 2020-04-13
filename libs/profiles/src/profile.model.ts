@@ -95,3 +95,8 @@ export class Profile {
   public email: string;
   public communicateBy: CommunicateByTypeEnum[];
 }
+
+export class ProfileStatistics {
+  public helpers: number;
+  public needers: number;
+}

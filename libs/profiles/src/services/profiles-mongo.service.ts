@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
-import { Profile } from '../profile.model';
+import { Profile, ProfileStatistics } from '../profile.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 import { ConfigService } from '@backend/config';
 
@@ -53,7 +53,7 @@ export class ProfilesMongoService {
       .toArray();
   }
 
-  public async getCounts(): Promise<any> {
+  public async getCounts(): Promise<ProfileStatistics> {
     await this.mongo.waitReady();
 
     const pipelines: object[] = [
@@ -93,7 +93,11 @@ export class ProfilesMongoService {
       },
     ];
 
-    return this.mongo.db.collection(collection).aggregate(pipelines);
+    const res = await this.mongo.db
+      .collection(collection)
+      .aggregate(pipelines)
+      .toArray();
+    return res?.[0];
   }
 
   public async findManyById(args: {
