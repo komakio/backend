@@ -19,6 +19,13 @@ describe('Profile controller', () => {
     );
     app = testController.app;
     tokens = testController.tokens;
+
+    await app.get(GroupsMongoService).createOne({
+      name: 'komak',
+      url: 'komak.io',
+      secret,
+      managersUserIds: [new ObjectID()],
+    });
   });
 
   afterAll(() => stopTest(app));
@@ -72,6 +79,7 @@ describe('Profile controller', () => {
   };
 
   let neederProfileId: string;
+  const secret = 'lorempipsum';
 
   it('Create new helper profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
@@ -150,13 +158,6 @@ describe('Profile controller', () => {
   });
 
   it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
-    const secret = 'lorempipsum';
-    await app.get(GroupsMongoService).createOne({
-      name: 'komak',
-      url: 'komak.io',
-      secret,
-      managersUserIds: [new ObjectID()],
-    });
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${neederProfileId}/group`)
       .set({ Authorization: `Bearer ${tokens.needer}` })
@@ -166,13 +167,6 @@ describe('Profile controller', () => {
   });
 
   it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {
-    const secret = 'lorempipsum';
-    await app.get(GroupsMongoService).createOne({
-      name: 'komak',
-      url: 'komak.io',
-      secret,
-      managersUserIds: [new ObjectID()],
-    });
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${neederProfileId}/group`)
       .set({ Authorization: `Bearer ${tokens.needer}` })
@@ -182,13 +176,6 @@ describe('Profile controller', () => {
   });
 
   it('Add a profile to a group without secret => error 400 (/v1/profiles/{id}/group)', async () => {
-    const secret = 'lorempipsum';
-    await app.get(GroupsMongoService).createOne({
-      name: 'komak',
-      url: 'komak.io',
-      secret,
-      managersUserIds: [new ObjectID()],
-    });
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${neederProfileId}/group`)
       .set({ Authorization: `Bearer ${tokens.needer}` });
