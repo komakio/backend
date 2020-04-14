@@ -21,6 +21,12 @@ async function bootstrap() {
     app.get(ExceptionsService).report(err);
   });
 
+  const config = app.get(ConfigService);
+
+  if (this.config.isProduction && !process.env.API_TOKEN) {
+    throw new Error('Unauthorized admin access');
+  }
+
   const redis = app.get(RedisService);
   await app.get(RabbitMQService).connect();
   await redis.waitReady();
@@ -44,8 +50,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
-
-  const config = app.get(ConfigService);
 
   if (config.env !== 'production') {
     app.enableCors();
