@@ -7,6 +7,7 @@ import {
   ValidateNested,
   IsOptional,
   IsEnum,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -56,6 +57,7 @@ export class Address {
   @IsOptional()
   @IsString()
   public country?: string;
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => Location)
   public location?: Location;
