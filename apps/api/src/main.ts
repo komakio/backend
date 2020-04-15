@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
 
-  if (this.config.isProduction && !process.env.API_TOKEN) {
+  if (config.isProduction && !process.env.API_TOKEN) {
     throw new Error('Unauthorized admin access');
   }
 
