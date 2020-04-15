@@ -11,6 +11,12 @@ import { ObjectID } from 'mongodb';
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];
   let tokens: TestApplicationController['tokens'];
+  const group = {
+    groupName: 'komak',
+    groupUrl: 'komak.io',
+    secret: 'lorempipsum',
+    managersUserIds: [new ObjectID()],
+  };
 
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
@@ -20,12 +26,7 @@ describe('Profile controller', () => {
     app = testController.app;
     tokens = testController.tokens;
 
-    await app.get(GroupsMongoService).createOne({
-      name: 'komak',
-      url: 'komak.io',
-      secret,
-      managersUserIds: [new ObjectID()],
-    });
+    await app.get(GroupsMongoService).createOne(group);
   });
 
   afterAll(() => stopTest(app));
@@ -79,13 +80,15 @@ describe('Profile controller', () => {
   };
 
   let neederProfileId: string;
-  const secret = 'lorempipsum';
+  let helperProfileId: string;
 
   it('Create new helper profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` })
       .send(newHelperProfile);
+
+    helperProfileId = res.body._id;
     expect(res.body).toEqual(expect.objectContaining(newHelperProfile));
   });
 
@@ -159,17 +162,17 @@ describe('Profile controller', () => {
 
   it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
-      .patch(`/v1/profiles/${neederProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.needer}` })
-      .send({ secret });
+      .patch(`/v1/profiles/${helperProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .send({ secret: group.secret });
 
     expect(res.status).toBe(200);
   });
 
   it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
-      .patch(`/v1/profiles/${neederProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .patch(`/v1/profiles/${helperProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.helper}` })
       .send({ secret: 'wrongsecret' });
 
     expect(res.status).toBe(403);
@@ -177,9 +180,23 @@ describe('Profile controller', () => {
 
   it('Add a profile to a group without secret => error 400 (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
-      .patch(`/v1/profiles/${neederProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.needer}` });
+      .patch(`/v1/profiles/${helperProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.helper}` });
 
     expect(res.status).toBe(400);
+  });
+
+  it('Get all helper profiles after group added => contains group information (/v1/profiles)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/v1/profiles')
+      .set({ Authorization: `Bearer ${tokens.helper}` });
+
+    expect(res.body[0]).toEqual(
+      expect.objectContaining({
+        ...newHelperProfile,
+        groupName: group.groupName,
+        groupUrl: group.groupUrl,
+      })
+    );
   });
 });

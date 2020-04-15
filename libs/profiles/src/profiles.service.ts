@@ -40,7 +40,7 @@ export class ProfilesService {
 
   public async findAggregatedWithGroupById(id: ObjectID) {
     const res = await this.profilesMongo.findAllAggregatedWithGroupBy({
-      profileId: new ObjectID(id),
+      _id: new ObjectID(id),
     });
     return res[0];
   }
