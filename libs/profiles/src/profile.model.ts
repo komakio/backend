@@ -102,3 +102,8 @@ export class ProfilesStatistics {
   public helpers: number;
   public needers: number;
 }
+
+export class ProfileAggregatedWithGroup extends Profile {
+  public groupName: string;
+  public groupUrl?: string;
+}

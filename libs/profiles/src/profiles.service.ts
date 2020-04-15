@@ -32,8 +32,17 @@ export class ProfilesService {
     return this.profilesMongo.findOneById(new ObjectID(id));
   }
 
-  public async findAllByUserId(userId: ObjectID) {
-    return this.profilesMongo.findAllByUserId(new ObjectID(userId));
+  public async findAllAggregatedWithGroupByUserId(userId: ObjectID) {
+    return this.profilesMongo.findAllAggregatedWithGroupBy({
+      userId: new ObjectID(userId),
+    });
+  }
+
+  public async findAggregatedWithGroupById(id: ObjectID) {
+    const res = await this.profilesMongo.findAllAggregatedWithGroupBy({
+      profileId: new ObjectID(id),
+    });
+    return res[0];
   }
 
   public async findManyById(args: {

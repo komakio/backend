@@ -2,7 +2,7 @@ import { Controller, Post, Body, Put, Param, Get, Patch } from '@nestjs/common';
 import { UserReq, Auth } from '@utils/decorators';
 import { ProfilesService } from './profiles.service';
 import { ObjectID } from 'mongodb';
-import { Profile } from './profile.model';
+import { Profile, ProfileAggregatedWithGroup } from './profile.model';
 import { User } from '@backend/users/users.model';
 import { ProfilesRabbitMQService } from './services/profiles-rabbitmq.service';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
@@ -22,8 +22,12 @@ export class ProfilesController {
 
   @Auth()
   @Get()
-  public async get(@UserReq() user: User): Promise<Profile[]> {
-    return this.profiles.findAllByUserId(new ObjectID(user._id));
+  public async get(
+    @UserReq() user: User
+  ): Promise<ProfileAggregatedWithGroup[]> {
+    return this.profiles.findAllAggregatedWithGroupByUserId(
+      new ObjectID(user._id)
+    );
   }
 
   @Auth()
