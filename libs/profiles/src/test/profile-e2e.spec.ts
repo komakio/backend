@@ -198,5 +198,7 @@ describe('Profile controller', () => {
         groupUrl: group.groupUrl,
       })
     );
+    expect(res.body[0].secret).toBeUndefined();
+    expect(res.body[0].managersUserIds).toBeUndefined();
   });
 });
