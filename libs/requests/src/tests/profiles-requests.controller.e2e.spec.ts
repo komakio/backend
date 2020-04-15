@@ -22,6 +22,8 @@ describe('Profile Requests controller', () => {
 
   afterAll(() => stopTest(app));
 
+  // user profile mismatch
+  // add a profile for a needer or helper
   it('Get profile requests with wrong profileId => error 403 (/v1/profiles/:id/requests)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles/:id/requests')
@@ -29,4 +31,10 @@ describe('Profile Requests controller', () => {
       .send(group);
     expect(res.status).toBe(403);
   });
+
+  // wrong order of requests
+  // add a profile for a needer
+  //must add some requests to the profile
+
+  // profileId should be searched in candidates, acceptor and requester Ids
 });
