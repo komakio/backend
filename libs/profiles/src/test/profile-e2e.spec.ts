@@ -5,6 +5,8 @@ import {
   stopTest,
 } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
+import { GroupsMongoService } from '@backend/groups/services/groups-mongo.service';
+import { ObjectID } from 'mongodb';
 
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];
@@ -17,6 +19,13 @@ describe('Profile controller', () => {
     );
     app = testController.app;
     tokens = testController.tokens;
+
+    await app.get(GroupsMongoService).createOne({
+      name: 'komak',
+      url: 'komak.io',
+      secret,
+      managersUserIds: [new ObjectID()],
+    });
   });
 
   afterAll(() => stopTest(app));
@@ -60,7 +69,7 @@ describe('Profile controller', () => {
         coordinates: [3.234564, -52.123425],
       },
     },
-    disabled: true,
+    disabled: false,
     role: 'needer',
     phone: {
       dialCode: 'string',
@@ -70,8 +79,9 @@ describe('Profile controller', () => {
   };
 
   let neederProfileId: string;
+  const secret = 'lorempipsum';
 
-  it('Post new helper profile (/v1/profiles)', async () => {
+  it('Create new helper profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` })
@@ -79,7 +89,40 @@ describe('Profile controller', () => {
     expect(res.body).toEqual(expect.objectContaining(newHelperProfile));
   });
 
-  it('Post new needer profile (/v1/profiles)', async () => {
+  it('Create new helper profile without coordinates => error 400 (/v1/profiles)', async () => {
+    const body = JSON.parse(JSON.stringify(newHelperProfile));
+    delete body.address.location.coordinates;
+
+    const res = await request(app.getHttpServer())
+      .post('/v1/profiles')
+      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .send(body);
+    expect(res.status).toBe(400);
+  });
+
+  it('Create new helper profile without location => error 400 (/v1/profiles)', async () => {
+    const body = JSON.parse(JSON.stringify(newHelperProfile));
+    delete body.address.location;
+
+    const res = await request(app.getHttpServer())
+      .post('/v1/profiles')
+      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .send(body);
+    expect(res.status).toBe(400);
+  });
+
+  it('Create new helper profile with negative coverage => error 400 (/v1/profiles)', async () => {
+    const body = JSON.parse(JSON.stringify(newHelperProfile));
+    body.coverage = -100;
+
+    const res = await request(app.getHttpServer())
+      .post('/v1/profiles')
+      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .send(body);
+    expect(res.status).toBe(400);
+  });
+
+  it('Create new needer profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.needer}` })
@@ -89,7 +132,7 @@ describe('Profile controller', () => {
     expect(res.body).toEqual(expect.objectContaining(newNeederProfile));
   });
 
-  it('Get all helper profile (/v1/profiles)', async () => {
+  it('Get all helper profiles => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.helper}` });
@@ -97,7 +140,7 @@ describe('Profile controller', () => {
     expect(res.body[0]).toEqual(expect.objectContaining(newHelperProfile));
   });
 
-  it('Get all needer profiles (/v1/profiles)', async () => {
+  it('Get all needer profiles => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
       .set({ Authorization: `Bearer ${tokens.needer}` });
@@ -105,12 +148,38 @@ describe('Profile controller', () => {
     expect(res.body[0]).toEqual(expect.objectContaining(newNeederProfile));
   });
 
-  it('Change profile from needer to helper (/v1/profiles/{id})', async () => {
+  it('Change profile from needer to helper => success (/v1/profiles/{id})', async () => {
     const res = await request(app.getHttpServer())
       .put(`/v1/profiles/${neederProfileId}`)
       .set({ Authorization: `Bearer ${tokens.needer}` })
       .send({ ...newNeederProfile, role: 'helper' });
 
     expect(res.status).toBe(200);
+  });
+
+  it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
+    const res = await request(app.getHttpServer())
+      .patch(`/v1/profiles/${neederProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .send({ secret });
+
+    expect(res.status).toBe(200);
+  });
+
+  it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {
+    const res = await request(app.getHttpServer())
+      .patch(`/v1/profiles/${neederProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .send({ secret: 'wrongsecret' });
+
+    expect(res.status).toBe(403);
+  });
+
+  it('Add a profile to a group without secret => error 400 (/v1/profiles/{id}/group)', async () => {
+    const res = await request(app.getHttpServer())
+      .patch(`/v1/profiles/${neederProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.needer}` });
+
+    expect(res.status).toBe(400);
   });
 });

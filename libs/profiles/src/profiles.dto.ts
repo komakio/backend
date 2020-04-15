@@ -3,9 +3,9 @@ import {
   IsBoolean,
   IsString,
   ValidateNested,
-  IsNumber,
   IsNotEmpty,
   IsEnum,
+  IsPositive,
 } from 'class-validator';
 import { Address, ProfileRoleEnum, Phone } from './profile.model';
 import { Type } from 'class-transformer';
@@ -35,7 +35,7 @@ export class PatchProfilesDto {
   @Type(() => Phone)
   public phone: Phone;
   @IsOptional()
-  @IsNumber()
+  @IsPositive()
   public coverage: number;
 }
 
@@ -61,7 +61,7 @@ export class CreateProfilesDto {
   @Type(() => Phone)
   public phone: Phone;
   @IsOptional()
-  @IsNumber()
+  @IsPositive()
   public coverage: number;
 }
 
