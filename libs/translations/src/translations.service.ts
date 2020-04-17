@@ -43,7 +43,7 @@ export class TranslationsService {
       await this.cache(translations);
     }
 
-    let translation = translations.find(t =>
+    let translation = translations?.find(t =>
       t.languageCodes.includes(args.languageCode)
     );
 
