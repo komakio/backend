@@ -5,8 +5,8 @@ import { Translation } from './translations-model';
 import { TranslationsRedisService } from './services/translations-redis.service';
 import Axios from 'axios';
 import { ExceptionsService } from '@backend/exceptions';
-import { supportedTranslations } from '@utils/data/supported-translations';
 import { englishStrings } from './data/english-strings';
+import { supportedTranslations } from './data/supported-translations';
 
 @Injectable()
 export class TranslationsService {
@@ -31,7 +31,10 @@ export class TranslationsService {
 
     if (!translation) {
       translation = await this.getFromGithub(languageCode);
-      await this.cache(translation || englishStrings);
+      await this.cache({
+        languageCode: languageCode,
+        translation: translation || englishStrings,
+      });
     }
 
     this.replaceVariables({ translation, variables: args.variables });
@@ -91,11 +94,11 @@ export class TranslationsService {
     }
   };
 
-  private async cache(translation: Translation) {
-    if (!translation) {
-      return;
-    }
-    await this.translationsRedis.saveWithExpire(translation);
-    await this.translationsRedis.saveForever(translation);
+  private async cache(args: {
+    languageCode: string;
+    translation: Translation;
+  }) {
+    await this.translationsRedis.saveWithExpire(args);
+    await this.translationsRedis.saveForever(args);
   }
 }
