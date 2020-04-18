@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { Group } from '@backend/groups/groups.model';
 
 export enum CoordinateTypeEnum {
   Point = 'Point',
@@ -104,6 +105,5 @@ export class ProfilesStatistics {
 }
 
 export class ProfileAggregatedWithGroup extends Profile {
-  public groupName: string;
-  public groupUrl?: string;
+  public group: Group;
 }

@@ -7,8 +7,8 @@ export class Group {
   public _id: ObjectID;
   public createdAt?: Date;
   public updatedAt?: Date;
-  public groupName: string;
-  public groupUrl?: string;
+  public name: string;
+  public url?: string;
   @Exclude()
   public managersUserIds: ObjectID[];
   @Exclude()

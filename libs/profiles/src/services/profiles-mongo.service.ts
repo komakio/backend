@@ -64,33 +64,32 @@ export class ProfilesMongoService {
 
     const pipelines: object[] = [
       {
-        $match: filter,
+        $match: {
+          ...filter,
+        },
       },
       {
         $lookup: {
           from: 'groups',
           localField: 'groupId',
           foreignField: '_id',
-          as: 'group',
+          as: 'tempGroup',
         },
       },
       {
-        $replaceRoot: {
-          newRoot: {
-            $mergeObjects: [
-              {
-                $arrayElemAt: ['$group', 0],
-              },
-              '$$ROOT',
-            ],
+        $addFields: {
+          group: {
+            $arrayElemAt: ['$tempGroup', 0],
           },
         },
       },
       {
         $project: {
-          group: 0,
-          secret: 0,
-          managersUserIds: 0,
+          tempGroup: 0,
+          'group.secret': 0,
+          'group.managersUserIds': 0,
+          'group.createdAt': 0,
+          'group.updatedAt': 0,
         },
       },
     ];

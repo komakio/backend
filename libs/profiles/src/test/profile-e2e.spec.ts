@@ -7,13 +7,14 @@ import {
 import { AppModule } from '@apps/api/src/app.module';
 import { GroupsMongoService } from '@backend/groups/services/groups-mongo.service';
 import { ObjectID } from 'mongodb';
+import { Group } from '@backend/groups/groups.model';
 
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];
   let tokens: TestApplicationController['tokens'];
-  const group = {
-    groupName: 'komak',
-    groupUrl: 'komak.io',
+  const group: Partial<Group> = {
+    name: 'komak',
+    url: 'komak.io',
     secret: 'lorempipsum',
     managersUserIds: [new ObjectID()],
   };
@@ -26,7 +27,8 @@ describe('Profile controller', () => {
     app = testController.app;
     tokens = testController.tokens;
 
-    await app.get(GroupsMongoService).createOne(group);
+    const createdGroup = await app.get(GroupsMongoService).createOne(group);
+    group._id = createdGroup._id;
   });
 
   afterAll(() => stopTest(app));
@@ -160,15 +162,6 @@ describe('Profile controller', () => {
     expect(res.status).toBe(200);
   });
 
-  it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
-    const res = await request(app.getHttpServer())
-      .patch(`/v1/profiles/${helperProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.helper}` })
-      .send({ secret: group.secret });
-
-    expect(res.status).toBe(200);
-  });
-
   it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${helperProfileId}/group`)
@@ -186,6 +179,15 @@ describe('Profile controller', () => {
     expect(res.status).toBe(400);
   });
 
+  it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
+    const res = await request(app.getHttpServer())
+      .patch(`/v1/profiles/${helperProfileId}/group`)
+      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .send({ secret: group.secret });
+
+    expect(res.status).toBe(200);
+  });
+
   it('Get all helper profiles after group added => contains group information (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
@@ -194,11 +196,15 @@ describe('Profile controller', () => {
     expect(res.body[0]).toEqual(
       expect.objectContaining({
         ...newHelperProfile,
-        groupName: group.groupName,
-        groupUrl: group.groupUrl,
       })
     );
-    expect(res.body[0].secret).toBeUndefined();
-    expect(res.body[0].managersUserIds).toBeUndefined();
+    expect(res.body[0].group).toEqual(
+      expect.objectContaining({
+        name: group.name,
+        url: group.url,
+      })
+    );
+    expect(res.body[0].group.secret).toBeUndefined;
+    expect(res.body[0].group.managersUserIds).toBeUndefined;
   });
 });

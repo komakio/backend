@@ -10,8 +10,8 @@ export class CreateGroupDto {
   @IsString()
   public secret: string;
   @IsString()
-  public groupName: string;
+  public name: string;
   @IsOptional()
   @IsString()
-  public groupUrl?: string;
+  public url?: string;
 }

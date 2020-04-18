@@ -82,8 +82,8 @@ export class RequestsService {
         )?.distance,
         candidates: [],
         acceptorShortName: profile.firstName,
-        acceptorGroupName: profile.groupName,
-        acceptorGroupUrl: profile.groupUrl,
+        acceptorGroupName: profile.group.name,
+        acceptorGroupUrl: profile.group.url,
       },
     });
 
