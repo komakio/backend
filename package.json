@@ -30,7 +30,7 @@
     "@nestjs/microservices": "^7.0.3",
     "@nestjs/platform-express": "^7.0.7",
     "@nestjs/swagger": "^4.5.1",
-    "@nestjs/terminus": "^7.0.0-pre.2",
+    "@nestjs/terminus": "^7.0.1",
     "@sentry/node": "^5.15.0",
     "adm-zip": "^0.4.14",
     "amqp-connection-manager": "^3.2.0",
@@ -57,7 +57,7 @@
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.0.0",
+    "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
     "@types/adm-zip": "^0.4.32",
