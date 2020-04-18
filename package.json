@@ -32,7 +32,6 @@
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/terminus": "^7.0.1",
     "@sentry/node": "^5.15.0",
-    "adm-zip": "^0.4.14",
     "amqp-connection-manager": "^3.2.0",
     "amqplib": "^0.5.5",
     "apple-signin-auth": "^1.0.4",
