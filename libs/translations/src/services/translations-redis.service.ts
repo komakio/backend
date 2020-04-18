@@ -18,7 +18,7 @@ export class TranslationsRedisService {
   public async getWithExpire(languageCode: string): Promise<Translation> {
     const key = this.getWithExpireKey(languageCode);
     const res = await this.redis.db.get(key);
-    return JSON.parse(res);
+    return res && JSON.parse(res);
   }
 
   public async saveForever(args: {
@@ -32,14 +32,14 @@ export class TranslationsRedisService {
   public async getForever(languageCode: string): Promise<Translation> {
     const key = this.getForeverKey(languageCode);
     const res = await this.redis.db.get(key);
-    return JSON.parse(res);
+    return res && JSON.parse(res);
   }
 
   private getWithExpireKey = (languageCode: string) => {
-    return `${this.redis.prefix}:crowdin-translations:${languageCode}`;
+    return `${this.redis.prefix}:translation:${languageCode}`;
   };
 
   private getForeverKey = (languageCode: string) => {
-    return `${this.redis.prefix}:crowdin-translations-forever:${languageCode}`;
+    return `${this.redis.prefix}:translation-forever:${languageCode}`;
   };
 }

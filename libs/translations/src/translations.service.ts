@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
 import { Translation } from './translations-model';
 import { TranslationsRedisService } from './services/translations-redis.service';
@@ -11,7 +10,6 @@ import { supportedTranslations } from './data/supported-translations';
 @Injectable()
 export class TranslationsService {
   constructor(
-    private config: ConfigService,
     private logger: LoggerService,
     private exceptions: ExceptionsService,
     private translationsRedis: TranslationsRedisService
@@ -27,17 +25,37 @@ export class TranslationsService {
       [l.locale, l.crowdinCode].includes(args.languageCode)
     )?.locale;
 
+    if (!languageCode) {
+      this.replaceVariables({
+        translation: englishStrings,
+        variables: args.variables,
+      });
+      return englishStrings;
+    }
+
     let translation = await this.translationsRedis.getWithExpire(languageCode);
 
     if (!translation) {
       translation = await this.getFromGithub(languageCode);
-      await this.cache({
-        languageCode: languageCode,
-        translation: translation || englishStrings,
-      });
     }
 
-    this.replaceVariables({ translation, variables: args.variables });
+    if (!translation) {
+      translation = await this.translationsRedis.getForever(languageCode);
+    }
+
+    if (!translation) {
+      translation = englishStrings;
+    }
+
+    await this.cache({
+      languageCode: languageCode,
+      translation,
+    });
+
+    this.replaceVariables({
+      translation,
+      variables: args.variables,
+    });
     return translation;
   }
 
@@ -60,11 +78,10 @@ export class TranslationsService {
   }
 
   private async getFromGithub(languageCode: string) {
-    if (!languageCode || languageCode === 'en-US') {
-      return this.getEnglishFromGithub();
-    }
-
     try {
+      if (['en-US', 'en-UK, en'].includes(languageCode)) {
+        return this.getEnglishFromGithub();
+      }
       const res = await Axios.get(
         `https://raw.githubusercontent.com/komakio/app/master/backend-i18n/languages/${languageCode}.json`
       );
@@ -79,7 +96,7 @@ export class TranslationsService {
     }
   }
 
-  private getEnglishFromGithub = async () => {
+  private async getEnglishFromGithub() {
     try {
       const res = await Axios.get(
         'https://raw.githubusercontent.com/komakio/app/master/backend-i18n/en.json'
@@ -92,7 +109,7 @@ export class TranslationsService {
       });
       this.exceptions.report(err);
     }
-  };
+  }
 
   private async cache(args: {
     languageCode: string;
