@@ -106,7 +106,7 @@ export class TranslationsService {
     );
     const success = ['skipped', 'built'].includes(res?.data?.success?.status);
     if (!success) {
-      throw { message: 'zip build failed!' };
+      throw new Error('zip build failed!');
     }
   }
 
