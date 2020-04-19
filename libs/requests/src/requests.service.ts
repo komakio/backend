@@ -67,7 +67,9 @@ export class RequestsService {
   }
 
   public async acceptOne(args: { id: ObjectID; acceptorProfileId: ObjectID }) {
-    const profile = await this.profiles.findOneById(args.acceptorProfileId);
+    const profile = await this.profiles.findAggregatedWithGroupById(
+      new ObjectID(args.acceptorProfileId)
+    );
     const request = await this.findOneById(new ObjectID(args.id));
 
     await this.requestsMongo.patchOneById({
@@ -80,6 +82,8 @@ export class RequestsService {
         )?.distance,
         candidates: [],
         acceptorShortName: profile.firstName,
+        acceptorGroupName: profile.group.name,
+        acceptorGroupUrl: profile.group.url,
       },
     });
 

@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { MongoService } from '@backend/mongo';
-import { Profile, ProfilesStatistics } from '../profile.model';
+import {
+  Profile,
+  ProfilesStatistics,
+  ProfileAggregatedWithGroup,
+} from '../profile.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 import { ConfigService } from '@backend/config';
 
@@ -50,6 +54,49 @@ export class ProfilesMongoService {
     return this.mongo.db
       .collection(this.collection)
       .find({ userId: new ObjectID(userId) })
+      .toArray();
+  }
+
+  public async findAllAggregatedWithGroupBy(
+    filter: object
+  ): Promise<ProfileAggregatedWithGroup[]> {
+    await this.mongo.waitReady();
+
+    const pipelines: object[] = [
+      {
+        $match: {
+          ...filter,
+        },
+      },
+      {
+        $lookup: {
+          from: 'groups',
+          localField: 'groupId',
+          foreignField: '_id',
+          as: 'tempGroup',
+        },
+      },
+      {
+        $addFields: {
+          group: {
+            $arrayElemAt: ['$tempGroup', 0],
+          },
+        },
+      },
+      {
+        $project: {
+          tempGroup: 0,
+          'group.secret': 0,
+          'group.managersUserIds': 0,
+          'group.createdAt': 0,
+          'group.updatedAt': 0,
+        },
+      },
+    ];
+
+    return this.mongo.db
+      .collection(this.collection)
+      .aggregate(pipelines)
       .toArray();
   }
 

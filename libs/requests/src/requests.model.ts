@@ -33,6 +33,8 @@ export class HelpRequest {
   @ApiProperty({ type: String })
   public acceptorProfileId: ObjectID;
   public acceptorDistance: number;
+  public acceptorGroupName: string;
+  public acceptorGroupUrl: string;
   public type: RequestTypeEnum;
   public comment: string;
   public location: Location;
