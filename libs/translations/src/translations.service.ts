@@ -22,41 +22,57 @@ export class TranslationsService {
     };
   }) {
     const languageCode = supportedTranslations.find(l =>
-      [l.locale, l.crowdinCode].includes(args.languageCode)
-    )?.locale;
+      [l.code, l.extendedCode].includes(args.languageCode)
+    )?.extendedCode;
 
-    if (!languageCode) {
+    try {
+      if (!languageCode) {
+        this.replaceVariables({
+          translation: englishStrings,
+          variables: args.variables,
+        });
+        return englishStrings;
+      }
+
+      let translation = await this.translationsRedis.getWithExpire(
+        languageCode
+      );
+
+      if (!translation) {
+        translation = await this.getFromGithub(languageCode);
+      }
+
+      if (!translation) {
+        translation = await this.translationsRedis.getForever(languageCode);
+      }
+
+      if (!translation) {
+        translation = englishStrings;
+      }
+
+      this.replaceVariables({
+        translation,
+        variables: args.variables,
+      });
+
+      await this.cache({
+        languageCode: languageCode,
+        translation,
+      });
+
+      return translation;
+    } catch (err) {
+      this.logger.verbose({
+        route: 'get-translation',
+        error: err?.message,
+      });
+      this.exceptions.report(err);
       this.replaceVariables({
         translation: englishStrings,
         variables: args.variables,
       });
       return englishStrings;
     }
-
-    let translation = await this.translationsRedis.getWithExpire(languageCode);
-
-    if (!translation) {
-      translation = await this.getFromGithub(languageCode);
-    }
-
-    if (!translation) {
-      translation = await this.translationsRedis.getForever(languageCode);
-    }
-
-    if (!translation) {
-      translation = englishStrings;
-    }
-
-    await this.cache({
-      languageCode: languageCode,
-      translation,
-    });
-
-    this.replaceVariables({
-      translation,
-      variables: args.variables,
-    });
-    return translation;
   }
 
   private replaceVariables(args: {
