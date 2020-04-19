@@ -50,14 +50,14 @@ export class TranslationsService {
         translation = englishStrings;
       }
 
-      this.replaceVariables({
-        translation,
-        variables: args.variables,
-      });
-
       await this.cache({
         languageCode: languageCode,
         translation,
+      });
+
+      this.replaceVariables({
+        translation,
+        variables: args.variables,
       });
 
       return translation;
