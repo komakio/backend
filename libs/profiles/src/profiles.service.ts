@@ -23,7 +23,7 @@ export class ProfilesService {
     userId: ObjectID;
   }) {
     const profile = await this.profilesMongo.findOneById(new ObjectID(args.id));
-    if (!profile.userId.equals(args.userId)) {
+    if (!profile?.userId.equals(args.userId)) {
       throw new HttpException('USER_PROFILE_MISMATCH', HttpStatus.FORBIDDEN);
     }
   }

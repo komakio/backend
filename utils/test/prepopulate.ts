@@ -4,16 +4,14 @@ import { mockHelperUser, mockNeederUser } from './users.mock';
 import { ProfilesModule, ProfilesService } from '@backend/profiles';
 import { mockHelperProfile, mockNeederProfile } from './profiles.mock';
 import { Profile } from '@backend/profiles/profile.model';
+import { User } from '@backend/users/users.model';
+import { INestApplication } from '@nestjs/common';
 
-export const prePopulateUsersAndProfiles = async (
-  moduleFixture: TestingModule
-) => {
-  const profilesModule = moduleFixture.select(ProfilesModule);
-  const profileService = profilesModule.get(ProfilesService) as ProfilesService;
+export const prePopulateUsers = async (moduleFixture: TestingModule) => {
   const usersModule = moduleFixture.select(UsersModule);
   const usersService = usersModule.get(UsersService) as UsersService;
   //sign up users
-  const users = await Promise.all(
+  const [helper, needer] = await Promise.all(
     [mockHelperUser, mockNeederUser].map(({ username, password }) =>
       usersService.passwordLogin({
         username: username,
@@ -21,17 +19,29 @@ export const prePopulateUsersAndProfiles = async (
       })
     )
   );
+  return { helper, needer };
+};
 
-  const profiles: Profile[] = await Promise.all([
+export const prePopulateProfiles = async (args: {
+  users: {
+    needer: User;
+    helper: User;
+  };
+  moduleFixture: TestingModule | INestApplication;
+}) => {
+  const profilesModule = args.moduleFixture.select(ProfilesModule);
+  const profileService = profilesModule.get(ProfilesService) as ProfilesService;
+
+  const [helper, needer]: Profile[] = await Promise.all([
     profileService.create({
       ...mockHelperProfile,
-      userId: users.find(u => u.username === 'helper@komak.io')._id,
+      userId: args.users.helper._id,
     }),
     profileService.create({
       ...mockNeederProfile,
-      userId: users.find(u => u.username === 'needer@komak.io')._id,
+      userId: args.users.needer._id,
     }),
   ]);
 
-  return { users, profiles };
+  return { helper, needer };
 };

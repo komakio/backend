@@ -17,12 +17,13 @@ import { MongoService } from '@backend/mongo';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
-import { prePopulateUsersAndProfiles } from './prepopulate';
+import { prePopulateUsers } from './prepopulate';
 import { AppleService } from '@backend/users/auth/services/apple.service';
 import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { GoogleService } from '@backend/users/auth/services/google.service';
 import { MockGoogleService } from '@backend/users/mock/google-service.mock';
 import { RedisService } from '@backend/redis';
+import { User } from '@backend/users/users.model';
 
 // export const toIdempotentObject = (user: User) => {
 //   return {
@@ -37,6 +38,7 @@ export interface TestApplicationController {
   app: INestApplication;
   tokens: InternalTestModuleFixture['tokens'];
   services: InternalTestModuleFixture['services'];
+  users: InternalTestModuleFixture['users'];
 }
 
 export interface TestMicroserviceController {
@@ -56,10 +58,12 @@ export const prepareHttpTestController = async (
     | ForwardReference<any>,
   uniqueId: string
 ): Promise<TestApplicationController> => {
-  const { moduleFixture, tokens, services } = await prepareTestController(
-    Module,
-    uniqueId
-  );
+  const {
+    moduleFixture,
+    tokens,
+    services,
+    users,
+  } = await prepareTestController(Module, uniqueId);
 
   const app = moduleFixture.createNestApplication();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
@@ -74,6 +78,7 @@ export const prepareHttpTestController = async (
     app,
     tokens,
     services,
+    users,
   };
 };
 
@@ -123,6 +128,10 @@ export const prepareRabbitMQTestController = async (
 
 export interface InternalTestModuleFixture {
   moduleFixture: TestingModule;
+  users: {
+    helper: User;
+    needer: User;
+  };
   tokens: {
     helper: string;
     needer: string;
@@ -184,21 +193,16 @@ const prepareTestController = async (
 
   const authService = moduleFixture.get(AuthService);
 
-  const { users } = await prePopulateUsersAndProfiles(moduleFixture);
+  const users = await prePopulateUsers(moduleFixture);
 
   const [helper, needer] = await Promise.all([
-    authService.generateAccessToken(
-      users.find(u => u.username === 'helper@komak.io'),
-      10000000
-    ),
-    authService.generateAccessToken(
-      users.find(u => u.username === 'needer@komak.io'),
-      10000000
-    ),
+    authService.generateAccessToken(users.helper, 10000000),
+    authService.generateAccessToken(users.needer, 10000000),
   ]);
 
   return {
     moduleFixture,
+    users,
     tokens: {
       helper: helper.token,
       needer: needer.token,
