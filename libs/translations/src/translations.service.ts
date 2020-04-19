@@ -49,8 +49,8 @@ export class TranslationsService {
       }
 
       if (translation && languageCode) {
-        await this.cache({
-          languageCode: languageCode,
+        this.cache({
+          languageCode,
           translation,
         });
       }
