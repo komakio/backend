@@ -29,14 +29,12 @@ export class TranslationsService {
 
     try {
       if (!languageCode) {
-        this.replaceVariables({
-          translation: englishStrings,
-          variables: args.variables,
-        });
-        return englishStrings;
+        translation = englishStrings;
       }
 
-      translation = await this.translationsRedis.getWithExpire(languageCode);
+      if (!translation) {
+        translation = await this.translationsRedis.getWithExpire(languageCode);
+      }
 
       if (!translation) {
         translation = await this.getFromGithub(languageCode);
@@ -50,17 +48,19 @@ export class TranslationsService {
         translation = englishStrings;
       }
 
-      await this.cache({
-        languageCode: languageCode,
-        translation,
-      });
+      if (translation && languageCode) {
+        await this.cache({
+          languageCode: languageCode,
+          translation,
+        });
+      }
     } catch (err) {
       this.logger.verbose({
         route: 'get-translation',
         error: err?.message,
       });
       this.exceptions.report(err);
-      translation = englishStrings;
+      translation = translation || englishStrings;
     }
 
     this.replaceVariables({
