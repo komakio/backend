@@ -25,6 +25,8 @@ export class TranslationsService {
       [l.code, l.extendedCode].includes(args.languageCode)
     )?.extendedCode;
 
+    let translation: Translation;
+
     try {
       if (!languageCode) {
         this.replaceVariables({
@@ -34,9 +36,7 @@ export class TranslationsService {
         return englishStrings;
       }
 
-      let translation = await this.translationsRedis.getWithExpire(
-        languageCode
-      );
+      translation = await this.translationsRedis.getWithExpire(languageCode);
 
       if (!translation) {
         translation = await this.getFromGithub(languageCode);
@@ -54,25 +54,21 @@ export class TranslationsService {
         languageCode: languageCode,
         translation,
       });
-
-      this.replaceVariables({
-        translation,
-        variables: args.variables,
-      });
-
-      return translation;
     } catch (err) {
       this.logger.verbose({
         route: 'get-translation',
         error: err?.message,
       });
       this.exceptions.report(err);
-      this.replaceVariables({
-        translation: englishStrings,
-        variables: args.variables,
-      });
-      return englishStrings;
+      translation = englishStrings;
     }
+
+    this.replaceVariables({
+      translation,
+      variables: args.variables,
+    });
+
+    return translation;
   }
 
   private replaceVariables(args: {
