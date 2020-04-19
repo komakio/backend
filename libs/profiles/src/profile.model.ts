@@ -39,22 +39,22 @@ export class Location {
     second element a valid latitude 
     (between -90 and 90, both inclusive)`,
   })
-  public coordinates?: [number, number];
+  public coordinates: [number, number];
 }
 
 export class Address {
   @IsOptional()
   @IsString()
-  public raw: string;
+  public raw?: string;
   @IsOptional()
   @IsString()
-  public extra: string;
+  public extra?: string;
   @IsOptional()
   @IsString()
-  public postalCode: string;
+  public postalCode?: string;
   @IsOptional()
   @IsString()
-  public city: string;
+  public city?: string;
   @IsOptional()
   @IsString()
   public country?: string;
@@ -74,29 +74,29 @@ export class Phone {
 
 export class Profile {
   @ApiProperty({ type: String })
-  public _id: ObjectID;
+  public _id?: ObjectID;
   @ApiProperty({ type: String })
-  public userId: ObjectID;
+  public userId?: ObjectID;
   @ApiProperty({ type: String })
-  public groupId: ObjectID;
-  public createdAt: Date;
-  public updatedAt: Date;
-  public lastActivityAt: Date;
-  public lastAffirmativeAt: Date;
+  public groupId?: ObjectID;
+  public createdAt?: Date;
+  public updatedAt?: Date;
+  public lastActivityAt?: Date;
+  public lastAffirmativeAt?: Date;
   public self: boolean;
   public firstName: string;
   public lastName: string;
   public address: Address;
-  public disabled: boolean;
+  public disabled?: boolean;
   public role: ProfileRoleEnum;
   public phone: Phone;
   @ApiProperty({
     example: 2000,
     description: `in meters`,
   })
-  public coverage: number;
-  public email: string;
-  public communicateBy: CommunicateByTypeEnum[];
+  public coverage?: number;
+  public email?: string;
+  public communicateBy?: CommunicateByTypeEnum[];
 }
 
 export class ProfilesStatistics {

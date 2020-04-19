@@ -14,11 +14,10 @@ import { RabbitMQService } from '@backend/rabbitmq';
 import { AuthService } from '@backend/users/auth/services/auth.service';
 import { UsersModule } from '@backend/users';
 import { MongoService } from '@backend/mongo';
-import { dummyUsers } from './users';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
-import { prePopulateUsers } from './prepopulate';
+import { prePopulateUsersAndProfiles } from './prepopulate';
 import { AppleService } from '@backend/users/auth/services/apple.service';
 import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { GoogleService } from '@backend/users/auth/services/google.service';
@@ -185,18 +184,18 @@ const prepareTestController = async (
 
   const authService = moduleFixture.get(AuthService);
 
+  const { users } = await prePopulateUsersAndProfiles(moduleFixture);
+
   const [helper, needer] = await Promise.all([
     authService.generateAccessToken(
-      dummyUsers.find(u => u.type === 'helper').user,
+      users.find(u => u.username === 'helper@komak.io'),
       10000000
     ),
     authService.generateAccessToken(
-      dummyUsers.find(u => u.type === 'needer').user,
+      users.find(u => u.username === 'needer@komak.io'),
       10000000
     ),
   ]);
-
-  await prePopulateUsers(moduleFixture);
 
   return {
     moduleFixture,
