@@ -15,7 +15,7 @@ describe('Profile controller', () => {
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
       AppModule,
-      'profiles'
+      'profiles-controllers'
     );
     app = testController.app;
     tokens = testController.tokens;
