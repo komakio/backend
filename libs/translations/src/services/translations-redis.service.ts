@@ -5,25 +5,41 @@ import { Translation } from '../translations-model';
 @Injectable()
 export class TranslationsRedisService {
   constructor(private redis: RedisService) {}
-  private translationsKey = `${this.redis.prefix}:crowdin-translations`;
-  private foreverKey = `${this.redis.prefix}:crowdin-translations-forever`;
 
-  public async saveWithExpire(translations: Translation[]) {
-    this.redis.db.set(this.translationsKey, JSON.stringify(translations));
-    this.redis.db.expire(this.translationsKey, 1 * 60 * 60);
+  public async saveWithExpire(args: {
+    languageCode: string;
+    translation: Translation;
+  }) {
+    const key = this.getWithExpireKey(args.languageCode);
+    this.redis.db.set(key, JSON.stringify(args.translation));
+    this.redis.db.expire(key, 1 * 60 * 60);
   }
 
-  public async getWithExpire(): Promise<Translation[]> {
-    const res = await this.redis.db.get(this.translationsKey);
-    return JSON.parse(res);
+  public async getWithExpire(languageCode: string): Promise<Translation> {
+    const key = this.getWithExpireKey(languageCode);
+    const res = await this.redis.db.get(key);
+    return res && JSON.parse(res);
   }
 
-  public async saveWithoutExpire(translations: Translation[]) {
-    this.redis.db.set(this.foreverKey, JSON.stringify(translations));
+  public async saveForever(args: {
+    languageCode: string;
+    translation: Translation;
+  }) {
+    const key = this.getForeverKey(args.languageCode);
+    this.redis.db.set(key, JSON.stringify(args.translation));
   }
 
-  public async getWithoutExpire(): Promise<Translation[]> {
-    const res = await this.redis.db.get(this.foreverKey);
-    return JSON.parse(res);
+  public async getForever(languageCode: string): Promise<Translation> {
+    const key = this.getForeverKey(languageCode);
+    const res = await this.redis.db.get(key);
+    return res && JSON.parse(res);
   }
+
+  private getWithExpireKey = (languageCode: string) => {
+    return `${this.redis.prefix}:translation:${languageCode}`;
+  };
+
+  private getForeverKey = (languageCode: string) => {
+    return `${this.redis.prefix}:translation-forever:${languageCode}`;
+  };
 }
