@@ -12,7 +12,6 @@ import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
 import { RabbitMQService } from '@backend/rabbitmq';
 import { AuthService } from '@backend/users/auth/services/auth.service';
-import { UsersModule } from '@backend/users';
 import { MongoService } from '@backend/mongo';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
@@ -173,7 +172,7 @@ const prepareTestController = async (
   const googleService = new MockGoogleService();
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [Module, UsersModule],
+    imports: [Module],
   })
     .overrideProvider(ConfigService)
     .useValue(config)

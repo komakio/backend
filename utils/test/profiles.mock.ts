@@ -2,7 +2,7 @@ import {
   Profile,
   ProfileRoleEnum,
   CoordinateTypeEnum,
-} from '@backend/profiles/profile.model';
+} from '@backend/profiles/profiles.model';
 
 export const mockHelperProfile: Profile = {
   self: true,

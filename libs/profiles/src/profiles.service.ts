@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { ProfilesMongoService } from './services/profiles-mongo.service';
-import { Profile } from './profile.model';
+import { Profile } from './profiles.model';
 import { ObjectID } from 'mongodb';
 import { getDistance } from '@utils/distance';
 import { ConfigService } from '@backend/config';

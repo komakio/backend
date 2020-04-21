@@ -14,7 +14,7 @@ import { getDistance } from '@utils/distance';
 import { RequestsRabbitMQService } from './services/requests-rabbitmq.service';
 import { EmailService } from '@backend/email';
 import { TranslationsService } from '@backend/translations';
-import { CommunicateByTypeEnum } from '@backend/profiles/profile.model';
+import { CommunicateByTypeEnum } from '@backend/profiles/profiles.model';
 import { getRequestAcceptedTemplate } from '@utils/templates';
 
 @Injectable()

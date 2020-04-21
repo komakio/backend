@@ -6,7 +6,7 @@ import {
   HelpRequestStatusEnum,
 } from '../requests.model';
 import { UpdateWriteOpResult, ObjectID } from 'mongodb';
-import { Location } from '@backend/profiles/profile.model';
+import { Location } from '@backend/profiles/profiles.model';
 import { ConfigService } from '@backend/config';
 
 @Injectable()

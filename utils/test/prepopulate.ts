@@ -3,7 +3,7 @@ import { UsersModule, UsersService } from '@backend/users';
 import { mockHelperUser, mockNeederUser } from './users.mock';
 import { ProfilesModule, ProfilesService } from '@backend/profiles';
 import { mockHelperProfile, mockNeederProfile } from './profiles.mock';
-import { Profile } from '@backend/profiles/profile.model';
+import { Profile } from '@backend/profiles/profiles.model';
 import { User } from '@backend/users/users.model';
 import { INestApplication } from '@nestjs/common';
 

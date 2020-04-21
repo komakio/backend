@@ -5,7 +5,7 @@ import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
-import { Profile } from '@backend/profiles/profile.model';
+import { Profile } from '@backend/profiles/profiles.model';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { RequestBodyDto } from '../requests.dto';
 
