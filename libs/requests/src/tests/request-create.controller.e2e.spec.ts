@@ -1,21 +1,16 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
 import { prePopulateProfiles } from '@utils/test/prepopulate';
-import { RequestsModule } from '../requests.module';
-import { RequestsService } from '../requests.service';
+import { HelpRequestStatusEnum, RequestTypeEnum } from '../requests.model';
 import {
-  HelpRequestStatusEnum,
-  HelpRequest,
-  RequestTypeEnum,
-} from '../requests.model';
-import { PrePopulatedProfiles } from '@utils/test/model';
+  PrePopulatedProfiles,
+  TestApplicationController,
+} from '@utils/test/model';
+import { RequestsMongoService } from '../services/requests-mongo.service';
+import { ObjectID } from 'mongodb';
 
-describe('Profile Requests controller', () => {
+describe('Create Requests controller', () => {
   let app: TestApplicationController['app'];
   let tokens: TestApplicationController['tokens'];
   let users: TestApplicationController['users'];
@@ -24,7 +19,7 @@ describe('Profile Requests controller', () => {
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
       AppModule,
-      'profile-requests-controller'
+      'create-requests-controller'
     );
     app = testController.app;
     tokens = testController.tokens;
@@ -58,28 +53,32 @@ describe('Profile Requests controller', () => {
   });
 
   it('Create a request => success (/v1/requests)', async () => {
-    // const expectedRes: Partial<HelpRequest> = {
-    //   status: HelpRequestStatusEnum.Pending,
-    //   candidates: [{ distance: 0, profileId: profiles.helper._id }],
-    //   requesterShortName: profiles.needer.firstName,
-    //   requesterProfileId: profiles.needer._id,
-    //   type: RequestTypeEnum.Misc,
-    //   location: profiles.needer.address.location,
-    //   acceptorShortName: undefined,
-    //   acceptorProfileId: undefined,
-    //   acceptorDistance: undefined,
-    //   acceptorGroupName: undefined,
-    //   acceptorGroupUrl: undefined,
-    //   comment: undefined,
-    // };
     const res = await request(app.getHttpServer())
       .post('/v1/requests')
       .set({ Authorization: `Bearer ${tokens.needer}` })
       .send({ profileId: profiles.needer._id });
-    expect(res.status).toBe(200);
-    // expect(res.body).toMatchObject(expectedRes);
-  });
 
+    const requestMongoService = app.get(RequestsMongoService);
+    const req = await requestMongoService.findOneById(
+      new ObjectID(res.body._id)
+    );
+    expect(res.status).toBe(201);
+    expect(res.body).toMatchObject({
+      status: HelpRequestStatusEnum.Pending,
+      requesterShortName: profiles.needer.firstName,
+      requesterProfileId: profiles.needer._id.toString(),
+      type: RequestTypeEnum.Misc,
+      location: profiles.needer.address.location,
+    });
+    expect(req).toMatchObject({
+      status: HelpRequestStatusEnum.Pending,
+      candidates: [{ distance: 129, profileId: profiles.helper._id }],
+      requesterShortName: profiles.needer.firstName,
+      requesterProfileId: profiles.needer._id,
+      type: RequestTypeEnum.Misc,
+      location: profiles.needer.address.location,
+    });
+  });
   // user profile mismatch
   // it('Get profile requests with wrong profileId => error 403 (/v1/profiles/:id/requests)', async () => {
   //   const res = await requesst(app.getHttpServer())

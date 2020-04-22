@@ -1,13 +1,10 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
 import { GroupsMongoService } from '@backend/groups/services/groups-mongo.service';
 import { ObjectID } from 'mongodb';
 import { Group } from '@backend/groups/groups.model';
+import { TestApplicationController } from '@utils/test/model';
 
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];

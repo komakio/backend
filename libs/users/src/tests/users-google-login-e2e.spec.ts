@@ -1,10 +1,7 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
+import { TestApplicationController } from '@utils/test/model';
 
 describe('Users google login controllers', () => {
   let app: TestApplicationController['app'];

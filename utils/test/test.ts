@@ -22,32 +22,11 @@ import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { GoogleService } from '@backend/users/auth/services/google.service';
 import { MockGoogleService } from '@backend/users/mock/google-service.mock';
 import { RedisService } from '@backend/redis';
-import { User } from '@backend/users/users.model';
-
-// export const toIdempotentObject = (user: User) => {
-//   return {
-//     ...user,
-//     addedDate: null,
-//     lastLoginDate: null,
-//     password: null,
-//   } as User;
-// };
-
-export interface TestApplicationController {
-  app: INestApplication;
-  tokens: InternalTestModuleFixture['tokens'];
-  services: InternalTestModuleFixture['services'];
-  users: InternalTestModuleFixture['users'];
-}
-
-export interface TestMicroserviceController {
-  app: INestMicroservice;
-  getConsumer: (
-    data: any
-  ) => { ack: jest.Mock; nack: jest.Mock; consume: () => Promise<void> };
-  tokens: InternalTestModuleFixture['tokens'];
-  services: InternalTestModuleFixture['services'];
-}
+import {
+  TestApplicationController,
+  TestMicroserviceController,
+  InternalTestModuleFixture,
+} from './model';
 
 export const prepareHttpTestController = async (
   Module:
@@ -125,23 +104,11 @@ export const prepareRabbitMQTestController = async (
   };
 };
 
-export interface InternalTestModuleFixture {
-  moduleFixture: TestingModule;
-  users: {
-    helper: User;
-    needer: User;
-  };
-  tokens: {
-    helper: string;
-    needer: string;
-  };
-  services: {
-    notifications: MockNotificationsService;
-    rabbitMQ: MockRabbitMQService;
-    appleService: MockAppleService;
-    googleService: MockGoogleService;
-  };
-}
+export const stopTest = async (app: INestApplication | INestMicroservice) => {
+  await app.get(MongoService).close();
+  await app.get(RedisService).close();
+  await app.close();
+};
 
 const getKey = (uniqueId: string) =>
   `${process.env.MONGO_DB || 'default'}-test-${uniqueId}`;
@@ -226,10 +193,4 @@ const clean = async (
     mongoService.db.dropDatabase(),
     redisService.clearRedisKeys(`${getKey(uniqueId)}:*`),
   ]);
-};
-
-export const stopTest = async (app: INestApplication | INestMicroservice) => {
-  await app.get(MongoService).close();
-  await app.get(RedisService).close();
-  await app.close();
 };
