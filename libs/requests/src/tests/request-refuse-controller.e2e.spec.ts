@@ -10,7 +10,7 @@ import {
 import { RequestsMongoService } from '../services/requests-mongo.service';
 import { ObjectID } from 'mongodb';
 
-describe('Accept Requests controller', () => {
+describe('Refuse Requests controller', () => {
   let app: TestApplicationController['app'];
   let users: TestApplicationController['users'];
   let profiles: PrePopulatedProfiles;
@@ -19,7 +19,7 @@ describe('Accept Requests controller', () => {
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
       AppModule,
-      'accept-requests-controller'
+      'refuse-requests-controller'
     );
     app = testController.app;
     users = testController.users;
@@ -41,18 +41,18 @@ describe('Accept Requests controller', () => {
     expect(res.status).toBe(201);
   });
 
-  it('Accept a request with wrong profileId => error 403 (/v1/requests/:id/accept)', async () => {
+  it('Refuse a request with wrong profileId => error 403 (/v1/requests/:id/refuse)', async () => {
     const res = await request(app.getHttpServer())
-      .post(`/v1/requests/${requestId}/accept`)
+      .post(`/v1/requests/${requestId}/refuse`)
       .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({ profileId: profiles.needer._id });
 
     expect(res.status).toBe(403);
   });
 
-  it('Accept a request => success (/v1/requests/:id/accept)', async () => {
+  it('Accept a request => success (/v1/requests/:id/refuse)', async () => {
     const res = await request(app.getHttpServer())
-      .post(`/v1/requests/${requestId}/accept`)
+      .post(`/v1/requests/${requestId}/refuse`)
       .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({ profileId: profiles.helper._id });
 
@@ -60,15 +60,12 @@ describe('Accept Requests controller', () => {
     const req = await requestMongoService.findOneById(requestId);
     expect(res.status).toBe(201);
     expect(req).toMatchObject({
-      status: HelpRequestStatusEnum.Canceled,
+      status: HelpRequestStatusEnum.Pending,
       candidates: [],
       requesterShortName: profiles.needer.firstName,
       requesterProfileId: profiles.needer._id,
       type: RequestTypeEnum.Misc,
       location: profiles.needer.address.location,
-      acceptorShortName: profiles.helper.firstName,
-      acceptorProfileId: profiles.helper._id,
-      acceptorDistance: 129,
     });
   });
 });
