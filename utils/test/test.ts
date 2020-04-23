@@ -44,11 +44,6 @@ export const prepareHttpTestController = async (
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.init();
 
-  // await app
-  //   .getHttpAdapter()
-  //   .getInstance()
-  //   .ready();
-
   return {
     app,
     services,
