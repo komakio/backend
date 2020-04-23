@@ -44,8 +44,8 @@ describe('Accept Requests controller', () => {
   it('Accept a request with wrong profileId => error 403 (/v1/requests/:id/accept)', async () => {
     const res = await request(app.getHttpServer())
       .post(`/v1/requests/${requestId}/accept`)
-      .set({ Authorization: `Bearer ${users.needer.token}` })
-      .send({ profileId: profiles.helper._id });
+      .set({ Authorization: `Bearer ${users.helper.token}` })
+      .send({ profileId: profiles.needer._id });
 
     expect(res.status).toBe(403);
   });
@@ -53,8 +53,8 @@ describe('Accept Requests controller', () => {
   it('Accept a request => success (/v1/requests/:id/accept)', async () => {
     const res = await request(app.getHttpServer())
       .post(`/v1/requests/${requestId}/accept`)
-      .set({ Authorization: `Bearer ${users.needer.token}` })
-      .send({ profileId: profiles.needer._id });
+      .set({ Authorization: `Bearer ${users.helper.token}` })
+      .send({ profileId: profiles.helper._id });
 
     const requestMongoService = app.get(RequestsMongoService);
     const req = await requestMongoService.findOneById(requestId);
