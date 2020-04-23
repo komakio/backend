@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
-import { prePopulateProfiles } from '@utils/test/prepopulate';
+import { prePopulateMirrorProfiles } from '@utils/test/prepopulate';
 import { HelpRequestStatusEnum, RequestTypeEnum } from '../requests.model';
 import {
   PrePopulatedProfiles,
@@ -12,7 +12,6 @@ import { ObjectID } from 'mongodb';
 
 describe('Create Requests controller', () => {
   let app: TestApplicationController['app'];
-  let tokens: TestApplicationController['tokens'];
   let users: TestApplicationController['users'];
   let profiles: PrePopulatedProfiles;
 
@@ -22,9 +21,11 @@ describe('Create Requests controller', () => {
       'create-requests-controller'
     );
     app = testController.app;
-    tokens = testController.tokens;
     users = testController.users;
-    profiles = await prePopulateProfiles({ users, moduleFixture: app });
+    profiles = await prePopulateMirrorProfiles({
+      users: { helper: users.helper.user, needer: users.needer.user },
+      moduleFixture: app,
+    });
   });
 
   afterAll(() => stopTest(app));
@@ -40,7 +41,7 @@ describe('Create Requests controller', () => {
   it('Create a request with wrong profileId => error 403 (/v1/requests)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/requests')
-      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .set({ Authorization: `Bearer ${users.needer.token}` })
       .send({ profileId: profiles.helper._id });
     expect(res.status).toBe(403);
   });
@@ -48,14 +49,14 @@ describe('Create Requests controller', () => {
   it('Create a request without profileId => error 400 (/v1/requests)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/requests')
-      .set({ Authorization: `Bearer ${tokens.needer}` });
+      .set({ Authorization: `Bearer ${users.needer.token}` });
     expect(res.status).toBe(400);
   });
 
   it('Create a request => success (/v1/requests)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/requests')
-      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .set({ Authorization: `Bearer ${users.needer.token}` })
       .send({ profileId: profiles.needer._id });
 
     const requestMongoService = app.get(RequestsMongoService);

@@ -15,12 +15,14 @@ export interface PrePopulatedProfiles {
 export interface InternalTestModuleFixture {
   moduleFixture: TestingModule;
   users: {
-    helper: User;
-    needer: User;
-  };
-  tokens: {
-    helper: string;
-    needer: string;
+    helper: {
+      user: User;
+      token: string;
+    };
+    needer: {
+      user: User;
+      token: string;
+    };
   };
   services: {
     notifications: MockNotificationsService;
@@ -32,7 +34,6 @@ export interface InternalTestModuleFixture {
 
 export interface TestApplicationController {
   app: INestApplication;
-  tokens: InternalTestModuleFixture['tokens'];
   services: InternalTestModuleFixture['services'];
   users: InternalTestModuleFixture['users'];
 }
@@ -42,6 +43,5 @@ export interface TestMicroserviceController {
   getConsumer: (
     data: any
   ) => { ack: jest.Mock; nack: jest.Mock; consume: () => Promise<void> };
-  tokens: InternalTestModuleFixture['tokens'];
   services: InternalTestModuleFixture['services'];
 }

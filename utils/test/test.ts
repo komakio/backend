@@ -11,12 +11,11 @@ import {
 import { ConfigService } from '@backend/config';
 import { LoggerService } from '@backend/logger';
 import { RabbitMQService } from '@backend/rabbitmq';
-import { AuthService } from '@backend/users/auth/services/auth.service';
 import { MongoService } from '@backend/mongo';
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockNotificationsService } from '@backend/notifications/mock/notifications-service.mock';
 import { NotificationsService } from '@backend/notifications';
-import { prePopulateUsers } from './prepopulate';
+import { prePopulateMirrorUsers } from './prepopulate';
 import { AppleService } from '@backend/users/auth/services/apple.service';
 import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { GoogleService } from '@backend/users/auth/services/google.service';
@@ -36,12 +35,10 @@ export const prepareHttpTestController = async (
     | ForwardReference<any>,
   uniqueId: string
 ): Promise<TestApplicationController> => {
-  const {
-    moduleFixture,
-    tokens,
-    services,
-    users,
-  } = await prepareTestController(Module, uniqueId);
+  const { moduleFixture, services, users } = await prepareTestController(
+    Module,
+    uniqueId
+  );
 
   const app = moduleFixture.createNestApplication();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
@@ -54,7 +51,6 @@ export const prepareHttpTestController = async (
 
   return {
     app,
-    tokens,
     services,
     users,
   };
@@ -69,7 +65,7 @@ export const prepareRabbitMQTestController = async (
   Controller: string | symbol | Type<any> | Abstract<any>,
   uniqueId: string
 ): Promise<TestMicroserviceController> => {
-  const { moduleFixture, tokens, services } = await prepareTestController(
+  const { moduleFixture, services } = await prepareTestController(
     Module,
     uniqueId
   );
@@ -99,7 +95,6 @@ export const prepareRabbitMQTestController = async (
   return {
     app,
     getConsumer,
-    tokens,
     services,
   };
 };
@@ -157,22 +152,11 @@ const prepareTestController = async (
 
   await clean(moduleFixture, uniqueId);
 
-  const authService = moduleFixture.get(AuthService);
-
-  const users = await prePopulateUsers(moduleFixture);
-
-  const [helper, needer] = await Promise.all([
-    authService.generateAccessToken(users.helper, 10000000),
-    authService.generateAccessToken(users.needer, 10000000),
-  ]);
+  const users = await prePopulateMirrorUsers(moduleFixture);
 
   return {
     moduleFixture,
     users,
-    tokens: {
-      helper: helper.token,
-      needer: needer.token,
-    },
     services: {
       notifications,
       rabbitMQ,
