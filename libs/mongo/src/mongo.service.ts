@@ -51,10 +51,11 @@ export class MongoService {
   }
 
   public addIndex(collection: string, index: any) {
-    this.indexes.push({ collection, index });
-    this.indexes.forEach(({ collection, index }) => {
+    if (this.db) {
       this.db.collection(collection).createIndex(index);
-    });
+      return;
+    }
+    this.indexes.push({ collection, index });
   }
 
   public async waitReady() {
