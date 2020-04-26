@@ -38,7 +38,6 @@ export class MongoService {
 
       this.logger.debug('MongoDB client connected');
       this.db = this.client.db(this.config.mongo.database);
-
       this.indexes.forEach(({ collection, index }) => {
         this.db.collection(collection).createIndex(index);
       });
@@ -52,6 +51,10 @@ export class MongoService {
   }
 
   public addIndex(collection: string, index: any) {
+    if (this.db) {
+      this.db.collection(collection).createIndex(index);
+      return;
+    }
     this.indexes.push({ collection, index });
   }
 

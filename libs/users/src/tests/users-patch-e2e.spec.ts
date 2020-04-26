@@ -1,14 +1,11 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
+import { TestApplicationController } from '@utils/test/model';
 
 describe('Users patch controllers', () => {
   let app: TestApplicationController['app'];
-  let tokens: TestApplicationController['tokens'];
+  let users: TestApplicationController['users'];
 
   beforeAll(async () => {
     const testController = await prepareHttpTestController(
@@ -16,7 +13,7 @@ describe('Users patch controllers', () => {
       'users_patch'
     );
     app = testController.app;
-    tokens = testController.tokens;
+    users = testController.users;
   });
 
   afterAll(() => stopTest(app));
@@ -24,7 +21,7 @@ describe('Users patch controllers', () => {
   it('set registration token => success (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({
         uuid: 'fZIfOWUWeGQ',
         registrationToken: 'APA91bGh6bZEj6yRENLOJ9lc1yKLG3anUSksP4KMnmWoSabdpc',
@@ -46,7 +43,7 @@ describe('Users patch controllers', () => {
   it('set registration token with body that lacks uuid => error 400 (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({
         registrationToken: 'APA91bGh6bZEj6yRENLOJ9lc1yKLG3anUSksP4KMnmWoSabdpc',
       });
@@ -56,7 +53,7 @@ describe('Users patch controllers', () => {
   it('set registration token with body that lacks registration token => error 400  (/v1/users/registration-token)', async () => {
     const res = await request(app.getHttpServer())
       .patch('/v1/users/registration-token')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({
         uuid: 'fZIfOWUWeGQ',
       });

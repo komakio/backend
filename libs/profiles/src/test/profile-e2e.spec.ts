@@ -1,17 +1,14 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
 import { GroupsMongoService } from '@backend/groups/services/groups-mongo.service';
 import { ObjectID } from 'mongodb';
 import { Group } from '@backend/groups/groups.model';
+import { TestApplicationController } from '@utils/test/model';
 
 describe('Profile controller', () => {
   let app: TestApplicationController['app'];
-  let tokens: TestApplicationController['tokens'];
+  let users: TestApplicationController['users'];
   const group: Partial<Group> = {
     name: 'komak',
     url: 'komak.io',
@@ -25,7 +22,7 @@ describe('Profile controller', () => {
       'profiles-controllers'
     );
     app = testController.app;
-    tokens = testController.tokens;
+    users = testController.users;
 
     const createdGroup = await app.get(GroupsMongoService).createOne(group);
     group._id = createdGroup._id;
@@ -87,7 +84,7 @@ describe('Profile controller', () => {
   it('Create new helper profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send(newHelperProfile);
 
     helperProfileId = res.body._id;
@@ -100,7 +97,7 @@ describe('Profile controller', () => {
 
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send(body);
     expect(res.status).toBe(400);
   });
@@ -111,7 +108,7 @@ describe('Profile controller', () => {
 
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send(body);
     expect(res.status).toBe(400);
   });
@@ -122,7 +119,7 @@ describe('Profile controller', () => {
 
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send(body);
     expect(res.status).toBe(400);
   });
@@ -130,7 +127,7 @@ describe('Profile controller', () => {
   it('Create new needer profile => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .set({ Authorization: `Bearer ${users.needer.token}` })
       .send(newNeederProfile);
 
     neederProfileId = res.body._id;
@@ -140,7 +137,7 @@ describe('Profile controller', () => {
   it('Get all helper profiles => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` });
+      .set({ Authorization: `Bearer ${users.helper.token}` });
 
     expect(res.body[0]).toEqual(expect.objectContaining(newHelperProfile));
   });
@@ -148,7 +145,7 @@ describe('Profile controller', () => {
   it('Get all needer profiles => success (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.needer}` });
+      .set({ Authorization: `Bearer ${users.needer.token}` });
 
     expect(res.body[0]).toEqual(expect.objectContaining(newNeederProfile));
   });
@@ -156,7 +153,7 @@ describe('Profile controller', () => {
   it('Change profile from needer to helper => success (/v1/profiles/{id})', async () => {
     const res = await request(app.getHttpServer())
       .put(`/v1/profiles/${neederProfileId}`)
-      .set({ Authorization: `Bearer ${tokens.needer}` })
+      .set({ Authorization: `Bearer ${users.needer.token}` })
       .send({ ...newNeederProfile, role: 'helper' });
 
     expect(res.status).toBe(200);
@@ -165,7 +162,7 @@ describe('Profile controller', () => {
   it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${helperProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({ secret: 'wrongsecret' });
 
     expect(res.status).toBe(403);
@@ -174,7 +171,7 @@ describe('Profile controller', () => {
   it('Add a profile to a group without secret => error 400 (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${helperProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.helper}` });
+      .set({ Authorization: `Bearer ${users.helper.token}` });
 
     expect(res.status).toBe(400);
   });
@@ -182,7 +179,7 @@ describe('Profile controller', () => {
   it('Add a profile to a group => success (/v1/profiles/{id}/group)', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/v1/profiles/${helperProfileId}/group`)
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send({ secret: group.secret });
 
     expect(res.status).toBe(200);
@@ -191,7 +188,7 @@ describe('Profile controller', () => {
   it('Get all helper profiles after group added => contains group information (/v1/profiles)', async () => {
     const res = await request(app.getHttpServer())
       .get('/v1/profiles')
-      .set({ Authorization: `Bearer ${tokens.helper}` });
+      .set({ Authorization: `Bearer ${users.helper.token}` });
 
     expect(res.body[0]).toEqual(
       expect.objectContaining({

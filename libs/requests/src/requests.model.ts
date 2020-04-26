@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import { Location } from '@backend/profiles/profile.model';
+import { Location } from '@backend/profiles/profiles.model';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum HelpRequestStatusEnum {

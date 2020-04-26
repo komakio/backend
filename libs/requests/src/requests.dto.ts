@@ -1,6 +1,6 @@
 import { IsString, ValidateNested, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Address, Phone } from '@backend/profiles/profile.model';
+import { Address, Phone } from '@backend/profiles/profiles.model';
 
 export class WebFormRequestBodyDto {
   @IsString()

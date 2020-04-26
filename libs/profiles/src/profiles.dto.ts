@@ -7,7 +7,7 @@ import {
   IsEnum,
   IsPositive,
 } from 'class-validator';
-import { Address, ProfileRoleEnum, Phone } from './profile.model';
+import { Address, ProfileRoleEnum, Phone } from './profiles.model';
 import { Type } from 'class-transformer';
 
 export class PatchProfilesDto {

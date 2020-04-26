@@ -7,7 +7,7 @@ import { ApiTags, ApiBody } from '@nestjs/swagger';
 import {
   CommunicateByTypeEnum,
   ProfileRoleEnum,
-} from '@backend/profiles/profile.model';
+} from '@backend/profiles/profiles.model';
 import { Auth } from '@utils/decorators';
 import { WebFormRequestBodyDto } from '../requests.dto';
 

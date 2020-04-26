@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { ProfilesMongoService } from './services/profiles-mongo.service';
-import { Profile } from './profile.model';
+import { Profile } from './profiles.model';
 import { ObjectID } from 'mongodb';
 import { getDistance } from '@utils/distance';
 import { ConfigService } from '@backend/config';
@@ -23,7 +23,7 @@ export class ProfilesService {
     userId: ObjectID;
   }) {
     const profile = await this.profilesMongo.findOneById(new ObjectID(args.id));
-    if (!profile.userId.equals(args.userId)) {
+    if (!profile?.userId.equals(args.userId)) {
       throw new HttpException('USER_PROFILE_MISMATCH', HttpStatus.FORBIDDEN);
     }
   }

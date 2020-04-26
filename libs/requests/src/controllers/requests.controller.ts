@@ -5,7 +5,7 @@ import { RequestsService } from '../requests.service';
 import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
-import { Profile } from '@backend/profiles/profile.model';
+import { Profile } from '@backend/profiles/profiles.model';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { RequestBodyDto } from '../requests.dto';
 
@@ -51,9 +51,14 @@ export class RequestsController {
   @Post(':id/accept')
   @ApiBody({ type: RequestBodyDto })
   public async accept(
+    @UserReq() user: User,
     @Param('id') id: string,
     @Body() body: RequestBodyDto
   ): Promise<void> {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(body.profileId),
+      userId: new ObjectID(user._id),
+    });
     await this.requests.validateRequestResponseMatch({
       id: new ObjectID(id),
       responseProfileId: new ObjectID(body.profileId),
@@ -68,9 +73,14 @@ export class RequestsController {
   @Post(':id/refuse')
   @ApiBody({ type: RequestBodyDto })
   public async refuse(
+    @UserReq() user: User,
     @Param('id') id: string,
     @Body() body: RequestBodyDto
   ): Promise<void> {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(body.profileId),
+      userId: new ObjectID(user._id),
+    });
     await this.requests.validateRequestResponseMatch({
       id: new ObjectID(id),
       responseProfileId: new ObjectID(body.profileId),
@@ -85,10 +95,14 @@ export class RequestsController {
   @Post(':id/finish')
   @ApiBody({ type: RequestBodyDto })
   public async finish(
+    @UserReq() user: User,
     @Param('id') id: string,
     @Body() body: RequestBodyDto
   ): Promise<void> {
-    //todo: validate
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(body.profileId),
+      userId: new ObjectID(user._id),
+    });
     await this.requests.validateRequestProfileIdMatch({
       id: new ObjectID(id),
       profileId: new ObjectID(body.profileId),
@@ -102,9 +116,14 @@ export class RequestsController {
   @Auth()
   @Get(':id/profiles/:profileId')
   public async getProfileRequests(
+    @UserReq() user: User,
     @Param('id') id: string,
     @Param('profileId') profileId: string
   ): Promise<Profile[]> {
+    await this.profiles.validateProfileUserMatch({
+      id: new ObjectID(profileId),
+      userId: new ObjectID(user._id),
+    });
     return this.requests.findRequestProfilesDetailsById({
       id: new ObjectID(id),
       profileId: new ObjectID(profileId),

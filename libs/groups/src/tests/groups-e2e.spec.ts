@@ -1,15 +1,12 @@
 import request from 'supertest';
-import {
-  TestApplicationController,
-  prepareHttpTestController,
-  stopTest,
-} from '@utils/test/test';
+import { prepareHttpTestController, stopTest } from '@utils/test/test';
 import { AppModule } from '@apps/api/src/app.module';
 import { ObjectID } from 'mongodb';
+import { TestApplicationController } from '@utils/test/model';
 
 describe('Groups controller', () => {
   let app: TestApplicationController['app'];
-  let tokens: TestApplicationController['tokens'];
+  let users: TestApplicationController['users'];
 
   const group = {
     name: 'komak',
@@ -24,7 +21,7 @@ describe('Groups controller', () => {
       'groups-controller'
     );
     app = testController.app;
-    tokens = testController.tokens;
+    users = testController.users;
   });
 
   afterAll(() => stopTest(app));
@@ -32,7 +29,7 @@ describe('Groups controller', () => {
   it('Create new group with regular Auth => error 403 (/v1/groups)', async () => {
     const res = await request(app.getHttpServer())
       .post('/v1/groups')
-      .set({ Authorization: `Bearer ${tokens.helper}` })
+      .set({ Authorization: `Bearer ${users.helper.token}` })
       .send(group);
     expect(res.status).toBe(403);
   });

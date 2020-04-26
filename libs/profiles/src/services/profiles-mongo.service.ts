@@ -4,7 +4,7 @@ import {
   Profile,
   ProfilesStatistics,
   ProfileAggregatedWithGroup,
-} from '../profile.model';
+} from '../profiles.model';
 import { ObjectID, UpdateWriteOpResult } from 'mongodb';
 import { ConfigService } from '@backend/config';
 
