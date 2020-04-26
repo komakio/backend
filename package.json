@@ -29,9 +29,11 @@
     "@nestjs/core": "^7.0.0",
     "@nestjs/microservices": "^7.0.3",
     "@nestjs/platform-express": "^7.0.7",
+    "@nestjs/schedule": "^0.3.1",
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/terminus": "^7.0.1",
     "@sentry/node": "^5.15.0",
+    "amplitude": "^4.0.1",
     "amqp-connection-manager": "^3.2.0",
     "amqplib": "^0.5.5",
     "apple-signin-auth": "^1.0.4",
@@ -137,7 +139,9 @@
       "@backend/translations/(.*)": "<rootDir>/libs/translations/src/$1",
       "@backend/translations": "<rootDir>/libs/translations/src",
       "@backend/groups/(.*)": "<rootDir>/libs/groups/src/$1",
-      "@backend/groups": "<rootDir>/libs/groups/src"
+      "@backend/groups": "<rootDir>/libs/groups/src",
+      "@backend/statistics/(.*)": "<rootDir>/libs/statistics/src/$1",
+      "@backend/statistics": "<rootDir>/libs/statistics/src"
     }
   }
 }

@@ -88,7 +88,13 @@ export class UsersService {
   }
 
   public async getStats() {
-    return this.usersMongo.getStats();
+    const stats = await this.usersMongo.getStats();
+    return {
+      apple: stats.apple || 0,
+      google: stats.google || 0,
+      regular: stats.regular || 0,
+      total: (stats.apple || 0) + (stats.regular || 0) + (stats.google || 0),
+    };
   }
 
   private async getSocialUser(args: {

@@ -6,12 +6,17 @@
   "compilerOptions": {
     "webpack": true,
     "tsConfigPath": "apps/api/tsconfig.app.json",
-    "plugins": [{
-      "name": "@nestjs/swagger/plugin",
-      "options": {
-        "dtoFileNameSuffix": [".model.ts", ".dto.ts"]
+    "plugins": [
+      {
+        "name": "@nestjs/swagger/plugin",
+        "options": {
+          "dtoFileNameSuffix": [
+            ".model.ts",
+            ".dto.ts"
+          ]
+        }
       }
-    }]
+    ]
   },
   "projects": {
     "api": {
@@ -156,6 +161,15 @@
       "sourceRoot": "libs/groups/src",
       "compilerOptions": {
         "tsConfigPath": "libs/groups/tsconfig.lib.json"
+      }
+    },
+    "statistics": {
+      "type": "library",
+      "root": "libs/statistics",
+      "entryFile": "index",
+      "sourceRoot": "libs/statistics/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/statistics/tsconfig.lib.json"
       }
     }
   }
