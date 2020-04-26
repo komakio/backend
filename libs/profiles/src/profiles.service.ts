@@ -110,6 +110,11 @@ export class ProfilesService {
   }
 
   public async getStats() {
-    return this.profilesMongo.getStats();
+    const stats = await this.profilesMongo.getStats();
+    return {
+      helpers: stats.helpers || 0,
+      needer: stats.needers || 0,
+      total: (stats.helpers || 0) + (stats.needers || 0),
+    };
   }
 }

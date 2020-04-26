@@ -99,4 +99,6 @@ export class ConfigService {
     apiKey: process.env.CROWDIN_API_KEY || 'lorem',
     projectId: process.env.CROWDIN_PROJECT_ID || 'lorem',
   };
+
+  public amplitudeToken = process.env.AMPLITUDE_TOKEN;
 }

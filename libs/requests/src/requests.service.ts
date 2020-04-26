@@ -270,6 +270,18 @@ export class RequestsService {
   }
 
   public async getStats() {
-    return this.requestsMongo.getStats();
+    const stats = await this.requestsMongo.getStats();
+
+    return {
+      accepted: stats.accepted || 0,
+      pending: stats.pending || 0,
+      used: stats.used || 0,
+      canceled: stats.canceled || 0,
+      total:
+        (stats.accepted || 0) +
+        (stats.pending || 0) +
+        (stats.used || 0) +
+        (stats.canceled || 0),
+    };
   }
 }

@@ -107,6 +107,12 @@
       ],
       "@backend/groups/*": [
         "libs/groups/src/*"
+      ],
+      "@backend/statistics": [
+        "libs/statistics/src"
+      ],
+      "@backend/statistics/*": [
+        "libs/statistics/src/*"
       ]
     }
   },

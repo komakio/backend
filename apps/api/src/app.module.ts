@@ -18,6 +18,8 @@ import { RedisModule } from '@backend/redis';
 import { PublicModule } from '@backend/public';
 import { TranslationsModule } from '@backend/translations';
 import { GroupsModule } from '@backend/groups';
+import { ScheduleModule } from '@nestjs/schedule';
+import { StatisticsModule } from '@backend/statistics';
 
 const modules = [
   MongoModule,
@@ -33,6 +35,7 @@ const modules = [
   PublicModule,
   TranslationsModule,
   GroupsModule,
+  StatisticsModule,
 ];
 @Module({
   controllers: [HealthController],
@@ -44,7 +47,7 @@ const modules = [
     RedisHealthIndicator,
     MongoHealthIndicator,
   ],
-  imports: [TerminusModule, ...modules],
+  imports: [TerminusModule, ScheduleModule.forRoot(), ...modules],
 })
 export class AppModule {}
 
