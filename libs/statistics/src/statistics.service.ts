@@ -8,7 +8,9 @@ import { ConfigService } from '@backend/config';
 
 @Injectable()
 export class StatisticsService {
-  private amplitude = new Amplitude(this.config.amplitudeToken);
+  private amplitude = this.config.amplitudeToken
+    ? new Amplitude(this.config.amplitudeToken)
+    : null;
 
   constructor(
     private profiles: ProfilesService,
@@ -24,10 +26,10 @@ export class StatisticsService {
     return { users, profiles, requests };
   }
 
+  // TODO : When growing we should run this as a Kubernetes CronJob
   @Cron('0 0 * * * *')
   public async sendStatistics() {
-    // TODO : When growing we should run this as a Kubernetes CronJob
-    if (!this.config.amplitudeToken) {
+    if (!this.amplitude) {
       return;
     }
     const [userStats, requestStats, profileStats] = await Promise.all([
