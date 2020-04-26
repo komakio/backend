@@ -36,6 +36,8 @@ export class NotificationsService {
           ...args.message,
           sound: 'default',
           badge: '1',
+          //@ts-ignore
+          android_channel_id: 'high-priority',
         },
       });
 
