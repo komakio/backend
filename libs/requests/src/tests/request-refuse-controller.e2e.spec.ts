@@ -20,7 +20,7 @@ describe('Refuse Requests controller', () => {
     const testController = await prepareHttpTestController(
       AppModule,
       'refuse-requests-controller'
-    );
+    ); //
     app = testController.app;
     users = testController.users;
     profiles = await prePopulateMirrorProfiles({
