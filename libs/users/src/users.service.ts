@@ -111,8 +111,6 @@ export class UsersService {
     socialAuthId: string;
     socialAuthType: SocialAuthTypeEnum;
   }) {
-    console.log(args);
-
     if (!args.socialAuthId) {
       throw new HttpException('INVALID_IDENTITY_TOKEN', HttpStatus.FORBIDDEN);
     }
