@@ -101,4 +101,9 @@ export class ConfigService {
   };
 
   public amplitudeToken = process.env.AMPLITUDE_TOKEN;
+
+  public facebook = {
+    appId: '',
+    secret: '',
+  };
 }
