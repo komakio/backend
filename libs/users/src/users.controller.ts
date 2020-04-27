@@ -66,6 +66,16 @@ export class UsersController {
     return { user: user?.serialize(), accessToken };
   }
 
+  @Post('login/facebook')
+  @ApiBody({ type: IdentityTokenLoginDto })
+  public async facebookLogin(
+    @Body() body: IdentityTokenLoginDto
+  ): Promise<LoginResult> {
+    const user = await this.users.facebookLogin(body.identityToken);
+    const accessToken = await this.auth.generateAccessToken(user);
+    return { user: user?.serialize(), accessToken };
+  }
+
   @Auth()
   @Patch('registration-token')
   @ApiBody({ type: RegistrationTokenDto })

@@ -26,6 +26,8 @@ import {
   TestMicroserviceController,
   InternalTestModuleFixture,
 } from './model';
+import { FacebookService } from '@backend/users/auth/services/facebook.service';
+import { MockFacebookService } from '@backend/users/mock/facebook-service.mock';
 
 export const prepareHttpTestController = async (
   Module:
@@ -127,6 +129,7 @@ const prepareTestController = async (
   const rabbitMQ = new MockRabbitMQService();
   const appleService = new MockAppleService();
   const googleService = new MockGoogleService();
+  const facebookService = new MockFacebookService();
 
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [Module],
@@ -143,6 +146,8 @@ const prepareTestController = async (
     .useValue(appleService)
     .overrideProvider(GoogleService)
     .useValue(googleService)
+    .overrideProvider(FacebookService)
+    .useValue(facebookService)
     .compile();
 
   await clean(moduleFixture, uniqueId);
@@ -157,6 +162,7 @@ const prepareTestController = async (
       rabbitMQ,
       appleService,
       googleService,
+      facebookService,
     },
   };
 };
