@@ -7,11 +7,18 @@ import { LoggerService } from '@backend/logger';
 export class FacebookService {
   constructor(private config: ConfigService, private logger: LoggerService) {}
 
-  public async getUserId(identityToken: string) {
+  public async getUserId(fbAccessToken: string) {
     try {
       const { data } = await Axios.get(
-        `https://graph.facebook.com/debug_token?input_token=${identityToken}&access_token=${this.config.facebook.appId}|${this.config.facebook.appSecret}`
+        `https://graph.facebook.com/v6.0/debug_token?input_token=${fbAccessToken}&&access_token=${this.config.facebook.appId}|${this.config.facebook.appSecret}`
       );
+
+      if (
+        !data?.data.is_valid ||
+        data?.data?.app_id !== this.config.facebook.appId
+      ) {
+        return;
+      }
       return data?.data?.user_id;
     } catch (err) {
       this.logger.verbose({

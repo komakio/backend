@@ -46,8 +46,8 @@ export class UsersService {
     });
   }
 
-  public async facebookLogin(identityToken: string) {
-    const socialAuthId = await this.facebook.getUserId(identityToken);
+  public async facebookLogin(fbAccessToken: string) {
+    const socialAuthId = await this.facebook.getUserId(fbAccessToken);
     return this.getSocialUser({
       socialAuthId,
       socialAuthType: SocialAuthTypeEnum.Facebook,

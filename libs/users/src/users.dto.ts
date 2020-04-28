@@ -17,6 +17,11 @@ export class IdentityTokenLoginDto {
   public identityToken: string;
 }
 
+export class FacebookLoginDto {
+  @IsString()
+  public fbAccessToken: string;
+}
+
 export class RegistrationTokenDto {
   @IsString()
   public uuid: string;
