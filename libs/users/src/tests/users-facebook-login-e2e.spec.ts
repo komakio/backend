@@ -18,11 +18,11 @@ describe('Users facebook login controllers', () => {
 
   afterAll(() => stopTest(app));
 
-  it('login with a valid identity token => register a new user (/v1/users/login/google)', async () => {
+  it('login with a valid identity token => register a new user (/v1/users/login/facebook)', async () => {
     services.facebookService.getUserId.mockReturnValue('123');
     const res = await request(app.getHttpServer())
       .post('/v1/users/login/facebook')
-      .send({ identityToken: 'aValidToken' });
+      .send({ fbAccessToken: 'aValidToken' });
 
     expect(res.status).toBe(201);
     expect(res.body.hasOwnProperty('user')).toBeTruthy();
@@ -30,16 +30,16 @@ describe('Users facebook login controllers', () => {
     expect(res.body.accessToken.hasOwnProperty('expiration')).toBeTruthy();
   });
 
-  it('login with an invalid identity token => error 403 (/v1/users/login/google)', async () => {
+  it('login with an invalid identity token => error 403 (/v1/users/login/facebook)', async () => {
     services.facebookService.getUserId.mockReturnValue(undefined);
     const res = await request(app.getHttpServer())
       .post('/v1/users/login/facebook')
-      .send({ identityToken: 'invalidToken' });
+      .send({ fbAccessToken: 'invalidToken' });
 
     expect(res.status).toBe(403);
   });
 
-  it('login without an identity token => error 400 (/v1/users/login/google)', async () => {
+  it('login without an identity token => error 400 (/v1/users/login/facebook)', async () => {
     services.googleService.getTicket.mockReturnValue('123');
     const res = await request(app.getHttpServer())
       .post('/v1/users/login/facebook')
