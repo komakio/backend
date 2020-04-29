@@ -91,7 +91,6 @@
     "typescript": "^3.7.4"
   },
   "jest": {
-    "modulePathIgnorePatterns": ["libs/requests"],
     "moduleFileExtensions": [
       "js",
       "json",
