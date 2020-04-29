@@ -6,6 +6,7 @@ import { AppleService } from './auth/services/apple.service';
 import { GoogleService } from './auth/services/google.service';
 import { compareHash, hashString } from '@utils/hash';
 import { RecaptchaService } from './auth/services/captcha.service';
+import { FacebookService } from './auth/services/facebook.service';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,8 @@ export class UsersService {
     private usersMongo: UsersMongoService,
     private apple: AppleService,
     private google: GoogleService,
-    private recaptcha: RecaptchaService
+    private recaptcha: RecaptchaService,
+    private facebook: FacebookService
   ) {}
 
   public async patch(args: {
@@ -41,6 +43,14 @@ export class UsersService {
     return this.getSocialUser({
       socialAuthId,
       socialAuthType: SocialAuthTypeEnum.Google,
+    });
+  }
+
+  public async facebookLogin(fbAccessToken: string) {
+    const socialAuthId = await this.facebook.getUserId(fbAccessToken);
+    return this.getSocialUser({
+      socialAuthId,
+      socialAuthType: SocialAuthTypeEnum.Facebook,
     });
   }
 

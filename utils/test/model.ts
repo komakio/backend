@@ -6,6 +6,7 @@ import { MockNotificationsService } from '@backend/notifications/mock/notificati
 import { MockRabbitMQService } from '@backend/rabbitmq/mocks/rabbitmq-service.mock';
 import { MockAppleService } from '@backend/users/mock/apple-service.mock';
 import { MockGoogleService } from '@backend/users/mock/google-service.mock';
+import { MockFacebookService } from '@backend/users/mock/facebook-service.mock';
 
 export interface PrePopulatedProfiles {
   helper: Profile;
@@ -29,6 +30,7 @@ export interface InternalTestModuleFixture {
     rabbitMQ: MockRabbitMQService;
     appleService: MockAppleService;
     googleService: MockGoogleService;
+    facebookService: MockFacebookService;
   };
 }
 

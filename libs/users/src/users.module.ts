@@ -10,6 +10,7 @@ import { GoogleService } from './auth/services/google.service';
 import { RecaptchaService } from './auth/services/captcha.service';
 import { LoggerModule } from '@backend/logger';
 import { ExceptionsModule } from '@backend/exceptions';
+import { FacebookService } from './auth/services/facebook.service';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { ExceptionsModule } from '@backend/exceptions';
     AppleService,
     GoogleService,
     RecaptchaService,
+    FacebookService,
   ],
   controllers: [UsersController],
   imports: [MongoModule, ConfigModule, LoggerModule, ExceptionsModule],

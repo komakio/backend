@@ -6,6 +6,7 @@ import { AccessTokenResponse } from './auth/auth.model';
 export enum SocialAuthTypeEnum {
   Apple = 'apple',
   Google = 'google',
+  Facebook = 'facebook',
 }
 
 export class UuidRegTokenPair {

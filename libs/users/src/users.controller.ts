@@ -11,6 +11,7 @@ import {
   IdentityTokenLoginDto,
   RegistrationTokenDto,
   PatchUserDto,
+  FacebookLoginDto,
 } from './users.dto';
 
 @Controller('v1/users')
@@ -62,6 +63,16 @@ export class UsersController {
     @Body() body: IdentityTokenLoginDto
   ): Promise<LoginResult> {
     const user = await this.users.googleLogin(body.identityToken);
+    const accessToken = await this.auth.generateAccessToken(user);
+    return { user: user?.serialize(), accessToken };
+  }
+
+  @Post('login/facebook')
+  @ApiBody({ type: FacebookLoginDto })
+  public async facebookLogin(
+    @Body() body: FacebookLoginDto
+  ): Promise<LoginResult> {
+    const user = await this.users.facebookLogin(body.fbAccessToken);
     const accessToken = await this.auth.generateAccessToken(user);
     return { user: user?.serialize(), accessToken };
   }
