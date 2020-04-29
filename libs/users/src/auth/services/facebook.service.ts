@@ -10,7 +10,7 @@ export class FacebookService {
   public async getUserId(fbAccessToken: string) {
     try {
       const { data } = await Axios.get(
-        `https://graph.facebook.com/v6.0/debug_token?input_token=${fbAccessToken}&&access_token=${this.config.facebook.appId}|${this.config.facebook.appSecret}`
+        `https://graph.facebook.com/v6.0/debug_token?input_token=${fbAccessToken}&access_token=${this.config.facebook.appId}|${this.config.facebook.appSecret}`
       );
 
       if (
