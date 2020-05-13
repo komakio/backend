@@ -7,7 +7,7 @@ import {
   IsEnum,
   IsPositive,
 } from 'class-validator';
-import { Address, ProfileRoleEnum, Phone } from './profiles.model';
+import { Address, Phone } from './profiles.model';
 import { Type } from 'class-transformer';
 
 export class PatchProfilesDto {
@@ -27,9 +27,6 @@ export class PatchProfilesDto {
   @IsOptional()
   @IsBoolean()
   public disabled?: boolean;
-  @IsOptional()
-  @IsEnum(ProfileRoleEnum)
-  public role: ProfileRoleEnum;
   @IsOptional()
   @ValidateNested()
   @Type(() => Phone)
@@ -54,8 +51,6 @@ export class CreateProfilesDto {
   @IsOptional()
   @IsBoolean()
   public disabled?: boolean;
-  @IsEnum(ProfileRoleEnum)
-  public role: ProfileRoleEnum;
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => Phone)

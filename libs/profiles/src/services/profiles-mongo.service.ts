@@ -15,7 +15,6 @@ export class ProfilesMongoService {
 
   public onApplicationBootstrap() {
     this.mongo.addIndex(this.collection, { userId: 1 });
-    this.mongo.addIndex(this.collection, { role: 1 });
     this.mongo.addIndex(this.collection, { country: 1 });
     this.mongo.addIndex(this.collection, { disabled: 1 });
     this.mongo.addIndex(this.collection, { 'address.location': '2dsphere' });

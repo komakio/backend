@@ -1,8 +1,4 @@
-import {
-  Profile,
-  ProfileRoleEnum,
-  CoordinateTypeEnum,
-} from '@backend/profiles/profiles.model';
+import { Profile, CoordinateTypeEnum } from '@backend/profiles/profiles.model';
 
 export const mockHelperProfile: Profile = {
   self: true,
@@ -15,7 +11,6 @@ export const mockHelperProfile: Profile = {
       coordinates: [55.685966, 12.565402],
     },
   },
-  role: ProfileRoleEnum.Helper,
   phone: { dialCode: '+45', number: '0000000' },
 };
 
@@ -30,6 +25,5 @@ export const mockNeederProfile: Profile = {
       coordinates: [55.686779, 12.563942],
     },
   },
-  role: ProfileRoleEnum.Needer,
   phone: { dialCode: '+45', number: '0000000' },
 };

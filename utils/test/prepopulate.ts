@@ -42,10 +42,10 @@ export const prePopulateMirrorProfiles = async (args: {
 }) => {
   const profilesService = args.moduleFixture.get(ProfilesService);
   const [helper, needer]: Profile[] = await Promise.all(
-    [mockHelperProfile, mockNeederProfile].map(profile =>
+    [mockHelperProfile, mockNeederProfile].map((profile, index) =>
       profilesService.create({
         ...profile,
-        userId: args.users[profile.role]._id,
+        userId: args.users[index === 0 ? 'helper' : 'needer']._id,
       })
     )
   );

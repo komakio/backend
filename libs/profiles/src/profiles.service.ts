@@ -75,7 +75,6 @@ export class ProfilesService {
     const profiles = (
       await this.profilesMongo.findNear({
         filters: {
-          role: 'helper',
           disabled: { $ne: true },
         },
         coordinates: address.location.coordinates,
