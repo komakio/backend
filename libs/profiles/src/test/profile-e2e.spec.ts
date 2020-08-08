@@ -46,7 +46,6 @@ describe('Profile controller', () => {
       },
     },
     disabled: false,
-    role: 'helper',
     phone: {
       dialCode: 'string',
       number: '64333445',
@@ -70,7 +69,6 @@ describe('Profile controller', () => {
       },
     },
     disabled: false,
-    role: 'needer',
     phone: {
       dialCode: 'string',
       number: '64333445',
@@ -148,15 +146,6 @@ describe('Profile controller', () => {
       .set({ Authorization: `Bearer ${users.needer.token}` });
 
     expect(res.body[0]).toEqual(expect.objectContaining(newNeederProfile));
-  });
-
-  it('Change profile from needer to helper => success (/v1/profiles/{id})', async () => {
-    const res = await request(app.getHttpServer())
-      .put(`/v1/profiles/${neederProfileId}`)
-      .set({ Authorization: `Bearer ${users.needer.token}` })
-      .send({ ...newNeederProfile, role: 'helper' });
-
-    expect(res.status).toBe(200);
   });
 
   it('Add a profile to a group with wrong secret => error 403 (/v1/profiles/{id}/group)', async () => {

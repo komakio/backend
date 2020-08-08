@@ -42,7 +42,7 @@ export class ProfilesController {
       userId: new ObjectID(userReq._id),
     });
 
-    if (body.self && body.role === 'helper') {
+    if (body.self) {
       await this.profileRabbitMQ.sendToSubscribeNewHelperRequests({
         profileId: profile._id,
       });

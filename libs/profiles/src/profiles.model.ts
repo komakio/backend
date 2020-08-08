@@ -17,11 +17,6 @@ export enum CoordinateTypeEnum {
   Point = 'Point',
 }
 
-export enum ProfileRoleEnum {
-  Helper = 'helper',
-  Needer = 'needer',
-}
-
 export enum CommunicateByTypeEnum {
   Email = 'email',
 }
@@ -88,7 +83,6 @@ export class Profile {
   public lastName: string;
   public address: Address;
   public disabled?: boolean;
-  public role: ProfileRoleEnum;
   public phone: Phone;
   @ApiProperty({
     example: 2000,

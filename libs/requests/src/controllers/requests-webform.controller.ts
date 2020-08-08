@@ -4,10 +4,7 @@ import { ObjectID } from 'mongodb';
 import { ProfilesService } from '@backend/profiles';
 import { HelpRequest } from '../requests.model';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
-import {
-  CommunicateByTypeEnum,
-  ProfileRoleEnum,
-} from '@backend/profiles/profiles.model';
+import { CommunicateByTypeEnum } from '@backend/profiles/profiles.model';
 import { Auth } from '@utils/decorators';
 import { WebFormRequestBodyDto } from '../requests.dto';
 
@@ -28,7 +25,6 @@ export class RequestsWebFormController {
     const profile = await this.profiles.create({
       firstName: body.firstName,
       lastName: body.lastName,
-      role: ProfileRoleEnum.Needer,
       phone: {
         dialCode: body.phone.dialCode,
         number: body.phone.number,
